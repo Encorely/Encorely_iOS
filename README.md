@@ -18,7 +18,7 @@ Encore(앙코르) + ly = 앙코르처럼 기록하다
 |:------:|:------:|:------:|
 | <img src="이미지URL1" width="150" height="150"/> | <img src="이미지URL2" width="150" height="150"/> | <img src="이미지URL3" width="150" height="150"/> |
 | **FE** | **FE** | **FE** |
-| [GitHub](깃허브링크1) | [GitHub](깃허브링크2) | [GitHub](깃허브링크3) |
+| [GitHub] | [GitHub] | [GitHub] |
 
 <br>
 
