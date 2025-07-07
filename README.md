@@ -2,7 +2,8 @@
 
 ![배너 이미지 또는 로고](링크)
 
-> 간단한 한 줄 소개 – 프로젝트의 핵심 가치 또는 기능
+> “공연의 여운을 기록하는 공간”
+Encore(앙코르) + ly = 앙코르처럼 기록하다
 
 [![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg)]()
 [![Xcode](https://img.shields.io/badge/Xcode-16.0-blue.svg)]()
@@ -13,24 +14,24 @@
 <br>
 
 ## 👥 멤버
-| 팀원 1 | 팀원 2 | 팀원 3 | 팀원 4 |
+| 앤드류/고은혁 | 흑곰/이민서 | 소피/이예지 |
 |:------:|:------:|:------:|:------:|
-| 사진1 | 사진2 | 사진3 | 사진4 |
-| PL | FE | FE | FE |
-| [GitHub](깃허브 링크) | [GitHub](깃허브 링크) | [GitHub](깃허브 링크) | [GitHub](깃허브 링크) |
+| 사진1 | 사진2 | 사진3 |
+| FE | FE | FE |
+| [GitHub](깃허브 링크) | [GitHub](깃허브 링크) | [GitHub](깃허브 링크) |
 
 <br>
 
 
-## 📱 소개
+## 📱 Encorely 소개
 
-> 프로젝트의 주요 목적과 사용자가 얻게 될 경험을 설명해주세요.
+> 공연을 여운을 기록하고 팁을 공유하며 모두의 공연 생활을 응원하는 앱입니다.
 
 <br>
 
 ## 📆 프로젝트 기간
-- 전체 기간: `YYYY.MM.DD - YYYY.MM.DD`
-- 개발 기간: `YYYY.MM.DD - YYYY.MM.DD`
+- 전체 기간: `2025.07.03 - 2025.08.22`
+- 개발 기간: `2025.07.07 - 2025.08.22`
 
 <br>
 
@@ -132,6 +133,25 @@ if let user = self.veryLongFunctionNameWhichReturnsOptionalUser(),
 * 나중에 추가로 작업해야 할 부분에 대해서는 `// TODO: - xxx 주석을 남기도록 한다.`
 * 코드의 섹션을 분리할 때는 `// MARK: - xxx 주석을 남기도록 한다.`
 * 함수에 대해 전부 주석을 남기도록 하여 무슨 액션을 하는지 알 수 있도록 한다.
+* Stack, ScrollView, … 속성 쓸 때에는 대괄호를 쓰기 전에 한칸 띄운다.
+```swift
+VStack(spacing: 5) {
+	...
+	}
+```
+* 함수 이름의 첫 글자는 소문자, 다음 단어의 시작은 대문자로 시작한다.
+* 하위뷰 생성 시에 1엔터, 1주석 후 줄바꿈한다.
+* 변수가 괄호 안에 세 개 이상일 때 변수마다 줄바꿈을 한다.
+* ifelse 작성법
+```swift
+if {
+...
+}
+else
+```
+* 콤마(,), 콜론(:)의 앞은 붙여쓰고 뒤는 한 칸 띄워쓴다.
+* button의 변수는 Btn으로 사용한다.
+
 
 <br>
 
@@ -219,4 +239,83 @@ if let user = self.veryLongFunctionNameWhichReturnsOptionalUser(),
 
 ## 🗂️ 폴더 컨벤션
 ```
+.
+├── Encorely
+│   ├── App
+│   │   └── EncorelyApp.swift
+│   ├── Common
+│   │   ├── Enum
+│   │   │   ├── Error
+│   │   │   ├── Login
+│   │   │   ├── MyPage
+│   │   │   ├── Registration
+│   │   │   ├── Segment
+│   │   │   └── Tab
+│   │   ├── Protocol
+│   │   └── UIComponents
+│   │       ├── Custom
+│   │       ├── MyPage
+│   │       ├── Registration
+│   │       ├── Segment
+│   │       └── Venue
+│   ├── ContentView.swift
+│   ├── Core
+│   │   ├── Actor
+│   │   ├── DIContainer
+│   │   ├── Navigation
+│   │   └── Service
+│   │       ├── MoyaRouter
+│   │       ├── MoyaService
+│   │       └── Social
+│   ├── Models
+│   │   ├── Domain
+│   │   │   ├── Common
+│   │   │   ├── MyPage
+│   │   │   ├── Registration
+│   │   │   └── Venue
+│   │   └── DTO
+│   │       └── Auth
+│   ├── Modules
+│   │   ├── AppFlow
+│   │   │   ├── Login
+│   │   │   └── Splash
+│   │   └── Tab
+│   │       ├── EncorelyTabView.swift
+│   │       ├── MyPage
+│   │       │   ├── ViewModels
+│   │       │   └── Views
+│   │       ├── Registration
+│   │       │   ├── ViewModels
+│   │       │   └── Views
+│   │       └── Venue
+│   │           ├── ViewModels
+│   │           └── Views
+│   ├── Resources
+│   │   ├── Assets
+│   │   │   ├── Assets.xcassets
+│   │   │   │   ├── AccentColor.colorset
+│   │   │   │   │   └── Contents.json
+│   │   │   │   ├── AppIcon.appiconset
+│   │   │   │   │   └── Contents.json
+│   │   │   │   └── Contents.json
+│   │   │   └── Color.xcassets
+│   │   └── Fonts
+│   └── Utils
+│       ├── Extensions
+│       └── Modifiers
+└── Encorely.xcodeproj
+    ├── project.pbxproj
+    ├── project.xcworkspace
+    │   ├── contents.xcworkspacedata
+    │   ├── xcshareddata
+    │   │   └── swiftpm
+    │   │       └── configuration
+    │   └── xcuserdata
+    │       └── leeyeji.xcuserdatad
+    │           └── UserInterfaceState.xcuserstate
+    └── xcuserdata
+        └── leeyeji.xcuserdatad
+            └── xcschemes
+                └── xcschememanagement.plist
+
 ```
