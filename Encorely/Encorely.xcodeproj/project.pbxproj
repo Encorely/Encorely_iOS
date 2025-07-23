@@ -6,13 +6,56 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C74A51B62E2610CF009FC517 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C74A51B52E2610CF009FC517 /* Kingfisher */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		C74A49582E1BD083009FC517 /* Encorely.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Encorely.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C74A50302E25F605009FC517 /* Exceptions for "Encorely" folder in "Encorely" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Common/Enum/Error/.gitkeep,
+				Common/Enum/Login/.gitkeep,
+				Common/Enum/MyPage/.gitkeep,
+				Common/Enum/Registration/.gitkeep,
+				Common/Enum/Segment/.gitkeep,
+				Common/Enum/Tab/.gitkeep,
+				Common/Protocol/.gitkeep,
+				Common/UIComponents/MyPage/.gitkeep,
+				Common/UIComponents/Segment/.gitkeep,
+				Core/Actor/.gitkeep,
+				Core/DIContainer/.gitkeep,
+				Core/Navigation/.gitkeep,
+				Core/Service/MoyaRouter/.gitkeep,
+				Core/Service/MoyaService/.gitkeep,
+				Core/Service/Social/.gitkeep,
+				Info.plist,
+				Models/Domain/MyPage/.gitkeep,
+				Models/DTO/Auth/.gitkeep,
+				Modules/AppFlow/Login/.gitkeep,
+				Modules/AppFlow/Splash/.gitkeep,
+				Modules/Tab/MyPage/ViewModels/.gitkeep,
+				Modules/Tab/MyPage/Views/.gitkeep,
+				Modules/Tab/Registration/ViewModels/.gitkeep,
+				Modules/Tab/Registration/Views/.gitkeep,
+				Modules/Tab/Venue/ViewModels/.gitkeep,
+				Modules/Tab/Venue/Views/.gitkeep,
+				Utils/Extensions/.gitkeep,
+			);
+			target = C74A49572E1BD083009FC517 /* Encorely */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C74A495A2E1BD083009FC517 /* Encorely */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C74A50302E25F605009FC517 /* Exceptions for "Encorely" folder in "Encorely" target */,
+			);
 			path = Encorely;
 			sourceTree = "<group>";
 		};
@@ -23,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C74A51B62E2610CF009FC517 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +109,7 @@
 			);
 			name = Encorely;
 			packageProductDependencies = (
+				C74A51B52E2610CF009FC517 /* Kingfisher */,
 			);
 			productName = Encorely;
 			productReference = C74A49582E1BD083009FC517 /* Encorely.app */;
@@ -94,6 +139,9 @@
 			);
 			mainGroup = C74A494F2E1BD083009FC517;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C74A51B42E2610CF009FC517 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C74A49592E1BD083009FC517 /* Products */;
 			projectDirPath = "";
@@ -324,6 +372,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C74A51B42E2610CF009FC517 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C74A51B52E2610CF009FC517 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C74A51B42E2610CF009FC517 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C74A49502E1BD083009FC517 /* Project object */;
 }
