@@ -106,6 +106,10 @@ extension Font {
     }
     
     // MARK: - Medium
+    static var mainTextMedium20: Font {
+        return .pretendard(type: .medium, size: 20)
+    }
+    
     static var mainTextMedium18: Font {
         return .pretendard(type: .medium, size: 18)
     }
