@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C74A51B62E2610CF009FC517 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C74A51B52E2610CF009FC517 /* Kingfisher */; };
+		C74A538A2E2E188E009FC517 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = C74A53892E2E188E009FC517 /* Moya */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,15 +22,12 @@
 				Common/Enum/Error/.gitkeep,
 				Common/Enum/Login/.gitkeep,
 				Common/Enum/MyPage/.gitkeep,
-				Common/Enum/Registration/.gitkeep,
 				Common/Enum/Segment/.gitkeep,
 				Common/Enum/Tab/.gitkeep,
 				Common/Protocol/.gitkeep,
 				Common/UIComponents/MyPage/.gitkeep,
 				Common/UIComponents/Segment/.gitkeep,
 				Core/Actor/.gitkeep,
-				Core/DIContainer/.gitkeep,
-				Core/Navigation/.gitkeep,
 				Core/Service/MoyaRouter/.gitkeep,
 				Core/Service/MoyaService/.gitkeep,
 				Core/Service/Social/.gitkeep,
@@ -40,10 +38,7 @@
 				Modules/AppFlow/Splash/.gitkeep,
 				Modules/Tab/MyPage/ViewModels/.gitkeep,
 				Modules/Tab/MyPage/Views/.gitkeep,
-				Modules/Tab/Registration/ViewModels/.gitkeep,
-				Modules/Tab/Registration/Views/.gitkeep,
 				Modules/Tab/Venue/ViewModels/.gitkeep,
-				Modules/Tab/Venue/Views/.gitkeep,
 				Utils/Extensions/.gitkeep,
 			);
 			target = C74A49572E1BD083009FC517 /* Encorely */;
@@ -66,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C74A538A2E2E188E009FC517 /* Moya in Frameworks */,
 				C74A51B62E2610CF009FC517 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -110,6 +106,7 @@
 			name = Encorely;
 			packageProductDependencies = (
 				C74A51B52E2610CF009FC517 /* Kingfisher */,
+				C74A53892E2E188E009FC517 /* Moya */,
 			);
 			productName = Encorely;
 			productReference = C74A49582E1BD083009FC517 /* Encorely.app */;
@@ -141,6 +138,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				C74A51B42E2610CF009FC517 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				C74A53882E2E188E009FC517 /* XCRemoteSwiftPackageReference "Moya" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C74A49592E1BD083009FC517 /* Products */;
@@ -382,6 +380,14 @@
 				minimumVersion = 8.5.0;
 			};
 		};
+		C74A53882E2E188E009FC517 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -389,6 +395,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C74A51B42E2610CF009FC517 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		C74A53892E2E188E009FC517 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C74A53882E2E188E009FC517 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

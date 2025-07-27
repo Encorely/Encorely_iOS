@@ -12,16 +12,20 @@ import Kingfisher
 struct SubVenueCard: View {
     
     let searchVenueResponse: SearchVenueResponse
+    @State private var isSelectedVenue: Bool = false
     
     var body: some View {
-        Button(action: {
-            
+        Button (action: {
+            isSelectedVenue.toggle()
         }) {
             HStack(spacing: 20) {
                 urlImage
                 venueInfo
                 Spacer()
             }
+            .padding(.vertical, 15)
+            .padding(.horizontal, 7)
+            .border(.mainColorA, width: isSelectedVenue ? 1 : 0)
         }
     }
     

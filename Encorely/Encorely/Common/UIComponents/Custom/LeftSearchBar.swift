@@ -30,13 +30,13 @@ struct LeftSearchBar: View {
                 .resizable()
                 .frame(width: 25, height: 25)
                 .foregroundStyle(.grayScaleA)
-                .padding(.leading, 20)
 
             TextField(leftSearchBarType.title, text: $text)
                 .basicTextFieldModifier(font: .mainTextMedium16)
             
             Spacer()
         }
+        .padding(.horizontal, 20)
     }
 }
 

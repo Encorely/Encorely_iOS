@@ -13,18 +13,16 @@ struct MainRegistBtn: View {
     let mainRegistType: MainRegistType
     
     var body: some View {
-        Button(action: {
-        }) {
-            Text(mainRegistType.title)
-                .foregroundStyle(.white)
-                .font(.mainTextSemiBold20)
-                .padding(.vertical, 19)
-                .frame(maxWidth: .infinity)
-                .background {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(.mainColorA)
-                }
-        }
+        Text(mainRegistType.title)
+            .foregroundStyle(.white)
+            .font(.mainTextSemiBold20)
+            .padding(.vertical, 19)
+            .padding(.horizontal, 40)
+            .frame(maxWidth: .infinity)
+            .background {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(.mainColorA)
+            }
     }
 }
 
