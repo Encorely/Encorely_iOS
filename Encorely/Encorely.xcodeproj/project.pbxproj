@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -59,12 +59,10 @@
 /* Begin PBXFrameworksBuildPhase section */
 		C74A49552E1BD083009FC517 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				C74A538A2E2E188E009FC517 /* Moya in Frameworks */,
 				C74A51B62E2610CF009FC517 /* Kingfisher in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -97,8 +95,6 @@
 				C74A49562E1BD083009FC517 /* Resources */,
 			);
 			buildRules = (
-			);
-			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
 				C74A495A2E1BD083009FC517 /* Encorely */,
@@ -140,7 +136,7 @@
 				C74A51B42E2610CF009FC517 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				C74A53882E2E188E009FC517 /* XCRemoteSwiftPackageReference "Moya" */,
 			);
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 90;
 			productRefGroup = C74A49592E1BD083009FC517 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -153,25 +149,21 @@
 /* Begin PBXResourcesBuildPhase section */
 		C74A49562E1BD083009FC517 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C74A49542E1BD083009FC517 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		C74A49612E1BD085009FC517 /* Debug */ = {
+		C74A49612E1BD085009FC517 /* Debug configuration for PBXProject "Encorely" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -235,7 +227,7 @@
 			};
 			name = Debug;
 		};
-		C74A49622E1BD085009FC517 /* Release */ = {
+		C74A49622E1BD085009FC517 /* Release configuration for PBXProject "Encorely" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -292,7 +284,7 @@
 			};
 			name = Release;
 		};
-		C74A49642E1BD085009FC517 /* Debug */ = {
+		C74A49642E1BD085009FC517 /* Debug configuration for PBXNativeTarget "Encorely" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -314,13 +306,17 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yjlee.Encorely;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
-		C74A49652E1BD085009FC517 /* Release */ = {
+		C74A49652E1BD085009FC517 /* Release configuration for PBXNativeTarget "Encorely" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -342,9 +338,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yjlee.Encorely;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -354,19 +354,17 @@
 		C74A49532E1BD083009FC517 /* Build configuration list for PBXProject "Encorely" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C74A49612E1BD085009FC517 /* Debug */,
-				C74A49622E1BD085009FC517 /* Release */,
+				C74A49612E1BD085009FC517 /* Debug configuration for PBXProject "Encorely" */,
+				C74A49622E1BD085009FC517 /* Release configuration for PBXProject "Encorely" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		C74A49632E1BD085009FC517 /* Build configuration list for PBXNativeTarget "Encorely" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C74A49642E1BD085009FC517 /* Debug */,
-				C74A49652E1BD085009FC517 /* Release */,
+				C74A49642E1BD085009FC517 /* Debug configuration for PBXNativeTarget "Encorely" */,
+				C74A49652E1BD085009FC517 /* Release configuration for PBXNativeTarget "Encorely" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
