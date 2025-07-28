@@ -16,7 +16,8 @@ Encore(앙코르) + ly = 앙코르처럼 기록하다
 ## 👥 멤버
 | 앤드류/고은혁 | 흑곰/이민서 | 소피/이예지 |
 |:------:|:------:|:------:|
-| <img src="이미지URL1" width="150" height="150"/> | <img src="이미지URL2" width="150" height="150"/> | <img src="이미지URL3" width="150" height="150"/> |
+| <img src="이미지URL1" width="150" height="150"/> | <img src="이미지URL2" width="150" height="150"/> | ![IMG_6186](https://github.com/user-attachments/assets/a87fccc2-c777-4e52-a272-558b3f1d93ee)
+ |
 | **FE** | **FE** | **FE** |
 | [GitHub] | [GitHub] | [GitHub] |
 
