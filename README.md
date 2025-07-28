@@ -1,6 +1,6 @@
 # 🚀 Encorely
 
-![배너 이미지 또는 로고](링크)
+<img width="247" height="82" alt="EncorelyMainLogo" src="https://github.com/user-attachments/assets/c763dc23-8f46-46fb-aebe-9c5a8001c0aa" />
 
 > “공연의 여운을 기록하는 공간”
 Encore(앙코르) + ly = 앙코르처럼 기록하다
