@@ -27,11 +27,11 @@ struct RegistProgress: View {
         return VStack(spacing: 10) {
             Text(progressTitle[index])
                 .font(.mainTextSemiBold20)
-                .foregroundStyle(isCurrent ? .mainColorG : .grayScaleL)
+                .foregroundStyle(isCurrent ? .mainColorD : .grayColorF)
             
             Rectangle()
                 .frame(width: 89, height: isCurrent ? 2 : 1)
-                    .foregroundStyle(isCurrent ? .mainColorG : .grayScaleF)
+                    .foregroundStyle(isCurrent ? .mainColorD : .grayColorI)
                     
         }
     }

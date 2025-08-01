@@ -24,11 +24,11 @@ struct GoodKeywordRating: View {
             Text(keywordType.title)
                 .padding(.horizontal, 21)
                 .padding(.vertical, 9)
-                .foregroundStyle(.grayScaleA)
+                .foregroundStyle(.grayColorA)
                 .background {
                     RoundedRectangle(cornerRadius: 100)
-                        .fill(isSelected ? .mainColorD : .grayScaleM)
-                        .stroke(.mainColorH, lineWidth:  isSelected ? 1 : 0)
+                        .fill(isSelected ? .mainColorH : .grayColorI)
+                        .stroke(.mainColorF, lineWidth:  isSelected ? 1 : 0)
                 }
         }
     }

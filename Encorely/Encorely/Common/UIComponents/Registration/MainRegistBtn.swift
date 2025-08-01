@@ -14,14 +14,14 @@ struct MainRegistBtn: View {
     
     var body: some View {
         Text(mainRegistType.title)
-            .foregroundStyle(.white)
+            .foregroundStyle(.grayColorJ)
             .font(.mainTextSemiBold20)
             .padding(.vertical, 19)
             .padding(.horizontal, 40)
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(.mainColorA)
+                    .fill(.mainColorB)
             }
     }
 }

@@ -11,9 +11,7 @@ import SwiftUI
 
 struct RegistRateView: View {
     
-    @State private var rating: Int = 0
-    @State private var isChecked: Bool = false
-    @State private var detailSeatReview = ""
+    @ObservedObject var viewModel: SubRegistViewModel
     
     let goodkeywordList = KeywordType.goodSeatTag
     let badkeywordList = KeywordType.badSeatTag
@@ -56,20 +54,20 @@ struct RegistRateView: View {
                 Text("고척 스카이돔")
                     .font(.mainTextMedium16)
             }
-            .foregroundStyle(.grayScaleH)
+            .foregroundStyle(.grayColorF)
             .padding(.horizontal, 12)
             .padding(.vertical, 7)
             .background {
                 RoundedRectangle(cornerRadius: 100)
-                    .fill(.mainColorD)
-                    .stroke(.mainColorH, lineWidth: 1)
+                    .fill(.mainColorH)
+                    .stroke(.mainColorF, lineWidth: 1)
                 
             }
         }
     }
     
     private var seatInfo: some View {
-        Text("413구역 E열 10번")
+        Text("\(viewModel.zone)구역 \(viewModel.rows)열 \(viewModel.num)번")
             .frame(maxWidth: .infinity)
             .purpleBorderTextFieldModifier(height: 60, font: .mainTextMedium20)
             .padding(.horizontal, 1)
@@ -92,7 +90,7 @@ struct RegistRateView: View {
     
     private var starRating: some View {
         RateView(
-            currentStar: $rating,
+            currentStar: $viewModel.rating,
             starNumber: 5,
             filledImageName: "fillStar",
             emptyImageName: "emptyStar"
@@ -148,21 +146,21 @@ struct RegistRateView: View {
                         
                         HStack(spacing: 15) {
                             ForEach(0...3, id: \.self) { index in
-                                GoodKeywordRating(keywordType: badkeywordList[index])
+                                BadKeywordRating(keywordType: badkeywordList[index])
                             }
                         }
                         .padding(1)
                         
                         HStack(spacing: 15) {
                             ForEach(4...7, id: \.self) { index in
-                                GoodKeywordRating(keywordType: badkeywordList[index])
+                                BadKeywordRating(keywordType: badkeywordList[index])
                             }
                         }
                         .padding(1)
                         
                         HStack(spacing: 15) {
                             ForEach(8...11, id: \.self) { index in
-                                GoodKeywordRating(keywordType: badkeywordList[index])
+                                BadKeywordRating(keywordType: badkeywordList[index])
                             }
                         }
                         .padding(1)
@@ -179,19 +177,19 @@ struct RegistRateView: View {
         VStack(spacing: 23) {
             HStack(spacing: 15) {
                 Button(action: {
-                    isChecked.toggle()
+                    viewModel.isCheckedSeat.toggle()
                 }) {
-                    Image(isChecked ? .fullCheck : .emptyCheck)
+                    Image(viewModel.isCheckedSeat ? .fullCheck : .emptyCheck)
                         .resizable()
                         .frame(width: 20, height: 20)
                 }
                 Text("좌석에 대해 더 자세한 후기를 남길래요")
                     .font(.mainTextSemiBold18)
-                    .foregroundStyle(isChecked ? .grayScaleA : .grayScaleL)
+                    .foregroundStyle(viewModel.isCheckedSeat ? .grayColorA : .grayColorG)
                 Spacer()
             }
-            if isChecked {
-                TextEditor(text: $detailSeatReview)
+            if viewModel.isCheckedSeat {
+                TextEditor(text: $viewModel.detailSeatReview)
                     .detailTextFieldModifier(height: 230, font: .mainTextMedium16
                     )
             }
@@ -211,5 +209,10 @@ struct RegistRateView: View {
 
 
 #Preview {
-    RegistRateView(showSheet: .constant(nil))
+    let vm = SubRegistViewModel()
+    vm.zone = "12"
+    vm.rows = "4"
+    vm.num = "8"
+
+    return RegistRateView(viewModel: vm, showSheet: .constant(nil))
 }

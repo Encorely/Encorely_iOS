@@ -10,6 +10,8 @@ import SwiftUI
 struct BadKeywordRating: View {
     
     @State private var isSelected: Bool = false
+    
+    let keywordType: KeywordType
         
     var body: some View {
         tagStyle
@@ -19,19 +21,15 @@ struct BadKeywordRating: View {
         Button(action: {
             isSelected.toggle()
         }) {
-            Text("너무 멀어요")
+            Text(keywordType.title)
                 .padding(.horizontal, 21)
                 .padding(.vertical, 9)
-                .foregroundStyle(.grayScaleA)
+                .foregroundStyle(.grayColorA)
                 .background {
                     RoundedRectangle(cornerRadius: 100)
-                        .fill(isSelected ? .subColorC : .grayScaleM)
-                        .stroke(.subColorD, lineWidth:  isSelected ? 1 : 0)
+                        .fill(isSelected ? .subColorC : .grayColorI)
+                        .stroke(.subColorA, lineWidth:  isSelected ? 1 : 0)
                 }
         }
     }
-}
-
-#Preview {
-    BadKeywordRating()
 }

@@ -24,7 +24,7 @@ struct CustomToolBarModifier: ViewModifier {
                         Image(.chevronLeft)
                             .resizable()
                             .frame(width: 30, height: 30)
-                            .foregroundStyle(.grayScaleA)
+                            .foregroundStyle(.grayColorA)
                     }
                 }
                 
@@ -32,7 +32,7 @@ struct CustomToolBarModifier: ViewModifier {
                 ToolbarItem(placement: .principal) {
                     Text(title)
                         .font(.mainTextSemiBold20)
-                        .foregroundStyle(.grayScaleA)
+                        .foregroundStyle(.grayColorA)
                 }
             }
     }
