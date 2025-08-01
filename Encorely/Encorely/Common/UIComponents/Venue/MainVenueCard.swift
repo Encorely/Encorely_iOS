@@ -27,11 +27,11 @@ struct MainVenueCard: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(searchVenueResponse.name)
                 .font(.mainTextMedium18)
-                .foregroundStyle(.grayScaleA)
+                .foregroundStyle(.grayColorA)
             
             Text(searchVenueResponse.address)
                 .font(.mainTextMedium14)
-                .foregroundStyle(.grayScaleH)
+                .foregroundStyle(.grayColorF)
         }
     }
     
@@ -42,7 +42,7 @@ struct MainVenueCard: View {
         }) {
             Image(.chevronRight)
                 .resizable()
-                .foregroundStyle(.grayScaleA)
+                .foregroundStyle(.grayColorA)
                 .frame(width: 24, height: 24)
         }
     }

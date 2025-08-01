@@ -56,7 +56,7 @@ class MainReviewRegistViewModel: ObservableObject {
     
     // MARK: 공연명, 아티스트명
     /// 공연명 TextField
-    @Published var performanceName: String = ""
+    @Published var performanceTitle: String = ""
     
     /// 아티스트명 TextField
     @Published var artistName: String = ""

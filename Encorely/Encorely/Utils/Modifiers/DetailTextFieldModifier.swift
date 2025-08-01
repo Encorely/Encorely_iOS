@@ -24,7 +24,7 @@ struct DetailTextFieldModifier: ViewModifier {
             .padding(.vertical, 15)
             .background {
                 RoundedRectangle(cornerRadius: 20)
-                    .foregroundStyle(.grayScaleM)
+                    .foregroundStyle(.grayColorI)
             }
     }
 }

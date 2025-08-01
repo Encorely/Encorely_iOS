@@ -9,9 +9,8 @@ import SwiftUI
 
 struct RegistPerformanceReviewView: View {
     
-    @State private var isChecked: Bool = false
-    @State private var simplePerformanceReview = ""
-    @State private var detailPerformanceReview = ""
+    @StateObject var viewModel = SubRegistViewModel()
+    
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -35,10 +34,10 @@ struct RegistPerformanceReviewView: View {
             VStack(spacing: 10) {
                 Text("공연 후기")
                     .font(.mainTextSemiBold20)
-                    .foregroundStyle(.mainColorG)
+                    .foregroundStyle(.mainColorD)
                 Rectangle()
                     .frame(width: 89, height: 2)
-                    .foregroundStyle(.mainColorG)
+                    .foregroundStyle(.mainColorD)
             }
             Spacer()
         }
@@ -49,17 +48,17 @@ struct RegistPerformanceReviewView: View {
         VStack(alignment: .leading, spacing: 23) {
             Text("공연에 대한 한줄평을 남겨주세요")
                 .font(.mainTextSemiBold18)
-            TextEditor(text: $simplePerformanceReview)
-                .detailTextFieldModifier(height: 40, font: .mainTextMedium16)
+            TextEditor(text: $viewModel.simplePerformanceReview)
+                .detailTextFieldModifier(height: 60, font: .mainTextMedium16)
                 .overlay(alignment: .bottomTrailing) {
-                    Text("\(simplePerformanceReview.count) / 45")
+                    Text("\(viewModel.simplePerformanceReview.count) / 45")
                         .font(.mainTextMedium12)
-                        .foregroundStyle(.grayScaleI)
+                        .foregroundStyle(.grayColorF)
                         .padding(.trailing, 13)
                         .padding(.bottom, 10)
-                        .onChange(of: simplePerformanceReview) { oldValue, newValue in
+                        .onChange(of: viewModel.simplePerformanceReview) { oldValue, newValue in
                             if newValue.count > 45 {
-                                simplePerformanceReview = String(newValue.prefix(45))
+                                viewModel.simplePerformanceReview = String(newValue.prefix(45))
                             }
                         }
                 }
@@ -70,19 +69,19 @@ struct RegistPerformanceReviewView: View {
         VStack(spacing: 23) {
             HStack(spacing: 15) {
                 Button(action: {
-                    isChecked.toggle()
+                    viewModel.isCheckedPerformance.toggle()
                 }) {
-                    Image(isChecked ? .fullCheck : .emptyCheck)
+                    Image(viewModel.isCheckedPerformance ? .fullCheck : .emptyCheck)
                         .resizable()
                         .frame(width: 20, height: 20)
                 }
                 Text("공연에 대해 더 자세한 후기를 남길래요")
                     .font(.mainTextSemiBold18)
-                    .foregroundStyle(isChecked ? .grayScaleA : .grayScaleL)
+                    .foregroundStyle(viewModel.isCheckedPerformance ? .grayColorA : .grayColorG)
                 Spacer()
             }
-            if isChecked {
-                TextEditor(text: $detailPerformanceReview)
+            if viewModel.isCheckedPerformance {
+                TextEditor(text: $viewModel.detailPerformanceReview)
                     .detailTextFieldModifier(height: 230, font: .mainTextMedium16
                     )
             }

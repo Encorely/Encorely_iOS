@@ -11,8 +11,8 @@ import SwiftUI
 
 struct RegistVenueView: View {
     
-    @State private var venues: [SearchVenueResponse] = []
-    @State private var text = ""
+    @StateObject var viewModel = SubRegistViewModel()
+    
     @Binding var showSheet: SheetType?
     
     var body: some View {
@@ -36,7 +36,7 @@ struct RegistVenueView: View {
     private var searchList: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                ForEach(venues, id: \.name) { venue in
+                ForEach(viewModel.venues, id: \.name) { venue in
                     Button (action: {
                         
                     }) {
@@ -48,7 +48,7 @@ struct RegistVenueView: View {
                 Task {
                     let service = MockVenueSelectionService()
                     let result = try? await service.getAllVenues()
-                    self.venues = result ?? []
+                    self.viewModel.venues = result ?? []
                 }
             }
         }
@@ -60,7 +60,7 @@ struct RegistVenueView: View {
     // MARK: 다음 버튼
     private var nextBtn: some View {
         NavigationLink (
-            destination: RegistSeatView(showSheet: $showSheet),
+            destination: RegistSeatView(viewModel: SubRegistViewModel(), showSheet: $showSheet),
             label: { MainRegistBtn(mainRegistType: .init(title: "다음"))
             })
     }

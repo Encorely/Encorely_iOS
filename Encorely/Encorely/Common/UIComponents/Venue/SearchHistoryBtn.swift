@@ -21,7 +21,7 @@ struct SearchHistoryBtn: View {
             .padding(.vertical, 9.5)
             .background {
                 RoundedRectangle(cornerRadius: 50)
-                    .fill(Color.mainColorD)
+                    .fill(Color.mainColorH)
             }
     }
     
@@ -31,7 +31,7 @@ struct SearchHistoryBtn: View {
             //TODO: 검색어로 이동
         }) {
             Text(searchHistoryItem.keyword)
-                .foregroundStyle(.mainColorE)
+                .foregroundStyle(.mainColorG)
                 .font(.mainTextMedium17)
         }
     }
@@ -44,7 +44,7 @@ struct SearchHistoryBtn: View {
             Image(systemName: "multiply")
                 .resizable()
                 .frame(width: 12, height: 12)
-                .foregroundStyle(.mainColorE)
+                .foregroundStyle(.mainColorG)
         }
     }
 }
