@@ -11,13 +11,17 @@ import SwiftUI
 
 struct RegistVenueView: View {
     
+    @EnvironmentObject var container: DIContainer
     @StateObject var viewModel = SubRegistViewModel()
     
     @Binding var showSheet: SheetType?
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $container.navigationRouter.destination) {
             registVenueView
+        }
+        .navigationDestination(for: NavigationDestination.self) { destination in
+            NavigationRoutingView(destination: destination)
         }
     }
     
@@ -25,16 +29,19 @@ struct RegistVenueView: View {
     private var registVenueView: some View {
         VStack(alignment: .leading, spacing: 20) {
             RegistProgress(progressStep: 1)
+                .padding(.horizontal, 16)
             LeftSearchBar(leftSearchBarType: .init(title: "내가 찾고 싶은 공연장을 검색하세요"))
+                .padding(.horizontal, 16)
             searchList
             nextBtn
+                .padding(.horizontal, 16)
         }
-        .padding(.horizontal, 16)
+        
     }
     
     /// 공연장 리스트
     private var searchList: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 0) {
                 ForEach(viewModel.venues, id: \.name) { venue in
                     Button (action: {
@@ -59,8 +66,9 @@ struct RegistVenueView: View {
     
     // MARK: 다음 버튼
     private var nextBtn: some View {
-        NavigationLink (
-            destination: RegistSeatView(viewModel: SubRegistViewModel(), showSheet: $showSheet),
+        Button(action: {
+            container.navigationRouter.push(to: .registSeat)
+        },
             label: { MainRegistBtn(mainRegistType: .init(title: "다음"))
             })
     }
@@ -69,4 +77,5 @@ struct RegistVenueView: View {
 
 #Preview {
     RegistVenueView(showSheet: .constant(nil))
+        .environmentObject(DIContainer())
 }

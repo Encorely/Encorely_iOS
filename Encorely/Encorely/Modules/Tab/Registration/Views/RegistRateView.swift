@@ -11,6 +11,7 @@ import SwiftUI
 
 struct RegistRateView: View {
     
+    @EnvironmentObject var container: DIContainer
     @ObservedObject var viewModel: SubRegistViewModel
     
     let goodkeywordList = KeywordType.goodSeatTag
@@ -29,10 +30,10 @@ struct RegistRateView: View {
             RegistProgress(progressStep: 3)
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 40) {
-                    
-                    
                     topContents
+                    
                     middleContents
+                    
                     bottomContents
                 }
                 .padding(.bottom, 16)
@@ -40,7 +41,6 @@ struct RegistRateView: View {
             .padding(.bottom, 16)
             nextBtn
         }
-        .padding(.horizontal, 16)
     }
     
     private var venueLocation: some View {
@@ -60,7 +60,7 @@ struct RegistRateView: View {
             .background {
                 RoundedRectangle(cornerRadius: 100)
                     .fill(.mainColorH)
-                    .stroke(.mainColorF, lineWidth: 1)
+                    .strokeBorder(.mainColorF, lineWidth: 1)
                 
             }
         }
@@ -70,7 +70,6 @@ struct RegistRateView: View {
         Text("\(viewModel.zone)구역 \(viewModel.rows)열 \(viewModel.num)번")
             .frame(maxWidth: .infinity)
             .purpleBorderTextFieldModifier(height: 60, font: .mainTextMedium20)
-            .padding(.horizontal, 1)
     }
     
     private var topContents: some View {
@@ -86,6 +85,7 @@ struct RegistRateView: View {
                 .padding(.top, 5)
             
         }
+        .padding(.horizontal, 16)
     }
     
     private var starRating: some View {
@@ -105,6 +105,7 @@ struct RegistRateView: View {
                     
                     Spacer()
                 }
+                .padding(.horizontal, 16)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     
@@ -115,30 +116,29 @@ struct RegistRateView: View {
                                 GoodKeywordRating(keywordType: goodkeywordList[index])
                             }
                         }
-                        .padding(1)
                         
                         HStack(spacing: 15) {
                             ForEach(5...8, id: \.self) { index in
                                 GoodKeywordRating(keywordType: goodkeywordList[index])
                             }
                         }
-                        .padding(1)
                         
                         HStack(spacing: 15) {
                             ForEach(9...13, id: \.self) { index in
                                 GoodKeywordRating(keywordType: goodkeywordList[index])
                             }
                         }
-                        .padding(1)
                         
                     }
                 }
+                .padding(.leading, 16)
             }
             VStack {
                 HStack {
                     Text("이런 점이 아쉬워요")
                     Spacer()
                 }
+                .padding(.horizontal, 16)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     
@@ -149,24 +149,22 @@ struct RegistRateView: View {
                                 BadKeywordRating(keywordType: badkeywordList[index])
                             }
                         }
-                        .padding(1)
                         
                         HStack(spacing: 15) {
                             ForEach(4...7, id: \.self) { index in
                                 BadKeywordRating(keywordType: badkeywordList[index])
                             }
                         }
-                        .padding(1)
                         
                         HStack(spacing: 15) {
                             ForEach(8...11, id: \.self) { index in
                                 BadKeywordRating(keywordType: badkeywordList[index])
                             }
                         }
-                        .padding(1)
                         
                     }
                 }
+                .padding(.leading, 16)
             }
         }
     }
@@ -194,16 +192,20 @@ struct RegistRateView: View {
                     )
             }
         }
+        .padding(.horizontal, 16)
     }
     
     
-    // MARK: 다음 버튼
+    // MARK: 완료 버튼
     private var nextBtn: some View {
         Button(action: {
+            container.navigationRouter.popToRootView()
+            
             showSheet = nil
         }) {
             MainRegistBtn(mainRegistType: .init(title: "완료"))
         }
+        .padding(.horizontal, 16)
     }
 }
 
@@ -213,6 +215,9 @@ struct RegistRateView: View {
     vm.zone = "12"
     vm.rows = "4"
     vm.num = "8"
+    
+    let container = DIContainer()
 
     return RegistRateView(viewModel: vm, showSheet: .constant(nil))
+        .environmentObject(container)
 }

@@ -28,7 +28,7 @@ struct BadKeywordRating: View {
                 .background {
                     RoundedRectangle(cornerRadius: 100)
                         .fill(isSelected ? .subColorC : .grayColorI)
-                        .stroke(.subColorA, lineWidth:  isSelected ? 1 : 0)
+                        .strokeBorder(.subColorA, lineWidth:  isSelected ? 1 : 0)
                 }
         }
     }

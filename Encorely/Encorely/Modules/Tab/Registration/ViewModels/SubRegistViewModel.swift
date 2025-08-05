@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import PhotosUI
 
 class SubRegistViewModel: ObservableObject {
     
@@ -15,7 +16,10 @@ class SubRegistViewModel: ObservableObject {
     @Published var venues: [SearchVenueResponse] = []
     
     /// 검색창 textField
-    @Published var text: String = ""
+    @Published var searchVenue: String = ""
+    
+    /// 공연장 선택
+    @Published var selectedVenue: SearchVenueResponse? = nil
     
     // MARK: RegistSeatViewModel
     /// 구역
@@ -31,6 +35,10 @@ class SubRegistViewModel: ObservableObject {
     // MARK: RegistRateViewModel
     /// 별점
     @Published var rating: Int = 0
+    
+    /// 좌석 키워드 평가
+    @Published var selectedGoodKeywords: Set<String> = []
+    @Published var selectedBadKeywords: Set<String> = []
     
     /// 좌석에 대해 더 자세한 후기를 남길래요
     @Published var isCheckedSeat: Bool = false
@@ -52,16 +60,45 @@ class SubRegistViewModel: ObservableObject {
     // MARK: RegistFacilityViewModel
     // 맛집
     /// 맛집 선택
-    @Published var selectedRestaurant: String = ""
+    @Published var selectedRestaurantType: RestaurantType = .restaurant
     
     /// menu action
-    func selectRestaurant(_ restaurant: String) {
-        selectedRestaurant = restaurant
+    func selectRestaurant(_ type: RestaurantType) {
+        selectedRestaurantType = type
     }
     
     /// 드롭다운 버튼 표시
     var displayRestaurant: String {
-        selectedRestaurant.isEmpty ? "밥집" : selectedRestaurant
+        selectedRestaurantType.displayName
+    }
+    
+    /// 맛집 사진
+    @Published var restaurantItem: PhotosPickerItem? = nil {
+        didSet {
+            if restaurantItem != nil {
+                Task {
+                    await loadRestaurantImage()
+                }
+            }
+        }
+    }
+    
+    @Published var restaurantImage: UIImage? = nil
+    
+    /// 맛집 사진 PhotosPickerItem을 UIImage로 변환
+    @MainActor
+    func loadRestaurantImage() {
+        Task {
+            guard let item = restaurantItem else {
+                self.restaurantImage = nil
+                return
+            }
+            
+            if let imageData = try? await item.loadTransferable(type: Data.self),
+               let uiImage = UIImage(data: imageData) {
+                self.restaurantImage = uiImage
+            }
+        }
     }
     
     /// 맛집에 대해 더 자세한 후기를 남길래요
@@ -70,31 +107,66 @@ class SubRegistViewModel: ObservableObject {
     /// 맛집에 대한 자세한 후기 작성 TextEditor
     @Published var detailRestaurantReview: String = ""
     
-    /// 맛집 장소 링크 TextField
-    @Published var restaurantURL: URL?
-    
-    
     // 편의시설 드롭다운
     /// 편의시설 선택
-    @Published var selectedFacility: String = ""
+    @Published var selectedFacilityType: FacilityType = .restroom
     
     /// menu action
-    func selectFacility(_ facility: String) {
-        selectedFacility = facility
+    func selectFacility(_ type: FacilityType) {
+        selectedFacilityType = type
     }
     
     /// 드롭다운 버튼 표시
     var displayFacility: String {
-        selectedFacility.isEmpty ? "화장실" : selectedFacility
+        selectedFacilityType.displayName
+    }
+    
+    /// 편의시설 사진
+    @Published var facilityItem: PhotosPickerItem? = nil {
+        didSet {
+            if facilityItem != nil {
+                Task {
+                    await loadFacilityImage()
+                }
+            }
+        }
+    }
+    
+    @Published var facilityImage: UIImage? = nil
+    
+    /// 맛집 사진 PhotosPickerItem을 UIImage로 변환
+    @MainActor
+    func loadFacilityImage() {
+        Task {
+            guard let item = facilityItem else {
+                self.facilityImage = nil
+                return
+            }
+            
+            if let imageData = try? await item.loadTransferable(type: Data.self),
+               let uiImage = UIImage(data: imageData) {
+                self.facilityImage = uiImage
+            }
+        }
     }
     
     /// 편의시설에 대해 더 자세한 후기를 남길래요
     @Published var isCheckedFacility: Bool = false
-    
+        
     /// 편의시설에 대한 자세한 후기 작성 TextEditor
     @Published var detailFacilityReview = ""
     
-    /// 편의시설 장소 링크 TextField
-    @Published var facilityURL: URL?
     
+    
+    @Published var searchPlace: String = ""
+        
+    func toggleGoodKeyword(_ keyword: String) {
+        if selectedGoodKeywords.contains(keyword) {
+            selectedGoodKeywords.remove(keyword)
+        } else {
+            selectedGoodKeywords.insert(keyword)
+        }
+    }
+        
 }
+

@@ -11,6 +11,7 @@ import SwiftUI
 
 struct RegistSeatView: View {
     
+    @EnvironmentObject var container: DIContainer
     @ObservedObject var viewModel: SubRegistViewModel
 
     @Binding var showSheet: SheetType?
@@ -20,10 +21,8 @@ struct RegistSeatView: View {
     @State private var seatNumberInput: String = ""
     
     var body: some View {
-        NavigationStack {
-            registSeatView
-        }
-        .navigationBarBackButtonHidden(true)
+        registSeatView
+            .navigationBarBackButtonHidden(true)
     }
     
     // MARK: 좌석 등록
@@ -56,7 +55,7 @@ struct RegistSeatView: View {
             .background {
                 RoundedRectangle(cornerRadius: 100)
                     .fill(.mainColorH)
-                    .stroke(.mainColorF, lineWidth: 1)
+                    .strokeBorder(.mainColorF, lineWidth: 1)
                 
             }
         }
@@ -101,15 +100,13 @@ struct RegistSeatView: View {
     
     // MARK: 다음 버튼
     private var nextBtn: some View {
-        NavigationLink (
-            destination: {
-                RegistRateView(viewModel: viewModel, showSheet: $showSheet)
-                    .onAppear {
-                        viewModel.zone = seatZoneInput
-                        viewModel.rows = seatRowInput
-                        viewModel.num = seatNumberInput
-                                        }
-            },
+        Button(action: {
+            viewModel.zone = seatZoneInput
+            viewModel.rows = seatRowInput
+            viewModel.num = seatNumberInput
+            
+            container.navigationRouter.push(to: .registRating)
+        },
             label: { MainRegistBtn(mainRegistType: .init(title: "다음"))
         })
     }
@@ -118,4 +115,5 @@ struct RegistSeatView: View {
 
 #Preview {
     RegistSeatView(viewModel: SubRegistViewModel(), showSheet: .constant(nil))
+        .environmentObject(DIContainer())
 }

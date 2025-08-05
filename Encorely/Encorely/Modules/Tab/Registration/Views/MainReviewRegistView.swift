@@ -10,6 +10,7 @@ import PhotosUI
 
 struct MainReviewRegistView: View {
     
+    @EnvironmentObject var container: DIContainer
     @StateObject var viewModel = MainReviewRegistViewModel()
     @State private var tempSelectedDate: Date = Date()
     @State private var activeSheet: SheetType?
@@ -22,7 +23,7 @@ struct MainReviewRegistView: View {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 55) {
                             topContents
-                            middleContents
+                            MainMiddleContents(viewModel: MainReviewRegistViewModel())
                             bottomContents
                         }
                         .padding(.horizontal, 16)
@@ -90,21 +91,13 @@ struct MainReviewRegistView: View {
     private var calendarBtnDetail: some View {
         HStack {
             Text(viewModel.displayDate)
-                .foregroundStyle(.grayColorA)
-                .font(.mainTextMedium14)
             
             Spacer()
             
             Image(.chevronDown)
-                .foregroundStyle(.grayColorD)
         }
-        .padding(.horizontal, 15)
-        .frame(width: 120, height: 33)
-        .background {
-            RoundedRectangle(cornerRadius: 100)
-                .fill(.grayColorJ)
-                .stroke(.grayColorC, lineWidth: 1)
-        }
+        .frame(width: 90)
+        .basicDropdownModifier(horizontal: 15, vertical: 8)
     }
     
     // MARK: 달력 sheet
@@ -143,22 +136,13 @@ struct MainReviewRegistView: View {
     private var selectedRoundBtnDetail: some View {
         HStack {
             Text(viewModel.displayRound)
-                .foregroundStyle(.grayColorA)
-                .font(.mainTextMedium14)
             
             Spacer()
             
             Image(.chevronDown)
-                .foregroundStyle(.grayColorD)
         }
-        .padding(.leading, 15)
-        .padding(.trailing, 12)
-        .frame(width: 99, height: 33)
-        .background {
-            RoundedRectangle(cornerRadius: 100)
-                .fill(.grayColorJ)
-                .stroke(.grayColorC, lineWidth: 1)
-        }
+        .frame(width: 73)
+        .basicDropdownModifier(horizontal: 15, vertical: 8)
     }
     
     // MARK: 공연명, 아티스트명 TextField
@@ -169,71 +153,6 @@ struct MainReviewRegistView: View {
             TextField("아티스트명을 입력해주세요", text: $viewModel.artistName)
                 .titleTextFieldModifier(font: .mainTextMedium18)
         }
-    }
-    
-    // MARK: 시야사진, 공연사진
-    private var middleContents: some View {
-        ZStack {
-            ZStack(alignment: .top) {
-                RoundedRectangle(cornerRadius: 15)
-                    .frame(width: 225, height: 310)
-                    .foregroundStyle(.grayColorJ)
-                    .shadow(color: .grayColorH, radius: 3)
-                noneImageView
-                    .offset(y: 15)
-            }
-            HStack {
-                Spacer()
-                Button(action: {
-                    
-                }) {
-                    Image(.emptyPlus)
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                }
-                .padding(.trailing, 8)
-            }
-        }
-    }
-    
-    // MARK: 사진 카테고리 드롭다운
-    private var photoCategoryDropDown: some View {
-        Menu {
-            Button("시야사진", action: {
-                viewModel.selectedImageCategory("시야사진")})
-            Button("공연사진", action: {
-                viewModel.selectedImageCategory("공연사진")})
-        } label: {
-            selectedRoundBtnDetail
-        }
-    }
-    
-    // MARK: 사진이 비어있을 때
-    private var noneImageView: some View {
-        ZStack {
-            Image(.empty)
-                .resizable()
-                .frame(width: 191, height: 260)
-            
-            Text("공연장 사진을\n올려주세요")
-                .font(.mainTextSemiBold20)
-                .multilineTextAlignment(.center)
-                .lineSpacing(4)
-        }
-    }
-    
-    // MARK: 시야사진
-    private var sightImageView: some View {
-        TabView {
-            ForEach(0..<viewModel.uploadedImage.count, id: \.self) { index in viewModel.uploadedImage[index]
-            }
-        }
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
-    }
-    
-    // MARK: 공연사진
-    private var performanceImageView: some View {
-        Text("공연사진")
     }
     
     // MARK: 리뷰 작성 버튼
@@ -271,4 +190,6 @@ struct MainReviewRegistView: View {
 
 #Preview {
     MainReviewRegistView()
+        .environmentObject(DIContainer())
+    
 }

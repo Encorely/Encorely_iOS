@@ -17,7 +17,7 @@ struct PurpleBorderTextFieldModifier: ViewModifier {
         content
             .background {
                 RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.mainColorD, lineWidth: 1)
+                    .strokeBorder(Color.mainColorD, lineWidth: 1)
                     .frame(height: height)
             }
             .font(font)

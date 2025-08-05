@@ -28,7 +28,7 @@ struct GoodKeywordRating: View {
                 .background {
                     RoundedRectangle(cornerRadius: 100)
                         .fill(isSelected ? .mainColorH : .grayColorI)
-                        .stroke(.mainColorF, lineWidth:  isSelected ? 1 : 0)
+                        .strokeBorder(.mainColorF, lineWidth:  isSelected ? 1 : 0)
                 }
         }
     }

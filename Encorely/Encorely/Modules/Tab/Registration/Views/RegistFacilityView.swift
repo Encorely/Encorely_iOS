@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct RegistFacilityView: View {
     
+    @EnvironmentObject var container: DIContainer
     @StateObject var viewModel = SubRegistViewModel()
     
     let keywordList = KeywordType.RestaurantTag
@@ -76,19 +78,18 @@ struct RegistFacilityView: View {
                 
                 Menu {
                     Button("밥집", action: {
-                        viewModel.selectedRestaurant = "밥집"
+                        viewModel.selectRestaurant(.restaurant)
                     })
                     Button("카페", action: {
-                        viewModel.selectedRestaurant = "카페"
+                        viewModel.selectRestaurant(.cafe)
                     })
                     Button("술집", action: {
-                        viewModel.selectedRestaurant = "술집"
+                        viewModel.selectRestaurant(.bar)
                     })
                 } label: {
                     selectedRestaurantBtnDetail
                 }
                 .buttonStyle(.plain)
-                .padding(.leading, 1)
             }
             
             Spacer()
@@ -116,24 +117,43 @@ struct RegistFacilityView: View {
         .background {
             RoundedRectangle(cornerRadius: 100)
                 .fill(.mainColorH)
-                .stroke(.mainColorF, lineWidth: 1)
+                .strokeBorder(.mainColorF, lineWidth: 1)
         }
     }
     
     /// 장소 첨부, 사진 첨부
     private var middleContentsR: some View {
         VStack(spacing: 20) {
-            TextField("맛집 장소의 링크를 첨부해주세요!", value: $viewModel.restaurantURL, format: .url)
-                .padding(.horizontal, 18)
-                .urlTextFieldModifier()
-                .padding(.horizontal, 1)
-            
             Button(action: {
                 
             }, label: {
-                FacilityImageCard()
+                facilityMapButton()
             })
+            
+            PhotosPicker(
+                selection: $viewModel.restaurantItem,
+                matching: .images
+            ) {
+                if viewModel.restaurantItem == nil {
+                    noneImageView
+                } else {
+                    restaurantImageCard
+                }
+            }
+            .onChange(of: viewModel.restaurantItem) {
+                viewModel.loadRestaurantImage()
+            }
         }
+    }
+    
+    /// 맛집 사진이 삽입된 상태일 때
+    private var restaurantImageCard: some View {
+        Image(uiImage: viewModel.restaurantImage ?? UIImage())
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(height: 122)
+            .frame(maxWidth: .infinity)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
     }
     
     /// 키워드 평가, 자세한 후기
@@ -153,21 +173,18 @@ struct RegistFacilityView: View {
                                 GoodKeywordRating(keywordType: keywordList[index])
                             }
                         }
-                        .padding(1)
                         
                         HStack(spacing: 15) {
                             ForEach(3...5, id: \.self) { index in
                                 GoodKeywordRating(keywordType: keywordList[index])
                             }
                         }
-                        .padding(1)
                         
                         HStack(spacing: 15) {
                             ForEach(6...9, id: \.self) { index in
                                 GoodKeywordRating(keywordType: keywordList[index])
                             }
                         }
-                        .padding(1)
                         
                     }
                 }
@@ -220,28 +237,27 @@ struct RegistFacilityView: View {
                 
                 Menu {
                     Button("화장실", action: {
-                        viewModel.selectedFacility = "화장실"
+                        viewModel.selectFacility(.restroom)
                     })
                     Button("편의점", action: {
-                        viewModel.selectedFacility = "편의점"
+                        viewModel.selectFacility(.convenienceStore)
                     })
                     Button("주차장", action: {
-                        viewModel.selectedFacility = "주차장"
+                        viewModel.selectFacility(.parking)
                     })
                     Button("벤치", action: {
-                        viewModel.selectedFacility = "벤치"
+                        viewModel.selectFacility(.bench)
                     })
                     Button("ATM", action: {
-                        viewModel.selectedFacility = "ATM"
+                        viewModel.selectFacility(.atm)
                     })
                     Button("기타", action: {
-                        viewModel.selectedFacility = "기타"
+                        viewModel.selectFacility(.other)
                     })
                 } label: {
                     selectedFacilityBtnDetail
                 }
                 .buttonStyle(.plain)
-                .padding(.leading, 1)
             }
             
             Spacer()
@@ -269,24 +285,43 @@ struct RegistFacilityView: View {
         .background {
             RoundedRectangle(cornerRadius: 100)
                 .fill(.mainColorH)
-                .stroke(.mainColorF, lineWidth: 1)
+                .strokeBorder(.mainColorF, lineWidth: 1)
         }
     }
     
     /// 장소 첨부, 사진 첨부
     private var middleContentsF: some View {
         VStack(spacing: 20) {
-            TextField("편의시설 장소의 링크를 첨부해주세요!", value: $viewModel.facilityURL, format: .url)
-                .padding(.horizontal, 18)
-                .urlTextFieldModifier()
-                .padding(.horizontal, 1)
-            
             Button(action: {
                 
             }, label: {
-                FacilityImageCard()
+                facilityMapButton()
             })
+            
+            PhotosPicker(
+                selection: $viewModel.facilityItem,
+                matching: .images
+            ) {
+                if viewModel.facilityItem == nil {
+                    noneImageView
+                } else {
+                    facilityImageCard
+                }
+            }
+            .onChange(of: viewModel.restaurantItem) {
+                viewModel.loadRestaurantImage()
+            }
         }
+    }
+    
+    /// 편의시설 사진이 삽입된 상태일 때
+    private var facilityImageCard: some View {
+        Image(uiImage: viewModel.facilityImage ?? UIImage())
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(height: 122)
+            .frame(maxWidth: .infinity)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
     }
     
     /// 자세한 후기
@@ -314,6 +349,12 @@ struct RegistFacilityView: View {
     }
     
     
+    // MARK: 사진이 비어있을 때
+    private var noneImageView: some View {
+        FacilityImageCard()
+    }
+    
+    
     // MARK: 다음 버튼
     private var nextBtn: some View {
         Button(action: {
@@ -326,4 +367,5 @@ struct RegistFacilityView: View {
 
 #Preview {
     RegistFacilityView()
+        .environmentObject(DIContainer())
 }

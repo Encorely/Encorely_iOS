@@ -24,8 +24,11 @@ struct SubVenueCard: View {
                 Spacer()
             }
             .padding(.vertical, 15)
-            .padding(.horizontal, 7)
-            .border(.mainColorE, width: isSelectedVenue ? 1 : 0)
+            .padding(.horizontal, 16)
+            .background {
+                Rectangle()
+                    .foregroundStyle(isSelectedVenue ? .mainColorH.opacity(0.5) : .clear)
+            }
         }
     }
     

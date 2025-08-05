@@ -16,7 +16,7 @@ struct LeftSearchBar: View {
     // MARK: 검색창 테두리
     var body: some View {
         RoundedRectangle(cornerRadius: 50)
-            .stroke(Color.grayColorC, lineWidth: 1)
+            .strokeBorder(Color.grayColorC, lineWidth: 1)
             .frame(height: 49)
             .overlay {
                 searchElement
