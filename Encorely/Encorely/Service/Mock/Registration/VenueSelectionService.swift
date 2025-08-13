@@ -36,9 +36,9 @@ class MockVenueSelectionService: VenueSelectionServiceProtocol {
             image: "https://i.namu.wiki/i/weOyvjMO4Pv2TzZPXdlaTj3zzbQglcDeBUPrVf9WADE8899wqRWrl1WYknSDDr7BC-lk2WzTdWfBKvDAKChUew.webp"
         ),
         SearchVenueResponse(
-            name: "수원월드컵경기장",
-            address: "경기도 수원시 팔달구 월드컵로 310",
-            image: "https://i.namu.wiki/i/j1bZH0oH0vGMpHySpCNRxHwgaUFEzj3hJuIFPK7PfEq6Eo1A7FWRDshvfncJE0WYzYGEQJTqdjD6LxosfNmjhQ.webp"
+            name: "잠실실내체육관",
+            address: "서울특별시 송파구 올림픽로 25",
+            image: "https://i.namu.wiki/i/80J-s6xQiEM_iI5g9As481C8PKg5RhtsUeSFlYv6GjjWmD2vqtPPvRLSrDbchW7jyszmNR4eZ-zoV9aIwdZDCQ.webp"
         ),
         SearchVenueResponse(
             name: "인스파이어 아레나",

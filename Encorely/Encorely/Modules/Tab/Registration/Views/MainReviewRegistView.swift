@@ -6,15 +6,14 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct MainReviewRegistView: View {
     
+    @EnvironmentObject var container: DIContainer
     @StateObject var viewModel = MainReviewRegistViewModel()
     @State private var tempSelectedDate: Date = Date()
-    @EnvironmentObject var container: DIContainer
     @State private var activeSheet: SheetType?
-    @State private var performanceTitle = ""
-    @State private var artistName = ""
     
     var body: some View {
             ZStack {
@@ -24,12 +23,12 @@ struct MainReviewRegistView: View {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 55) {
                             topContents
-                            middleContents
+                            MainMiddleContents(viewModel: MainReviewRegistViewModel())
                             bottomContents
                         }
                         .padding(.horizontal, 16)
+                        .padding(.bottom, 16)
                     }
-                    .padding(.bottom, 16)
                     uploadBtn
                 }
             }
@@ -42,14 +41,17 @@ struct MainReviewRegistView: View {
                         .presentationCornerRadius(30)
                 case .venueSeatRating:
                     RegistVenueView(showSheet: $activeSheet)
+                        .presentationDragIndicator(.visible)
                         .presentationDetents([.fraction(0.65)])
                         .presentationCornerRadius(30)
                 case .performanceReview:
                     RegistPerformanceReviewView()
+                        .presentationDragIndicator(.visible)
                         .presentationDetents([.fraction(0.65)])
                         .presentationCornerRadius(30)
                 case .facility:
                     RegistFacilityView()
+                        .presentationDragIndicator(.visible)
                         .presentationDetents([.fraction(0.65)])
                         .presentationCornerRadius(30)
                 }
@@ -89,21 +91,13 @@ struct MainReviewRegistView: View {
     private var calendarBtnDetail: some View {
         HStack {
             Text(viewModel.displayDate)
-                .foregroundStyle(.grayScaleK)
-                .font(.mainTextMedium14)
             
             Spacer()
             
             Image(.chevronDown)
-                .foregroundStyle(.grayScaleJ)
         }
-        .padding(.horizontal, 15)
-        .frame(width: 120, height: 33)
-        .background {
-            RoundedRectangle(cornerRadius: 100)
-                .fill(.grayScaleG)
-                .stroke(.grayScaleJ, lineWidth: 1)
-        }
+        .frame(width: 90)
+        .basicDropdownModifier(horizontal: 15, vertical: 8)
     }
     
     // MARK: 달력 sheet
@@ -142,88 +136,23 @@ struct MainReviewRegistView: View {
     private var selectedRoundBtnDetail: some View {
         HStack {
             Text(viewModel.displayRound)
-                .foregroundStyle(.grayScaleK)
-                .font(.mainTextMedium14)
             
             Spacer()
             
             Image(.chevronDown)
-                .foregroundStyle(.grayScaleJ)
         }
-        .padding(.leading, 15)
-        .padding(.trailing, 12)
-        .frame(width: 99, height: 33)
-        .background {
-            RoundedRectangle(cornerRadius: 100)
-                .fill(.grayScaleG)
-                .stroke(.grayScaleJ, lineWidth: 1)
-        }
+        .frame(width: 73)
+        .basicDropdownModifier(horizontal: 15, vertical: 8)
     }
     
     // MARK: 공연명, 아티스트명 TextField
     private var nameTextField: some View {
         VStack(spacing: 17) {
-            TextField("공연명을 입력해주세요", text: $performanceTitle)
+            TextField("공연명을 입력해주세요", text: $viewModel.performanceTitle)
                 .titleTextFieldModifier(font: .mainTextMedium18)
-            TextField("아티스트명을 입력해주세요", text: $artistName)
+            TextField("아티스트명을 입력해주세요", text: $viewModel.artistName)
                 .titleTextFieldModifier(font: .mainTextMedium18)
         }
-    }
-    
-    // MARK: 시야사진, 공연사진
-    private var middleContents: some View {
-        ZStack {
-            ZStack(alignment: .top) {
-                RoundedRectangle(cornerRadius: 15)
-                    .frame(width: 225, height: 310)
-                    .foregroundStyle(.white)
-                    .shadow(color: .grayScaleE, radius: 4)
-                ZStack {
-                    Image(.empty)
-                        .resizable()
-                        .frame(width: 191, height: 260)
-                    
-                    Text("공연장 사진을\n올려주세요")
-                        .font(.mainTextSemiBold20)
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(4)
-                }
-                .offset(y: 15)
-            }
-            HStack {
-                Spacer()
-                Button(action: {
-                    
-                }) {
-                    Image(.emptyPlus)
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                }
-                .padding(.trailing, 8)
-            }
-        }
-    }
-    
-    // MARK: 사진 카테고리 드롭다운
-    private var photoCategoryDropDown: some View {
-        Menu {
-            Button("시야사진", action: {
-                viewModel.selectedImageCategory("시야사진")})
-            Button("공연사진", action: {
-                viewModel.selectedImageCategory("공연사진")})
-        } label: {
-            selectedRoundBtnDetail
-        }
-    }
-    
-    // MARK: 시야사진
-    private var sightImageView: some View {
-        Text("시야사진")
-    }
-    
-    // MARK: 공연사진
-    private var performanceImageView: some View {
-        Text("공연사진")
     }
     
     // MARK: 리뷰 작성 버튼
@@ -261,4 +190,6 @@ struct MainReviewRegistView: View {
 
 #Preview {
     MainReviewRegistView()
+        .environmentObject(DIContainer())
+    
 }

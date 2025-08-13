@@ -16,7 +16,7 @@ struct LeftSearchBar: View {
     // MARK: 검색창 테두리
     var body: some View {
         RoundedRectangle(cornerRadius: 50)
-            .stroke(Color.grayScaleC, lineWidth: 1)
+            .strokeBorder(Color.grayColorC, lineWidth: 1)
             .frame(height: 49)
             .overlay {
                 searchElement
@@ -29,7 +29,7 @@ struct LeftSearchBar: View {
             Image(.magnifyingGlass)
                 .resizable()
                 .frame(width: 25, height: 25)
-                .foregroundStyle(.grayScaleA)
+                .foregroundStyle(.grayColorA)
 
             TextField(leftSearchBarType.title, text: $text)
                 .basicTextFieldModifier(font: .mainTextMedium16)

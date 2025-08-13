@@ -14,7 +14,7 @@ struct UrlTextFieldModifier: ViewModifier {
         content
             .background {
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.mainColorH, lineWidth: 1)
+                    .strokeBorder(Color.mainColorF, lineWidth: 1)
                     .frame(height: 40)
             }
             .font(.mainTextMedium14)

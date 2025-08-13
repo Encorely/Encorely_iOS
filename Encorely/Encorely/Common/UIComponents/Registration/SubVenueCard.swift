@@ -24,8 +24,11 @@ struct SubVenueCard: View {
                 Spacer()
             }
             .padding(.vertical, 15)
-            .padding(.horizontal, 7)
-            .border(.mainColorA, width: isSelectedVenue ? 1 : 0)
+            .padding(.horizontal, 16)
+            .background {
+                Rectangle()
+                    .foregroundStyle(isSelectedVenue ? .mainColorH.opacity(0.5) : .clear)
+            }
         }
     }
     
@@ -34,11 +37,11 @@ struct SubVenueCard: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(searchVenueResponse.name)
                 .font(.mainTextMedium18)
-                .foregroundStyle(.grayScaleA)
+                .foregroundStyle(.grayColorA)
             
             Text(searchVenueResponse.address)
                 .font(.mainTextMedium14)
-                .foregroundStyle(.grayScaleH)
+                .foregroundStyle(.grayColorF)
         }
     }
     

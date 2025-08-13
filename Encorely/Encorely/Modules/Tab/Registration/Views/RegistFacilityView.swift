@@ -6,21 +6,14 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct RegistFacilityView: View {
     
+    @EnvironmentObject var container: DIContainer
     @StateObject var viewModel = SubRegistViewModel()
     
-    @State private var isRChecked: Bool = false
-    @State private var detailRestaurantReview = ""
-    @State private var restaurantURL: URL?
     let keywordList = KeywordType.RestaurantTag
-    
-    @State private var facilityURL: URL?
-    
-    @State private var isFChecked: Bool = false
-    @State private var detailFacilityReview = ""
-    
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -48,11 +41,11 @@ struct RegistFacilityView: View {
             VStack(spacing: 10) {
                 Text("맛집 및 편의시설")
                     .font(.mainTextSemiBold20)
-                    .foregroundStyle(.mainColorG)
+                    .foregroundStyle(.mainColorD)
                 
                 Rectangle()
                     .frame(width: 147, height: 2)
-                    .foregroundStyle(.mainColorG)
+                    .foregroundStyle(.mainColorD)
             }
             
             Spacer()
@@ -85,19 +78,18 @@ struct RegistFacilityView: View {
                 
                 Menu {
                     Button("밥집", action: {
-                        viewModel.selectedRestaurant = "밥집"
+                        viewModel.selectRestaurant(.restaurant)
                     })
                     Button("카페", action: {
-                        viewModel.selectedRestaurant = "카페"
+                        viewModel.selectRestaurant(.cafe)
                     })
                     Button("술집", action: {
-                        viewModel.selectedRestaurant = "술집"
+                        viewModel.selectRestaurant(.bar)
                     })
                 } label: {
-                    selectedRoundBtnDetail
+                    selectedRestaurantBtnDetail
                 }
                 .buttonStyle(.plain)
-                .padding(.leading, 1)
             }
             
             Spacer()
@@ -105,11 +97,11 @@ struct RegistFacilityView: View {
         .padding(.top, 20)
     }
     
-    private var selectedRoundBtnDetail: some View {
+    private var selectedRestaurantBtnDetail: some View {
         HStack {
             
             Text(viewModel.displayRestaurant)
-                .foregroundStyle(.grayScaleK)
+                .foregroundStyle(.grayColorF)
                 .font(.mainTextMedium16)
             
             Spacer()
@@ -117,32 +109,51 @@ struct RegistFacilityView: View {
             Image(.chevronDown)
                 .resizable()
                 .frame(width: 16, height: 9.04)
-                .foregroundStyle(.grayScaleJ)
+                .foregroundStyle(.grayColorD)
         }
         .padding(.leading, 20)
         .padding(.trailing, 18)
         .frame(width: 103, height: 33)
         .background {
             RoundedRectangle(cornerRadius: 100)
-                .fill(.mainColorD)
-                .stroke(.mainColorH, lineWidth: 1)
+                .fill(.mainColorH)
+                .strokeBorder(.mainColorF, lineWidth: 1)
         }
     }
     
     /// 장소 첨부, 사진 첨부
     private var middleContentsR: some View {
         VStack(spacing: 20) {
-            TextField("맛집 장소의 링크를 첨부해주세요!", value: $restaurantURL, format: .url)
-                .padding(.horizontal, 18)
-                .urlTextFieldModifier()
-                .padding(.horizontal, 1)
-            
             Button(action: {
                 
             }, label: {
-                FacilityImageCard()
+                facilityMapButton()
             })
+            
+            PhotosPicker(
+                selection: $viewModel.restaurantItem,
+                matching: .images
+            ) {
+                if viewModel.restaurantItem == nil {
+                    noneImageView
+                } else {
+                    restaurantImageCard
+                }
+            }
+            .onChange(of: viewModel.restaurantItem) {
+                viewModel.loadRestaurantImage()
+            }
         }
+    }
+    
+    /// 맛집 사진이 삽입된 상태일 때
+    private var restaurantImageCard: some View {
+        Image(uiImage: viewModel.restaurantImage ?? UIImage())
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(height: 122)
+            .frame(maxWidth: .infinity)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
     }
     
     /// 키워드 평가, 자세한 후기
@@ -151,7 +162,7 @@ struct RegistFacilityView: View {
             VStack(alignment: .leading, spacing: 20) {
                 Text("이런 점이 좋아요")
                     .font(.mainTextSemiBold18)
-                    .foregroundStyle(.grayScaleA)
+                    .foregroundStyle(.grayColorA)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     
@@ -162,21 +173,18 @@ struct RegistFacilityView: View {
                                 GoodKeywordRating(keywordType: keywordList[index])
                             }
                         }
-                        .padding(1)
                         
                         HStack(spacing: 15) {
                             ForEach(3...5, id: \.self) { index in
                                 GoodKeywordRating(keywordType: keywordList[index])
                             }
                         }
-                        .padding(1)
                         
                         HStack(spacing: 15) {
                             ForEach(6...9, id: \.self) { index in
                                 GoodKeywordRating(keywordType: keywordList[index])
                             }
                         }
-                        .padding(1)
                         
                     }
                 }
@@ -185,21 +193,21 @@ struct RegistFacilityView: View {
             HStack(spacing: 15) {
                 
                 Button(action: {
-                    isRChecked.toggle()
+                    viewModel.isCheckedRestaurant.toggle()
                 }) {
-                    Image(isRChecked ? .fullCheck : .emptyCheck)
+                    Image(viewModel.isCheckedRestaurant ? .fullCheck : .emptyCheck)
                         .resizable()
                         .frame(width: 20, height: 20)
                 }
                 
                 Text("맛집에 대해 더 자세한 후기를 남길래요")
                     .font(.mainTextSemiBold18)
-                    .foregroundStyle(isRChecked ? .grayScaleA : .grayScaleL)
+                    .foregroundStyle(viewModel.isCheckedRestaurant ? .grayColorA : .grayColorG)
                 
                 Spacer()
             }
-            if isRChecked {
-                TextEditor(text: $detailRestaurantReview)
+            if viewModel.isCheckedRestaurant {
+                TextEditor(text: $viewModel.detailRestaurantReview)
                     .detailTextFieldModifier(height: 100, font: .mainTextMedium16
                     )
             }
@@ -229,48 +237,91 @@ struct RegistFacilityView: View {
                 
                 Menu {
                     Button("화장실", action: {
-                        viewModel.selectedFacility = "화장실"
+                        viewModel.selectFacility(.restroom)
                     })
                     Button("편의점", action: {
-                        viewModel.selectedFacility = "편의점"
+                        viewModel.selectFacility(.convenienceStore)
                     })
                     Button("주차장", action: {
-                        viewModel.selectedFacility = "주차장"
+                        viewModel.selectFacility(.parking)
                     })
                     Button("벤치", action: {
-                        viewModel.selectedFacility = "벤치"
+                        viewModel.selectFacility(.bench)
                     })
                     Button("ATM", action: {
-                        viewModel.selectedFacility = "ATM"
+                        viewModel.selectFacility(.atm)
                     })
                     Button("기타", action: {
-                        viewModel.selectedFacility = "기타"
+                        viewModel.selectFacility(.other)
                     })
                 } label: {
-                    selectedRoundBtnDetail
+                    selectedFacilityBtnDetail
                 }
                 .buttonStyle(.plain)
-                .padding(.leading, 1)
             }
             
             Spacer()
         }
-        .padding(.top, 20)    }
+        .padding(.top, 20)
+    }
+    
+    private var selectedFacilityBtnDetail: some View {
+        HStack {
+            
+            Text(viewModel.displayFacility)
+                .foregroundStyle(.grayColorF)
+                .font(.mainTextMedium16)
+            
+            Spacer()
+            
+            Image(.chevronDown)
+                .resizable()
+                .frame(width: 16, height: 9.04)
+                .foregroundStyle(.grayColorD)
+        }
+        .padding(.leading, 18)
+        .padding(.trailing, 18)
+        .frame(width: 103, height: 33)
+        .background {
+            RoundedRectangle(cornerRadius: 100)
+                .fill(.mainColorH)
+                .strokeBorder(.mainColorF, lineWidth: 1)
+        }
+    }
     
     /// 장소 첨부, 사진 첨부
     private var middleContentsF: some View {
         VStack(spacing: 20) {
-            TextField("편의시설 장소의 링크를 첨부해주세요!", value: $facilityURL, format: .url)
-                .padding(.horizontal, 18)
-                .urlTextFieldModifier()
-                .padding(.horizontal, 1)
-            
             Button(action: {
                 
             }, label: {
-                FacilityImageCard()
+                facilityMapButton()
             })
+            
+            PhotosPicker(
+                selection: $viewModel.facilityItem,
+                matching: .images
+            ) {
+                if viewModel.facilityItem == nil {
+                    noneImageView
+                } else {
+                    facilityImageCard
+                }
+            }
+            .onChange(of: viewModel.restaurantItem) {
+                viewModel.loadRestaurantImage()
+            }
         }
+    }
+    
+    /// 편의시설 사진이 삽입된 상태일 때
+    private var facilityImageCard: some View {
+        Image(uiImage: viewModel.facilityImage ?? UIImage())
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(height: 122)
+            .frame(maxWidth: .infinity)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
     }
     
     /// 자세한 후기
@@ -278,23 +329,29 @@ struct RegistFacilityView: View {
         VStack(spacing: 23) {
             HStack(spacing: 15) {
                 Button(action: {
-                    isFChecked.toggle()
+                    viewModel.isCheckedFacility.toggle()
                 }) {
-                    Image(isFChecked ? .fullCheck : .emptyCheck)
+                    Image(viewModel.isCheckedFacility ? .fullCheck : .emptyCheck)
                         .resizable()
                         .frame(width: 20, height: 20)
                 }
                 Text("편의시설에 대해 더 자세한 후기를 남길래요")
                     .font(.mainTextSemiBold18)
-                    .foregroundStyle(isFChecked ? .grayScaleA : .grayScaleL)
+                    .foregroundStyle(viewModel.isCheckedFacility ? .grayColorA : .grayColorG)
                 Spacer()
             }
-            if isFChecked {
-                TextEditor(text: $detailFacilityReview)
+            if viewModel.isCheckedFacility {
+                TextEditor(text: $viewModel.detailFacilityReview)
                     .detailTextFieldModifier(height: 100, font: .mainTextMedium16
                     )
             }
         }
+    }
+    
+    
+    // MARK: 사진이 비어있을 때
+    private var noneImageView: some View {
+        FacilityImageCard()
     }
     
     
@@ -310,4 +367,5 @@ struct RegistFacilityView: View {
 
 #Preview {
     RegistFacilityView()
+        .environmentObject(DIContainer())
 }

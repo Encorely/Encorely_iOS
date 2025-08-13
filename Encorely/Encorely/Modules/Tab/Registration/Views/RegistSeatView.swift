@@ -11,15 +11,18 @@ import SwiftUI
 
 struct RegistSeatView: View {
     
-    @State private var text = ""
-    @State private var isChecked: Bool = false
+    @EnvironmentObject var container: DIContainer
+    @ObservedObject var viewModel: SubRegistViewModel
+
     @Binding var showSheet: SheetType?
     
+    @State private var seatZoneInput: String = ""
+    @State private var seatRowInput: String = ""
+    @State private var seatNumberInput: String = ""
+    
     var body: some View {
-        NavigationStack {
-            registSeatView
-        }
-        .navigationBarBackButtonHidden(true)
+        registSeatView
+            .navigationBarBackButtonHidden(true)
     }
     
     // MARK: 좌석 등록
@@ -46,13 +49,13 @@ struct RegistSeatView: View {
                 Text("고척 스카이돔")
                     .font(.mainTextMedium16)
             }
-            .foregroundStyle(.grayScaleH)
+            .foregroundStyle(.grayColorF)
             .padding(.horizontal, 12)
             .padding(.vertical, 7)
             .background {
                 RoundedRectangle(cornerRadius: 100)
-                    .fill(.mainColorD)
-                    .stroke(.mainColorH, lineWidth: 1)
+                    .fill(.mainColorH)
+                    .strokeBorder(.mainColorF, lineWidth: 1)
                 
             }
         }
@@ -61,32 +64,35 @@ struct RegistSeatView: View {
     private var seatTextField: some View {
         VStack(spacing: 20) {
             HStack(spacing: 21) {
-                TextField("", text: $text)
+                TextField("", text: $seatZoneInput)
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, 12)
-                    .purpleBorderTextFieldModifier(height: 60, font: .mainTextMedium16)
+                    .purpleBorderTextFieldModifier(height: 60, font: .mainTextMedium20)
+                    .multilineTextAlignment(.center)
                 Text("구역")
                     .font(.mainTextMedium20)
-                    .foregroundStyle(.grayScaleA)
+                    .foregroundStyle(.grayColorA)
             }
             HStack(spacing: 23) {
                 HStack(spacing: 21) {
-                    TextField("", text: $text)
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, 12)
-                        .purpleBorderTextFieldModifier(height: 60, font: .mainTextMedium16)
-                    Text("열")
-                        .font(.mainTextMedium20)
-                        .foregroundStyle(.grayScaleA)
-                }
-                HStack(spacing: 21) {
-                    TextField("", text: $text)
+                    TextField("", text: $seatRowInput)
                         .frame(maxWidth: .infinity)
                         .padding(.horizontal, 12)
                         .purpleBorderTextFieldModifier(height: 60, font: .mainTextMedium20)
+                        .multilineTextAlignment(.center)
+                    Text("열")
+                        .font(.mainTextMedium20)
+                        .foregroundStyle(.grayColorA)
+                }
+                HStack(spacing: 21) {
+                    TextField("", text: $seatNumberInput)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 12)
+                        .purpleBorderTextFieldModifier(height: 60, font: .mainTextMedium20)
+                        .multilineTextAlignment(.center)
                     Text("번")
                         .font(.mainTextMedium20)
-                        .foregroundStyle(.grayScaleA)
+                        .foregroundStyle(.grayColorA)
                 }
             }
         }
@@ -94,8 +100,13 @@ struct RegistSeatView: View {
     
     // MARK: 다음 버튼
     private var nextBtn: some View {
-        NavigationLink (
-            destination: RegistRateView(showSheet: $showSheet),
+        Button(action: {
+            viewModel.zone = seatZoneInput
+            viewModel.rows = seatRowInput
+            viewModel.num = seatNumberInput
+            
+            container.navigationRouter.push(to: .registRating)
+        },
             label: { MainRegistBtn(mainRegistType: .init(title: "다음"))
         })
     }
@@ -103,5 +114,6 @@ struct RegistSeatView: View {
 
 
 #Preview {
-    RegistSeatView(showSheet: .constant(nil))
+    RegistSeatView(viewModel: SubRegistViewModel(), showSheet: .constant(nil))
+        .environmentObject(DIContainer())
 }

@@ -19,9 +19,9 @@ struct TitleTextFieldModifier: ViewModifier {
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(.white)
+                    .fill(.grayColorJ)
+                    .shadow(color: .grayColorH, radius: 3)
             }
-            .shadow(color: .grayScaleE, radius: 4)
             .multilineTextAlignment(.center)
             .font(font)
             .textInputAutocapitalization(.never)

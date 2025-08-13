@@ -12,7 +12,7 @@ import Foundation
 class DIContainer: ObservableObject {
     
     /// 화면 전환을 제어하는 네비게이션 라우터
-    @Published var navigationRouter: NavigationRouter
+    @Published var navigationRouter = NavigationRouter()
     
     /// 유즈케이스 및 API 호출을 담당하는 서비스 객체
     /// API 요청, 데이터 가공 등 비즈니스 로직을 처리하는 UseCase 계층의 서비스
