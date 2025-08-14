@@ -20,6 +20,7 @@ struct MainVenueCard: View {
             Spacer()
             venueDetailBtn
         }
+        .padding(16)
     }
     
     // MARK: 공연장 정보(이름, 주소)
