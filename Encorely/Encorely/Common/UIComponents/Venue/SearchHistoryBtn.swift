@@ -31,7 +31,7 @@ struct SearchHistoryBtn: View {
             //TODO: 검색어로 이동
         }) {
             Text(searchHistoryItem.keyword)
-                .foregroundStyle(.mainColorG)
+                .foregroundStyle(.mainColorC)
                 .font(.mainTextMedium17)
         }
     }
@@ -44,7 +44,7 @@ struct SearchHistoryBtn: View {
             Image(systemName: "multiply")
                 .resizable()
                 .frame(width: 12, height: 12)
-                .foregroundStyle(.mainColorG)
+                .foregroundStyle(.mainColorC)
         }
     }
 }
