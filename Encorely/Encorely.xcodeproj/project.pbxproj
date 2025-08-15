@@ -34,10 +34,6 @@
 				Info.plist,
 				Models/Domain/MyPage/.gitkeep,
 				Models/DTO/Auth/.gitkeep,
-				Modules/AppFlow/Login/.gitkeep,
-				Modules/AppFlow/Splash/.gitkeep,
-				Modules/Tab/MyPage/ViewModels/.gitkeep,
-				Modules/Tab/MyPage/Views/.gitkeep,
 				Modules/Tab/Venue/ViewModels/.gitkeep,
 				Utils/Extensions/.gitkeep,
 			);
@@ -294,6 +290,7 @@
 				DEVELOPMENT_TEAM = 8X4Y9X224S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Encorely/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -326,6 +323,7 @@
 				DEVELOPMENT_TEAM = 8X4Y9X224S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Encorely/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
