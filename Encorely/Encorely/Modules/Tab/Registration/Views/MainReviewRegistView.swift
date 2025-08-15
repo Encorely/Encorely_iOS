@@ -11,7 +11,7 @@ import PhotosUI
 struct MainReviewRegistView: View {
     
     @EnvironmentObject var container: DIContainer
-    @StateObject var viewModel = MainReviewRegistViewModel()
+    @StateObject var viewModel = RegistViewModel()
     @State private var tempSelectedDate: Date = Date()
     @State private var activeSheet: SheetType?
     
@@ -23,7 +23,7 @@ struct MainReviewRegistView: View {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 55) {
                             topContents
-                            MainMiddleContents(viewModel: MainReviewRegistViewModel())
+                            MainMiddleContents(viewModel: RegistViewModel())
                             bottomContents
                         }
                         .padding(.horizontal, 16)
@@ -44,6 +44,7 @@ struct MainReviewRegistView: View {
                         .presentationDragIndicator(.visible)
                         .presentationDetents([.fraction(0.65)])
                         .presentationCornerRadius(30)
+                        .environmentObject(container)
                 case .performanceReview:
                     RegistPerformanceReviewView()
                         .presentationDragIndicator(.visible)
@@ -54,6 +55,15 @@ struct MainReviewRegistView: View {
                         .presentationDragIndicator(.visible)
                         .presentationDetents([.fraction(0.65)])
                         .presentationCornerRadius(30)
+                }
+            }
+            .onChange(of: activeSheet) { oldValue, newValue in
+                print("🔵 activeSheet 변경: \(String(describing: oldValue)) -> \(String(describing: newValue))")
+                
+                // sheet가 닫힐 때 navigation stack 정리
+                if newValue == nil && oldValue == .venueSeatRating {
+                    container.navigationRouter.destination.removeAll()
+                    print("🔵 Sheet 닫힘 - Navigation stack 정리됨")
                 }
             }
     }
@@ -94,7 +104,7 @@ struct MainReviewRegistView: View {
             
             Spacer()
             
-            Image(.chevronDown)
+            Image("chevronDown")
         }
         .frame(width: 90)
         .basicDropdownModifier(horizontal: 15, vertical: 8)
@@ -139,7 +149,7 @@ struct MainReviewRegistView: View {
             
             Spacer()
             
-            Image(.chevronDown)
+            Image("chevronDown")
         }
         .frame(width: 73)
         .basicDropdownModifier(horizontal: 15, vertical: 8)

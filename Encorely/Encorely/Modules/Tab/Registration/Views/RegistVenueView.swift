@@ -12,16 +12,22 @@ import SwiftUI
 struct RegistVenueView: View {
     
     @EnvironmentObject var container: DIContainer
-    @StateObject var viewModel = SubRegistViewModel()
+    @StateObject var viewModel = RegistViewModel()
     
     @Binding var showSheet: SheetType?
     
     var body: some View {
         NavigationStack(path: $container.navigationRouter.destination) {
             registVenueView
-        }
-        .navigationDestination(for: NavigationDestination.self) { destination in
-            NavigationRoutingView(destination: destination)
+                .navigationDestination(for: NavigationDestination.self) { destination in
+                    NavigationRoutingView(
+                        destination: destination,
+                        showSheet: $showSheet,
+                        onComplete: {
+                            showSheet = nil
+                        }
+                    )
+                }
         }
     }
     

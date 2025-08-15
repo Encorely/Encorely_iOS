@@ -30,7 +30,7 @@ struct RightSearchBar: View {
             
             Spacer()
             
-            Image(.magnifyingGlass)
+            Image("magnifyingGlass")
                 .resizable()
                 .frame(width: 22, height: 22)
                 .foregroundStyle(.grayColorF)

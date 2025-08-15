@@ -15,7 +15,7 @@ struct FacilityImageCard: View {
                 .frame(height: 122)
                 .frame(maxWidth: .infinity)
             VStack(spacing: 7) {
-                Image(.emptyPlus)
+                Image("emptyPlus")
                 Text("사진 첨부하기")
                     .font(.mainTextMedium16)
                     .foregroundStyle(.grayColorA)

@@ -10,7 +10,7 @@ import SwiftUI
 struct facilityMapButton: View {
     var body: some View {
         ZStack {
-            Image(.mapButton)
+            Image("mapButton")
                 .resizable()
                 .frame(maxWidth: .infinity)
                 .frame(height: 47)

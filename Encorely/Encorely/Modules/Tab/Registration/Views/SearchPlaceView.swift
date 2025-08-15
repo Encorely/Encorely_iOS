@@ -10,7 +10,7 @@ import SwiftUI
 struct SearchPlaceView: View {
     
     @EnvironmentObject var container: DIContainer
-    @StateObject var viewModel = SubRegistViewModel()
+    @StateObject var viewModel = RegistViewModel()
     
     var body: some View {
         VStack(spacing: 25) {
@@ -25,7 +25,7 @@ struct SearchPlaceView: View {
         }
         .toolbar(content: {
                     ToolbarItem(placement: .topBarLeading, content: {
-                        Image(.chevronLeft)
+                        Image("chevronLeft")
                     })
                     
                     ToolbarItem(placement: .principal, content: {
@@ -44,7 +44,7 @@ struct SearchPlaceView: View {
             Button(action: {
                 
             }) {
-                Image(.magnifyingGlass)
+                Image("magnifyingGlass")
                     .resizable()
                     .frame(width: 22, height: 22)
                     .foregroundStyle(.grayColorF)

@@ -26,7 +26,7 @@ struct LeftSearchBar: View {
     // MARK: 검색창 요소(돋보기, 텍스트필드)
     private var searchElement: some View {
         HStack(spacing: 13) {
-            Image(.magnifyingGlass)
+            Image("magnifyingGlass")
                 .resizable()
                 .frame(width: 25, height: 25)
                 .foregroundStyle(.grayColorA)

@@ -12,9 +12,10 @@ import SwiftUI
 struct RegistSeatView: View {
     
     @EnvironmentObject var container: DIContainer
-    @ObservedObject var viewModel: SubRegistViewModel
+    @ObservedObject var viewModel: RegistViewModel
 
     @Binding var showSheet: SheetType?
+    let onComplete: () -> Void
     
     @State private var seatZoneInput: String = ""
     @State private var seatRowInput: String = ""
@@ -43,7 +44,7 @@ struct RegistSeatView: View {
             
         }) {
             HStack(spacing: 5) {
-                Image(.location)
+                Image("location")
                     .resizable()
                     .frame(width: 12, height: 15)
                 Text("고척 스카이돔")
@@ -114,6 +115,10 @@ struct RegistSeatView: View {
 
 
 #Preview {
-    RegistSeatView(viewModel: SubRegistViewModel(), showSheet: .constant(nil))
+    RegistSeatView(
+        viewModel: RegistViewModel(),
+        showSheet: .constant(nil),
+        onComplete: { print("완료됨") }
+    )
         .environmentObject(DIContainer())
 }
