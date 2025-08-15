@@ -23,7 +23,6 @@
 				Common/Enum/Login/.gitkeep,
 				Common/Enum/MyPage/.gitkeep,
 				Common/Enum/Segment/.gitkeep,
-				Common/Enum/Tab/.gitkeep,
 				Common/Protocol/.gitkeep,
 				Common/UIComponents/MyPage/.gitkeep,
 				Common/UIComponents/Segment/.gitkeep,
