@@ -12,12 +12,15 @@ import SwiftUI
 struct RegistRateView: View {
     
     @EnvironmentObject var container: DIContainer
-    @ObservedObject var viewModel: SubRegistViewModel
+    @ObservedObject var viewModel: RegistViewModel
     
     let goodkeywordList = KeywordType.goodSeatTag
     let badkeywordList = KeywordType.badSeatTag
     
     @Binding var showSheet: SheetType?
+    @Environment(\.dismiss) private var dismiss
+    
+    let onComplete: () -> Void
     
     var body: some View {
         ratingSeatView
@@ -48,7 +51,7 @@ struct RegistRateView: View {
             
         }) {
             HStack(spacing: 5) {
-                Image(.location)
+                Image("location")
                     .resizable()
                     .frame(width: 12, height: 15)
                 Text("고척 스카이돔")
@@ -199,9 +202,7 @@ struct RegistRateView: View {
     // MARK: 완료 버튼
     private var nextBtn: some View {
         Button(action: {
-            container.navigationRouter.popToRootView()
-            
-            showSheet = nil
+            onComplete()
         }) {
             MainRegistBtn(mainRegistType: .init(title: "완료"))
         }
@@ -211,13 +212,17 @@ struct RegistRateView: View {
 
 
 #Preview {
-    let vm = SubRegistViewModel()
+    let vm = RegistViewModel()
     vm.zone = "12"
     vm.rows = "4"
     vm.num = "8"
     
     let container = DIContainer()
 
-    return RegistRateView(viewModel: vm, showSheet: .constant(nil))
+    return RegistRateView(
+        viewModel: vm,
+        showSheet: .constant(nil),
+        onComplete: { print("완료됨") }
+    )
         .environmentObject(container)
 }

@@ -12,4 +12,5 @@ struct SearchVenueResponse: Codable {
     let name: String
     let address: String
     let image: String
+    let id: Int
 }

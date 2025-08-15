@@ -9,8 +9,7 @@ import SwiftUI
 
 struct WholeReviewView: View {
     
-    @ObservedObject var mainViewModel = MainReviewRegistViewModel()
-    @ObservedObject var subViewModel = SubRegistViewModel()
+    @ObservedObject var viewModel = RegistViewModel()
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -82,7 +81,7 @@ struct WholeReviewView: View {
                 .frame(height: 341)
             
             HStack(spacing: 5) {
-                Image(.location)
+                Image("location")
                     .resizable()
                     .frame(width: 12, height: 15)
                 
@@ -124,7 +123,7 @@ struct WholeReviewView: View {
             
             VStack(alignment: .leading, spacing: 13) {
                 HStack(spacing: 5) {
-                    Image(.location)
+                    Image("location")
                         .resizable()
                         .frame(width: 12, height: 15)
                     
@@ -188,7 +187,7 @@ struct WholeReviewView: View {
                 
                 HStack(spacing: 10) {
                     HStack(spacing: 2) {
-                        Image(.heart)
+                        Image("heart")
                             .resizable()
                             .frame(width: 24, height: 24)
                             .foregroundStyle(.mainColorB)
@@ -199,7 +198,7 @@ struct WholeReviewView: View {
                     }
                     
                     HStack(spacing: 5) {
-                        Image(.comment)
+                        Image("comment")
                             .resizable()
                             .frame(width: 24, height: 24)
                             .foregroundStyle(.mainColorB)
@@ -210,7 +209,7 @@ struct WholeReviewView: View {
                     }
                     
                     HStack(spacing: 5) {
-                        Image(.scrap)
+                        Image("scrap")
                             .resizable()
                             .frame(width: 24, height: 24)
                             .foregroundStyle(.mainColorB)

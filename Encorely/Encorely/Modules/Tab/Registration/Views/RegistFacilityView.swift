@@ -11,7 +11,7 @@ import PhotosUI
 struct RegistFacilityView: View {
     
     @EnvironmentObject var container: DIContainer
-    @StateObject var viewModel = SubRegistViewModel()
+    @StateObject var viewModel = RegistViewModel()
     
     let keywordList = KeywordType.RestaurantTag
     @Environment(\.dismiss) private var dismiss
@@ -106,7 +106,7 @@ struct RegistFacilityView: View {
             
             Spacer()
             
-            Image(.chevronDown)
+            Image("chevronDown")
                 .resizable()
                 .frame(width: 16, height: 9.04)
                 .foregroundStyle(.grayColorD)
@@ -274,7 +274,7 @@ struct RegistFacilityView: View {
             
             Spacer()
             
-            Image(.chevronDown)
+            Image("chevronDown")
                 .resizable()
                 .frame(width: 16, height: 9.04)
                 .foregroundStyle(.grayColorD)

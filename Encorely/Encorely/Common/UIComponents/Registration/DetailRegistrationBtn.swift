@@ -20,7 +20,7 @@ struct DetailRegistrationBtn: View {
                 .foregroundStyle(.grayColorA)
                 .padding(.leading, 30)
             Spacer()
-            Image(.chevronRight)
+            Image("chevronRight")
                 .resizable()
                 .frame(width: 24, height: 24)
                 .foregroundStyle(.grayColorA)

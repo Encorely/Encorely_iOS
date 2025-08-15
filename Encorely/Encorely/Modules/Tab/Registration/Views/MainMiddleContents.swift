@@ -10,7 +10,7 @@ import PhotosUI
 
 struct MainMiddleContents: View {
     
-    @ObservedObject var viewModel: MainReviewRegistViewModel
+    @ObservedObject var viewModel: RegistViewModel
     
     @State private var sightCurrentPage: Int = 0
     @State private var performanceCurrentPage: Int = 0
@@ -63,7 +63,7 @@ struct MainMiddleContents: View {
             
             Spacer()
             
-            Image(.chevronDown)
+            Image("chevronDown")
         }
         .frame(width: 73)
         .basicDropdownModifier(horizontal: 15, vertical: 8)
@@ -100,7 +100,7 @@ struct MainMiddleContents: View {
                     maxSelectionCount: 5,
                     matching: .images
                 ) {
-                    Image(.emptyPlus)
+                    Image("emptyPlus")
                         .resizable()
                         .frame(width: 40, height: 40)
                         .padding(.trailing, 8)
@@ -145,7 +145,7 @@ struct MainMiddleContents: View {
                     maxSelectionCount: 5,
                     matching: .images
                 ) {
-                    Image(.emptyPlus)
+                    Image("emptyPlus")
                         .resizable()
                         .frame(width: 40, height: 40)
                         .padding(.trailing, 8)
@@ -177,5 +177,5 @@ struct MainMiddleContents: View {
 }
 
 #Preview {
-    MainMiddleContents(viewModel: MainReviewRegistViewModel())
+    MainMiddleContents(viewModel: RegistViewModel())
 }

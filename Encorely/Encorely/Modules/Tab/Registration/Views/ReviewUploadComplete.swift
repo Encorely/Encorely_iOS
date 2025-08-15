@@ -10,7 +10,7 @@ import SwiftUI
 struct ReviewUploadComplete: View {
     var body: some View {
         VStack(alignment: .center, spacing: 25) {
-            Image(.roundCheck)
+            Image("roundCheck")
                 .resizable()
                 .frame(width: 70, height: 70)
             

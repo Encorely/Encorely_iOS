@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RegistPerformanceReviewView: View {
     
-    @StateObject var viewModel = SubRegistViewModel()
+    @StateObject var viewModel = RegistViewModel()
     
     @Environment(\.dismiss) private var dismiss
     

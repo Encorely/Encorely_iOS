@@ -12,6 +12,8 @@ struct NavigationRoutingView: View {
     @EnvironmentObject var container: DIContainer
 
     let destination: NavigationDestination
+    @Binding var showSheet: SheetType?
+    let onComplete: () -> Void
     
     var body: some View {
         Group {
@@ -21,10 +23,17 @@ struct NavigationRoutingView: View {
                 VenueView()
             case .registSeat:
                 // 좌석 등록
-                RegistSeatView(viewModel: SubRegistViewModel(), showSheet: .constant(nil))
+                RegistSeatView(viewModel: RegistViewModel(),
+                               showSheet: .constant(nil),
+                               onComplete: onComplete
+                )
             case .registRating:
                 // 좌석 평가
-                RegistRateView(viewModel: SubRegistViewModel(), showSheet: .constant(nil))
+                RegistRateView(
+                    viewModel: RegistViewModel(),
+                    showSheet: .constant(nil),
+                    onComplete: onComplete
+                )
 //            case .searchPlace(let type):
                 // 맛집, 편의시설 장소 등록
 //                SearchPlaceView()
