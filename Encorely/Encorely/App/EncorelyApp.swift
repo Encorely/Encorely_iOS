@@ -7,19 +7,19 @@
 
 import SwiftUI
 
-/*@main
-@StateObject private var container = DIContainer()
-
+@main
 struct EncorelyApp: App {
+    
+    @StateObject private var container = DIContainer()
     
     var body: some Scene {
         WindowGroup {
-            MainReviewRegistView()
+            EncorelyTabView()
                 .environmentObject(container)
         }
     }
 }
-*/
+/*
 @main
 struct EncorelyApp: App {
     var body: some Scene {
@@ -28,3 +28,4 @@ struct EncorelyApp: App {
         }
     }
 }
+*/

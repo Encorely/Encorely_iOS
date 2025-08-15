@@ -19,7 +19,7 @@ protocol ReviewServiceProtocol {
     func hasLiked(reviewId: Int) async throws -> HasLikedResponse
     func addComment(reviewId: Int, request: AddCommentRequest) async throws -> AddCommentResponse
     func getComments(reviewId: Int) async throws -> GetCommentResponse
-    func getReviewRanking() async throws -> ReviewRankingResponse
+    func getReviewRanking() async throws -> RankOfReviewResponse
 }
 
 // MARK: ReviewService
@@ -233,14 +233,14 @@ class ReviewService {
     
     
     /// GET Method
-    func getReviewRanking() async throws -> ReviewRankingResponse {
+    func getReviewRanking() async throws -> RankOfReviewResponse {
 
         return try await withCheckedThrowingContinuation { continuation in
             provider.request(.getReviewRanking) { result in
                 switch result {
                 case .success(let response):
                     do {
-                        let decodedData = try JSONDecoder().decode(ReviewRankingResponse.self, from: response.data)
+                        let decodedData = try JSONDecoder().decode(RankOfReviewResponse.self, from: response.data)
                         continuation.resume(returning: decodedData)
                     } catch {
                         continuation.resume(throwing: error)

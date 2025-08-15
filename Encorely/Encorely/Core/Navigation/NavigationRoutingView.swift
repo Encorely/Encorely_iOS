@@ -20,7 +20,7 @@ struct NavigationRoutingView: View {
             switch destination {
             case .venueView:
                 // 공연장 탭
-                VenueView()
+                MainHomeView()
             case .registSeat:
                 // 좌석 등록
                 RegistSeatView(viewModel: RegistViewModel(),

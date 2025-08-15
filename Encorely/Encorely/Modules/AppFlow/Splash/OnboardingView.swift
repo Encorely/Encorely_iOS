@@ -7,7 +7,7 @@ struct OnboardingView: View {
     var body: some View {
         TabView(selection: $currentPage) {
             OnboardingPageView(
-                imageName: "splash_1",
+                imageName: "splash_venue",
                 text: "공연 가기 전 정보들을 편리하게 찾고!",
                 buttonText: "다음",
                 action: { currentPage += 1 },
@@ -17,7 +17,7 @@ struct OnboardingView: View {
             .tag(0)
 
             OnboardingPageView(
-                imageName: "splash_2",
+                imageName: "splash_regist",
                 text: "공연이 끝난 후엔 후기 작성까지!",
                 buttonText: "다음",
                 action: { currentPage += 1 },
@@ -27,7 +27,7 @@ struct OnboardingView: View {
             .tag(1)
 
             OnboardingPageView(
-                imageName: "splash_3",
+                imageName: "splash_mypage",
                 text: "내가 작성한 후기들을 친구들과 나눠요",
                 buttonText: "시작하기",
                 action: onFinish,

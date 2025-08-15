@@ -177,9 +177,9 @@ typealias DeleteReviewImageResponse = APIResponse<String>
 
 // MARK: 화제의 후기들
 /// 화제의 후기들 response
-typealias ReviewRankingResponse = APIResponse<ReviewRankingResult>
+typealias RankOfReviewResponse = APIResponse<RankOfReviewResult>
 
-struct ReviewRankingResult: Codable {
+struct RankOfReviewResult: Codable {
     let reviewId: Int
     let reviewImageUrl: String
     let userProfileImageUrl: String

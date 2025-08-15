@@ -25,6 +25,7 @@ struct GoodKeywordRating: View {
                 .padding(.horizontal, 21)
                 .padding(.vertical, 9)
                 .foregroundStyle(.grayColorA)
+                .font(.mainTextMedium16)
                 .background {
                     RoundedRectangle(cornerRadius: 100)
                         .fill(isSelected ? .mainColorH : .grayColorI)

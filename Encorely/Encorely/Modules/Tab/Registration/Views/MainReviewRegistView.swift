@@ -16,6 +16,7 @@ struct MainReviewRegistView: View {
     @State private var activeSheet: SheetType?
     
     var body: some View {
+        NavigationStack {
             ZStack {
                 Color.registrationBG
                     .ignoresSafeArea()
@@ -30,6 +31,7 @@ struct MainReviewRegistView: View {
                         .padding(.bottom, 16)
                     }
                     uploadBtn
+                        .padding(.bottom, 10)
                 }
             }
             .sheet(item: $activeSheet) { sheet in
@@ -66,6 +68,7 @@ struct MainReviewRegistView: View {
                     print("🔵 Sheet 닫힘 - Navigation stack 정리됨")
                 }
             }
+        }
     }
     
     // MARK: 날짜, 회차, 공연명, 아티스트명

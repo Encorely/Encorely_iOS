@@ -9,7 +9,7 @@ import SwiftUI
 
 struct VenueListView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject var viewModel = SubRegistViewModel()
+    @StateObject var viewModel = RegistViewModel()
     
     var body: some View {
         topSearchBar

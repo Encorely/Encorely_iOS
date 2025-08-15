@@ -63,5 +63,5 @@ struct SubVenueCard: View {
 }
 
 #Preview {
-    SubVenueCard(searchVenueResponse: .init(name: "KSPO DOME", address: "서울특별시 송파구 올림픽로 424", image: "https://i.namu.wiki/i/F4tCq3s3vS8MTOl1j1E6kPpiKu6lL9iLr6jl5OeSPLln1fBem4R8uHT0Mn7DuEqyCb5_xWrSwRROxviJDEGPIfhkLR3uV1zWfYyPISIXbou6vMoLPLkzdz1YgNmjqpgY8PG7cJxBwfl5jcHbEUJehQ.webp"))
+    SubVenueCard(searchVenueResponse: .init(name: "KSPO DOME", address: "서울특별시 송파구 올림픽로 424", image: "https://i.namu.wiki/i/F4tCq3s3vS8MTOl1j1E6kPpiKu6lL9iLr6jl5OeSPLln1fBem4R8uHT0Mn7DuEqyCb5_xWrSwRROxviJDEGPIfhkLR3uV1zWfYyPISIXbou6vMoLPLkzdz1YgNmjqpgY8PG7cJxBwfl5jcHbEUJehQ.webp", id: 2))
 }

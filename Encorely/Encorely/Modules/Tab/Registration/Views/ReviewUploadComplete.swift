@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ReviewUploadComplete: View {
+    
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         VStack(alignment: .center, spacing: 25) {
             Image("roundCheck")
@@ -17,6 +20,15 @@ struct ReviewUploadComplete: View {
             uploadText
         }
         .padding(.bottom, 70)
+        .toolbar(content: {
+            ToolbarItem(placement: .topBarLeading, content: {
+                Button(action: { dismiss() }) {
+                    Image(.chevronLeft)
+                        .frame(width: 25, height: 25)
+                        .foregroundStyle(Color.grayColorA)
+                }
+            })
+        })
     }
     
     private var uploadText: some View {
