@@ -38,6 +38,12 @@ enum ReviewRouter {
     
     // 화제의 후기들
     case getReviewRanking
+    
+    ///공연장별 시야 후기 목록 조회 API
+    case siteReviews(hallId: Int, seatArea: String, seatRow: String, seatNumber: String, page: Int, size: Int, sort: String, category: String)
+    
+    ///키워드를 통한 리뷰 검색
+    case searchReviews(keyword: String, page: Int, size: Int, sort: String)
 }
 
 extension ReviewRouter: TargetType {
@@ -77,12 +83,18 @@ extension ReviewRouter: TargetType {
             
         case .getReviewRanking:
             return "/api/reviews/reviewRanking"
+            
+        case let .siteReviews(hallId, _, _, _, _, _, _, _):
+            return "/api/reviews/views/\(hallId)"
+        
+        case let .searchReviews(keyword, _, _, _):
+            return "/api/reviews/searching/\(keyword)"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .getReview, .hasLiked, .getComments, .getReviewRanking:
+        case .getReview, .hasLiked, .getComments, .getReviewRanking, .siteReviews, .searchReviews:
             return .get
             
         case .createReview, .toggleLike, .addComment:
@@ -109,6 +121,14 @@ extension ReviewRouter: TargetType {
             
         case .addComment(_, let request):
             return .requestJSONEncodable(request)
+        
+        case let .siteReviews(_, seatArea, seatRow, seatNumber, page, size, sort, category):
+            return .requestParameters(parameters: ["seatArea": seatArea, "seatRow": seatRow, "seatNumber": seatNumber, "page": page, "size": size, "sort": sort, "category": category], encoding: URLEncoding.queryString)
+        case let .searchReviews(_, page, size, sort):
+                return .requestParameters(
+                    parameters: ["page": page, "size": size, "sort": sort],
+                    encoding: URLEncoding.queryString
+                )
         }
     }
     
@@ -126,7 +146,7 @@ extension ReviewRouter: TargetType {
                 "Accept": "application/json"
             ]
             
-        case .getReview, .deleteReview, .deleteImage, .toggleLike, .hasLiked, .getComments, .getReviewRanking:
+        case .getReview, .deleteReview, .deleteImage, .toggleLike, .hasLiked, .getComments, .getReviewRanking, .siteReviews, .searchReviews:
             return [
                 "Accept": "application/json"
             ]
