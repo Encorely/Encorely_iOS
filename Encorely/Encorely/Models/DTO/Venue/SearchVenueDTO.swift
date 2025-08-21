@@ -8,7 +8,7 @@
 import Foundation
 
 /// 장소 검색 카드 Response
-struct SearchVenueResponse: Codable {
+struct SearchVenueResponse: Codable, Identifiable {
     let name: String
     let address: String
     let image: String

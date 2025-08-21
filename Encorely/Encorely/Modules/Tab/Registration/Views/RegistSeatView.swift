@@ -12,14 +12,12 @@ import SwiftUI
 struct RegistSeatView: View {
     
     @EnvironmentObject var container: DIContainer
-    @ObservedObject var viewModel: RegistViewModel
-
     @Binding var showSheet: SheetType?
     let onComplete: () -> Void
     
-    @State private var seatZoneInput: String = ""
-    @State private var seatRowInput: String = ""
-    @State private var seatNumberInput: String = ""
+    private var viewModel: RegistViewModel {
+        container.registViewModel
+    }
     
     var body: some View {
         registSeatView
@@ -40,32 +38,37 @@ struct RegistSeatView: View {
     }
     
     private var venueLocation: some View {
-        Button (action:{
-            
-        }) {
-            HStack(spacing: 5) {
-                Image("location")
-                    .resizable()
-                    .frame(width: 12, height: 15)
-                Text("고척 스카이돔")
-                    .font(.mainTextMedium16)
-            }
-            .foregroundStyle(.grayColorF)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 7)
-            .background {
-                RoundedRectangle(cornerRadius: 100)
-                    .fill(.mainColorH)
-                    .strokeBorder(.mainColorF, lineWidth: 1)
-                
-            }
+        if let selected = container.registViewModel.selectedVenue {
+            return AnyView(
+                HStack(spacing: 5) {
+                    Image("location")
+                        .resizable()
+                        .frame(width: 12, height: 15)
+                    Text(selected.name)
+                        .font(.mainTextMedium16)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
+                    .foregroundStyle(.grayColorF)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 7)
+                    .background {
+                        RoundedRectangle(cornerRadius: 100)
+                            .fill(.mainColorH)
+                            .strokeBorder(.mainColorF, lineWidth: 1)
+                    }
+            )
+        } else {
+            return AnyView(EmptyView())
         }
     }
+    
+    
     
     private var seatTextField: some View {
         VStack(spacing: 20) {
             HStack(spacing: 21) {
-                TextField("", text: $seatZoneInput)
+                TextField("", text: $container.registViewModel.zone)
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, 12)
                     .purpleBorderTextFieldModifier(height: 60, font: .mainTextMedium20)
@@ -76,7 +79,7 @@ struct RegistSeatView: View {
             }
             HStack(spacing: 23) {
                 HStack(spacing: 21) {
-                    TextField("", text: $seatRowInput)
+                    TextField("", text: $container.registViewModel.rows)
                         .frame(maxWidth: .infinity)
                         .padding(.horizontal, 12)
                         .purpleBorderTextFieldModifier(height: 60, font: .mainTextMedium20)
@@ -86,7 +89,7 @@ struct RegistSeatView: View {
                         .foregroundStyle(.grayColorA)
                 }
                 HStack(spacing: 21) {
-                    TextField("", text: $seatNumberInput)
+                    TextField("", text: $container.registViewModel.num)
                         .frame(maxWidth: .infinity)
                         .padding(.horizontal, 12)
                         .purpleBorderTextFieldModifier(height: 60, font: .mainTextMedium20)
@@ -101,24 +104,36 @@ struct RegistSeatView: View {
     
     // MARK: 다음 버튼
     private var nextBtn: some View {
-        Button(action: {
-            viewModel.zone = seatZoneInput
-            viewModel.rows = seatRowInput
-            viewModel.num = seatNumberInput
-            
+        // 공백만 입력하는 경우도 막기 위해 trim
+        let zoneOK = !container.registViewModel.zone.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let rowOK  = !container.registViewModel.rows.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let numOK  = !container.registViewModel.num.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let enabled = zoneOK && rowOK && numOK
+        
+        return Button {
+            guard enabled else { return }
             container.navigationRouter.push(to: .registRating)
-        },
-            label: { MainRegistBtn(mainRegistType: .init(title: "다음"))
-        })
+        } label: {
+            MainRegistBtn(mainRegistType: .init(title: "다음"))
+                .background (
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(enabled ? Color.mainColorB : Color.grayColorG)
+                        .frame(height: 54)
+                )
+        }
+        .disabled(!enabled)
+        .animation(.easeInOut(duration: 0.15), value: enabled)
     }
 }
 
 
 #Preview {
-    RegistSeatView(
-        viewModel: RegistViewModel(),
+    let container = DIContainer()
+    container.registViewModel = RegistViewModel()
+    
+    return RegistSeatView(
         showSheet: .constant(nil),
-        onComplete: { print("완료됨") }
+        onComplete: { }
     )
-        .environmentObject(DIContainer())
+    .environmentObject(container)
 }

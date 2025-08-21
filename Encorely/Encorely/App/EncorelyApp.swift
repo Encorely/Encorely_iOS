@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 @main
 struct EncorelyApp: App {
 
@@ -15,3 +16,4 @@ struct EncorelyApp: App {
         }
     }
 }
+

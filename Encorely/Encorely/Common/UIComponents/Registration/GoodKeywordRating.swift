@@ -9,17 +9,16 @@ import SwiftUI
 
 struct GoodKeywordRating: View {
     
-    @State private var isSelected: Bool = false
-    
+    @ObservedObject var viewModel: RegistViewModel
     let keywordType: KeywordType
     
-    var body: some View {
-        tagStyle
+    private var isSelected: Bool {
+        viewModel.selectedGoodKeywords.contains(keywordType.title)
     }
     
-    private var tagStyle: some View {
+    var body: some View {
         Button(action: {
-            isSelected.toggle()
+            viewModel.toggleGoodKeyword(keywordType.title)
         }) {
             Text(keywordType.title)
                 .padding(.horizontal, 21)

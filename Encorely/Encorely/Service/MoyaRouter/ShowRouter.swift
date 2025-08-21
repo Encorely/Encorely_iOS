@@ -27,7 +27,7 @@ extension ShowAPI: BaseTarget {
             return "/api/shows"
         case let .showsDetail(showId):
             return "/api/shows/\(showId)"
-        case let .showsSearch(searchKeyword):
+        case .showsSearch(_):
             return "/api/shows/ongoing/search"
         }
     }

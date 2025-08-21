@@ -27,14 +27,10 @@
 				Common/UIComponents/MyPage/.gitkeep,
 				Common/UIComponents/Segment/.gitkeep,
 				Core/Actor/.gitkeep,
-				Core/Service/MoyaRouter/.gitkeep,
-				Core/Service/MoyaService/.gitkeep,
-				Core/Service/Social/.gitkeep,
 				Info.plist,
 				Models/Domain/MyPage/.gitkeep,
 				Models/DTO/Auth/.gitkeep,
 				Modules/Tab/Venue/ViewModels/.gitkeep,
-				Utils/Extensions/.gitkeep,
 			);
 			target = C74A49572E1BD083009FC517 /* Encorely */;
 		};
@@ -301,7 +297,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yjlee.Encorely;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yjlee.Encorely.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -335,7 +331,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yjlee.Encorely;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yjlee.Encorely.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
