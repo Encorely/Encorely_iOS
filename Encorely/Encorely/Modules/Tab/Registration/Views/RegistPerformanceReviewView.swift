@@ -9,9 +9,12 @@ import SwiftUI
 
 struct RegistPerformanceReviewView: View {
     
-    @StateObject var viewModel = RegistViewModel()
-    
+    @EnvironmentObject var container: DIContainer
     @Environment(\.dismiss) private var dismiss
+    
+    private var viewModel: RegistViewModel {
+        container.registViewModel
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -48,17 +51,17 @@ struct RegistPerformanceReviewView: View {
         VStack(alignment: .leading, spacing: 23) {
             Text("공연에 대한 한줄평을 남겨주세요")
                 .font(.mainTextSemiBold18)
-            TextEditor(text: $viewModel.simplePerformanceReview)
+            TextEditor(text: $container.registViewModel.simplePerformanceReview)
                 .detailTextFieldModifier(height: 60, font: .mainTextMedium16)
                 .overlay(alignment: .bottomTrailing) {
-                    Text("\(viewModel.simplePerformanceReview.count) / 45")
+                    Text("\(container.registViewModel.simplePerformanceReview.count) / 45")
                         .font(.mainTextMedium12)
                         .foregroundStyle(.grayColorF)
                         .padding(.trailing, 13)
                         .padding(.bottom, 10)
-                        .onChange(of: viewModel.simplePerformanceReview) { oldValue, newValue in
+                        .onChange(of: container.registViewModel.simplePerformanceReview) { oldValue, newValue in
                             if newValue.count > 45 {
-                                viewModel.simplePerformanceReview = String(newValue.prefix(45))
+                                container.registViewModel.simplePerformanceReview = String(newValue.prefix(45))
                             }
                         }
                 }
@@ -66,24 +69,37 @@ struct RegistPerformanceReviewView: View {
     }
     
     private var bottomContents: some View {
-        VStack(spacing: 23) {
-            HStack(spacing: 15) {
+        performanceDetailToggleView(viewModel: container.registViewModel)
+    }
+    
+    private struct performanceDetailToggleView: View {
+        @ObservedObject var viewModel: RegistViewModel
+        
+        var body: some View {
+            VStack(spacing: 23) {
                 Button(action: {
                     viewModel.isCheckedPerformance.toggle()
                 }) {
-                    Image(viewModel.isCheckedPerformance ? .fullCheck : .emptyCheck)
-                        .resizable()
-                        .frame(width: 20, height: 20)
+                    HStack(spacing: 15) {
+                        Image(viewModel.isCheckedPerformance ? .fullCheck : .emptyCheck)
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                        
+                        Text("공연에 대해 더 자세한 후기를 남길래요")
+                            .font(.mainTextSemiBold18)
+                            .foregroundStyle(viewModel.isCheckedPerformance ? .grayColorA : .grayColorG)
+                        
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
                 }
-                Text("공연에 대해 더 자세한 후기를 남길래요")
-                    .font(.mainTextSemiBold18)
-                    .foregroundStyle(viewModel.isCheckedPerformance ? .grayColorA : .grayColorG)
-                Spacer()
-            }
-            if viewModel.isCheckedPerformance {
-                TextEditor(text: $viewModel.detailPerformanceReview)
-                    .detailTextFieldModifier(height: 230, font: .mainTextMedium16
-                    )
+                .buttonStyle(.plain)
+                
+                if viewModel.isCheckedPerformance {
+                    TextEditor(text: $viewModel.detailPerformanceReview)
+                        .detailTextFieldModifier(height: 230, font: .mainTextMedium16
+                        )
+                }
             }
         }
     }
@@ -94,10 +110,16 @@ struct RegistPerformanceReviewView: View {
             dismiss()
         }) {
             MainRegistBtn(mainRegistType: .init(title: "완료"))
+                .background (
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color.mainColorB)
+                        .frame(height: 54)
+                )
         }
     }
 }
 
 #Preview {
     RegistPerformanceReviewView()
+        .environmentObject(DIContainer())
 }

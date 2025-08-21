@@ -62,7 +62,7 @@ class RegistViewModel: ObservableObject {
     @Published var searchVenue: String = ""
     /// 공연장 선택
     @Published var selectedVenue: SearchVenueResponse? = nil
-    
+
     
     // MARK: - 좌석 등록 관련
     /// 구역
@@ -174,6 +174,31 @@ class RegistViewModel: ObservableObject {
     @Published var uploadSuccess: Bool = false
     @Published var uploadError: String? = nil
     
+    
+    // MARK: 업로드 버튼 활성화/비활성화
+    /// 공연장 등록
+    var isVenueStepValid: Bool {
+            selectedVenue != nil
+    }
+    
+    /// 좌석 등록
+    
+    
+    
+    /// 좌석 평가
+    var isRatingStepValid: Bool {
+        return rating > 0
+    }
+    
+    /// 공연 후기
+    
+    
+    
+    /// 맛집 및 편의시설
+    
+    
+    
+    /// 전체 리뷰 등록
     
     // MARK: - 공연 기본 정보 관련 함수들
     /// 공연일자 받기
@@ -342,6 +367,14 @@ class RegistViewModel: ObservableObject {
         }
     }
     
+    func toggleBadKeyword(_ keyword: String) {
+        if selectedBadKeywords.contains(keyword) {
+            selectedBadKeywords.remove(keyword)
+        } else {
+            selectedBadKeywords.insert(keyword)
+        }
+    }
+    
     
     // MARK: - 이미지 업로드 기능
     /// 모든 이미지를 S3에 업로드
@@ -449,7 +482,7 @@ class RegistViewModel: ObservableObject {
             
             // 4. API 요청 생성
             let request = createRegistReviewRequest(
-                reviewImageInfos: reviewImageInfos  // ⚠️ 파라미터 수정
+                reviewImageInfos: reviewImageInfos
             )
             
             // 5. 후기 등록 API 호출
@@ -570,6 +603,19 @@ class RegistViewModel: ObservableObject {
             return "후기 등록 완료!"
         } else {
             return ""
+        }
+    }
+}
+
+extension RegistViewModel {
+    @MainActor
+    func fetchAllVenues(using service: VenueSelectionServiceProtocol) async {
+        do {
+            let result = try await service.getAllVenues()
+            self.venues = result
+            print("✅ 공연장 불러오기 성공: \(result.count)개")
+        } catch {
+            print("❌ 공연장 불러오기 실패: \(error)")
         }
     }
 }

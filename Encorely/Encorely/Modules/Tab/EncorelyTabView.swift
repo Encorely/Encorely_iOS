@@ -27,34 +27,25 @@ struct EncorelyTabView: View {
     @State private var showSheet: SheetType? = nil
     
     var body: some View {
-        NavigationStack(path: $container.navigationRouter.destination, root: {
-            TabView(selection: $tabcase) {
-                ForEach(TabCase.allCases, id: \.rawValue) { tab in
-                    tabView(tab: tab)
-                        .tag(tab)
-                        .tabItem {
-                            tabLabel(tab)
-                        }
-                }
+        TabView(selection: $tabcase) {
+            ForEach(TabCase.allCases, id: \.rawValue) { tab in
+                tabView(tab: tab)
+                    .tag(tab)
+                    .tabItem {
+                        tabLabel(tab)
+                    }
             }
-            .tint(Color.mainColorD)
-            .onAppear {
-                setupTabBarAppearance()
-            }
-            .navigationDestination(for: NavigationDestination.self, destination: { destination in
-                NavigationRoutingView(
-                    destination: destination,
-                    showSheet: $showSheet,
-                    onComplete: {}
-                )
-                .environmentObject(container)
-            })
-        })
+        }
+        .tint(Color.mainColorD)
+        .onAppear {
+            setupTabBarAppearance()
+        }
     }
-
+    
+    
     /// 탭 라벨 UI
     private func tabLabel(_ tab: TabCase) -> some View {
-        VStack(spacing: 8) { // ← 아이콘 위 간격 늘림
+        VStack(spacing: 8) {
             tab.icon
                 .resizable()
                 .renderingMode(.template)
@@ -73,13 +64,10 @@ struct EncorelyTabView: View {
         switch tab {
         case .venue:
             MainHomeView()
-                .environmentObject(container)
         case .regist:
             MainReviewRegistView()
-                .environmentObject(container)
         case .mypage:
             MyPageView()
-                .environmentObject(container)
         }
     }
     
@@ -93,6 +81,7 @@ struct EncorelyTabView: View {
         UITabBar.appearance().scrollEdgeAppearance = appearance
     }
 }
+
 
 
 #Preview {

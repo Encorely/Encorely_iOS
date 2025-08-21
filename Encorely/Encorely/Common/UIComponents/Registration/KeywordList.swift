@@ -9,6 +9,7 @@ import SwiftUI
 
 struct KeywordListView: View {
     
+    @ObservedObject var viewModel: RegistViewModel
     let keywordList: [KeywordType]
     
     private var dividedList: [[KeywordType]] {
@@ -25,7 +26,10 @@ struct KeywordListView: View {
                 ForEach(dividedList, id: \.self) { column in
                     VStack {
                         ForEach(column) { keyword in
-                            GoodKeywordRating(keywordType: keyword)
+                            GoodKeywordRating(
+                                viewModel: viewModel,
+                                keywordType: keyword
+                            )
                         }
                     }
                 }

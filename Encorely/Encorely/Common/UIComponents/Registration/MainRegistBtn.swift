@@ -19,10 +19,6 @@ struct MainRegistBtn: View {
             .padding(.vertical, 19)
             .padding(.horizontal, 40)
             .frame(maxWidth: .infinity)
-            .background {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(.mainColorB)
-            }
     }
 }
 
