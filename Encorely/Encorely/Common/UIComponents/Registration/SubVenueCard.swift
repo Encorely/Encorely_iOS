@@ -12,24 +12,15 @@ import Kingfisher
 struct SubVenueCard: View {
     
     let searchVenueResponse: SearchVenueResponse
-    @State private var isSelectedVenue: Bool = false
     
     var body: some View {
-        Button (action: {
-            isSelectedVenue.toggle()
-        }) {
-            HStack(spacing: 20) {
-                urlImage
-                venueInfo
-                Spacer()
-            }
-            .padding(.vertical, 15)
-            .padding(.horizontal, 16)
-            .background {
-                Rectangle()
-                    .foregroundStyle(isSelectedVenue ? .mainColorH.opacity(0.5) : .clear)
-            }
+        HStack(spacing: 20) {
+            urlImage
+            venueInfo
+            Spacer()
         }
+        .padding(.vertical, 15)
+        .padding(.horizontal, 16)
     }
     
     // MARK: 공연장 정보(이름, 주소)

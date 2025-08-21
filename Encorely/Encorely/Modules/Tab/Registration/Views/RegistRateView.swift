@@ -12,15 +12,17 @@ import SwiftUI
 struct RegistRateView: View {
     
     @EnvironmentObject var container: DIContainer
-    @ObservedObject var viewModel: RegistViewModel
+    @Environment(\.dismiss) private var dismiss
+
+    @Binding var showSheet: SheetType?
     
     let goodkeywordList = KeywordType.goodSeatTag
     let badkeywordList = KeywordType.badSeatTag
-    
-    @Binding var showSheet: SheetType?
-    @Environment(\.dismiss) private var dismiss
-    
     let onComplete: () -> Void
+    
+    private var viewModel: RegistViewModel {
+        container.registViewModel
+    }
     
     var body: some View {
         ratingSeatView
@@ -47,30 +49,33 @@ struct RegistRateView: View {
     }
     
     private var venueLocation: some View {
-        Button (action:{
-            
-        }) {
-            HStack(spacing: 5) {
-                Image("location")
-                    .resizable()
-                    .frame(width: 12, height: 15)
-                Text("고척 스카이돔")
-                    .font(.mainTextMedium16)
-            }
-            .foregroundStyle(.grayColorF)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 7)
-            .background {
-                RoundedRectangle(cornerRadius: 100)
-                    .fill(.mainColorH)
-                    .strokeBorder(.mainColorF, lineWidth: 1)
-                
-            }
+        if let selected = container.registViewModel.selectedVenue {
+            return AnyView(
+                HStack(spacing: 5) {
+                    Image("location")
+                        .resizable()
+                        .frame(width: 12, height: 15)
+                    Text(selected.name)
+                        .font(.mainTextMedium16)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
+                .foregroundStyle(.grayColorF)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 7)
+                .background {
+                    RoundedRectangle(cornerRadius: 100)
+                        .fill(.mainColorH)
+                        .strokeBorder(.mainColorF, lineWidth: 1)
+                }
+            )
+        } else {
+            return AnyView(EmptyView())
         }
     }
     
     private var seatInfo: some View {
-        Text("\(viewModel.zone)구역 \(viewModel.rows)열 \(viewModel.num)번")
+        Text("\(container.registViewModel.zone)구역 \(container.registViewModel.rows)열 \(container.registViewModel.num)번")
             .frame(maxWidth: .infinity)
             .purpleBorderTextFieldModifier(height: 60, font: .mainTextMedium20)
     }
@@ -93,7 +98,7 @@ struct RegistRateView: View {
     
     private var starRating: some View {
         RateView(
-            currentStar: $viewModel.rating,
+            currentStar: $container.registViewModel.rating,
             starNumber: 5,
             filledImageName: "fillStar",
             emptyImageName: "emptyStar"
@@ -116,19 +121,28 @@ struct RegistRateView: View {
                         
                         HStack(spacing: 15) {
                             ForEach(0...4, id: \.self) { index in
-                                GoodKeywordRating(keywordType: goodkeywordList[index])
+                                GoodKeywordRating(
+                                    viewModel: container.registViewModel,
+                                    keywordType: goodkeywordList[index]
+                                )
                             }
                         }
                         
                         HStack(spacing: 15) {
                             ForEach(5...8, id: \.self) { index in
-                                GoodKeywordRating(keywordType: goodkeywordList[index])
+                                GoodKeywordRating(
+                                    viewModel: container.registViewModel,
+                                    keywordType: goodkeywordList[index]
+                                )
                             }
                         }
                         
                         HStack(spacing: 15) {
                             ForEach(9...13, id: \.self) { index in
-                                GoodKeywordRating(keywordType: goodkeywordList[index])
+                                GoodKeywordRating(
+                                    viewModel: container.registViewModel,
+                                    keywordType: goodkeywordList[index]
+                                )
                             }
                         }
                         
@@ -149,19 +163,28 @@ struct RegistRateView: View {
                         
                         HStack(spacing: 15) {
                             ForEach(0...3, id: \.self) { index in
-                                BadKeywordRating(keywordType: badkeywordList[index])
+                                BadKeywordRating(
+                                    viewModel: container.registViewModel,
+                                    keywordType: badkeywordList[index]
+                                )
                             }
                         }
                         
                         HStack(spacing: 15) {
                             ForEach(4...7, id: \.self) { index in
-                                BadKeywordRating(keywordType: badkeywordList[index])
+                                BadKeywordRating(
+                                    viewModel: container.registViewModel,
+                                    keywordType: badkeywordList[index]
+                                )
                             }
                         }
                         
                         HStack(spacing: 15) {
                             ForEach(8...11, id: \.self) { index in
-                                BadKeywordRating(keywordType: badkeywordList[index])
+                                BadKeywordRating(
+                                    viewModel: container.registViewModel,
+                                    keywordType: badkeywordList[index]
+                                )
                             }
                         }
                         
@@ -175,54 +198,73 @@ struct RegistRateView: View {
     
     // MARK: 좌석 자세한 후기 TextEditor
     private var bottomContents: some View {
-        VStack(spacing: 23) {
-            HStack(spacing: 15) {
-                Button(action: {
+        seatDetailToggleView(viewModel: container.registViewModel)
+            .padding(.horizontal, 16)
+    }
+    
+    private struct seatDetailToggleView: View {
+        @ObservedObject var viewModel: RegistViewModel
+
+        var body: some View {
+            VStack(spacing: 23) {
+                Button {
                     viewModel.isCheckedSeat.toggle()
-                }) {
-                    Image(viewModel.isCheckedSeat ? .fullCheck : .emptyCheck)
-                        .resizable()
-                        .frame(width: 20, height: 20)
+                } label: {
+                    HStack(spacing: 15) {
+                        Image(viewModel.isCheckedSeat ? .fullCheck : .emptyCheck)
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                        Text("좌석에 대해 더 자세한 후기를 남길래요")
+                            .font(.mainTextSemiBold18)
+                            .foregroundStyle(viewModel.isCheckedSeat ? .grayColorA : .grayColorG)
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
                 }
-                Text("좌석에 대해 더 자세한 후기를 남길래요")
-                    .font(.mainTextSemiBold18)
-                    .foregroundStyle(viewModel.isCheckedSeat ? .grayColorA : .grayColorG)
-                Spacer()
-            }
-            if viewModel.isCheckedSeat {
-                TextEditor(text: $viewModel.detailSeatReview)
-                    .detailTextFieldModifier(height: 230, font: .mainTextMedium16
-                    )
+                .buttonStyle(.plain)
+
+                if viewModel.isCheckedSeat {
+                    TextEditor(text: $viewModel.detailSeatReview)
+                        .detailTextFieldModifier(height: 230, font: .mainTextMedium16)
+                }
             }
         }
-        .padding(.horizontal, 16)
     }
     
     
     // MARK: 완료 버튼
     private var nextBtn: some View {
-        Button(action: {
+        let enabled = container.registViewModel.rating > 0
+
+        return Button(action: {
+            guard enabled else { return }
+            showSheet = nil
+
+            container.navigationRouter.popToRootView()
+            
             onComplete()
         }) {
             MainRegistBtn(mainRegistType: .init(title: "완료"))
+                .background (
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(enabled ? Color.mainColorB : Color.grayColorG)
+                        .frame(height: 54)
+                )
         }
         .padding(.horizontal, 16)
+        .disabled(!enabled)
+        .animation(.easeInOut(duration: 0.15), value: enabled)
     }
 }
 
 
 #Preview {
-    let vm = RegistViewModel()
-    vm.zone = "12"
-    vm.rows = "4"
-    vm.num = "8"
-    
     let container = DIContainer()
-
+    container.registViewModel = RegistViewModel()
+    
     return RegistRateView(
-        viewModel: vm,
         showSheet: .constant(nil),
-        onComplete: { print("완료됨") }
+        onComplete: { }
     )
-        .environmentObject(container)
+    .environmentObject(container)
 }

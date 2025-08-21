@@ -13,8 +13,8 @@ struct NavigationRoutingView: View {
 
     let destination: NavigationDestination
     @Binding var showSheet: SheetType?
-    let onComplete: () -> Void
-    
+    let onComplete: (() -> Void)? = nil
+        
     var body: some View {
         Group {
             switch destination {
@@ -23,19 +23,21 @@ struct NavigationRoutingView: View {
                 MainHomeView()
             case .registSeat:
                 // 좌석 등록
-                RegistSeatView(viewModel: RegistViewModel(),
-                               showSheet: .constant(nil),
-                               onComplete: onComplete
+                RegistSeatView(
+                    showSheet: $showSheet,
+                    onComplete: onComplete ?? {}
                 )
             case .registRating:
-                // 좌석 평가
+                // 좌석 등록
                 RegistRateView(
-                    viewModel: RegistViewModel(),
-                    showSheet: .constant(nil),
-                    onComplete: onComplete
+                    showSheet: $showSheet,
+                    onComplete: {
+                        showSheet = nil
+                        container.navigationRouter.popToRootView()
+                    }
                 )
 //            case .searchPlace(let type):
-                // 맛집, 편의시설 장소 등록
+// 맛집, 편의시설 장소 등록
 //                SearchPlaceView()
             }
         }

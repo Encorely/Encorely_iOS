@@ -11,9 +11,12 @@ import PhotosUI
 struct MainReviewRegistView: View {
     
     @EnvironmentObject var container: DIContainer
-    @StateObject var viewModel = RegistViewModel()
     @State private var tempSelectedDate: Date = Date()
     @State private var activeSheet: SheetType?
+    
+    private var viewModel: RegistViewModel {
+            container.registViewModel
+    }
     
     var body: some View {
         NavigationStack {
@@ -24,7 +27,7 @@ struct MainReviewRegistView: View {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 55) {
                             topContents
-                            MainMiddleContents(viewModel: RegistViewModel())
+                            MainMiddleContents(viewModel: viewModel)
                             bottomContents
                         }
                         .padding(.horizontal, 16)
@@ -52,21 +55,17 @@ struct MainReviewRegistView: View {
                         .presentationDragIndicator(.visible)
                         .presentationDetents([.fraction(0.65)])
                         .presentationCornerRadius(30)
+                        .environmentObject(container)
                 case .facility:
                     RegistFacilityView()
                         .presentationDragIndicator(.visible)
                         .presentationDetents([.fraction(0.65)])
                         .presentationCornerRadius(30)
+                        .environmentObject(container)
                 }
             }
             .onChange(of: activeSheet) { oldValue, newValue in
                 print("🔵 activeSheet 변경: \(String(describing: oldValue)) -> \(String(describing: newValue))")
-                
-                // sheet가 닫힐 때 navigation stack 정리
-                if newValue == nil && oldValue == .venueSeatRating {
-                    container.navigationRouter.destination.removeAll()
-                    print("🔵 Sheet 닫힘 - Navigation stack 정리됨")
-                }
             }
         }
     }
@@ -161,9 +160,9 @@ struct MainReviewRegistView: View {
     // MARK: 공연명, 아티스트명 TextField
     private var nameTextField: some View {
         VStack(spacing: 17) {
-            TextField("공연명을 입력해주세요", text: $viewModel.performanceTitle)
+            TextField("공연명을 입력해주세요", text: $container.registViewModel.performanceTitle)
                 .titleTextFieldModifier(font: .mainTextMedium18)
-            TextField("아티스트명을 입력해주세요", text: $viewModel.artistName)
+            TextField("아티스트명을 입력해주세요", text: $container.registViewModel.artistName)
                 .titleTextFieldModifier(font: .mainTextMedium18)
         }
     }
@@ -172,6 +171,7 @@ struct MainReviewRegistView: View {
     private var bottomContents: some View {
         VStack(spacing: 20) {
             Button (action: {
+                container.navigationRouter.destination.removeAll()
                 activeSheet = .venueSeatRating
             }) {
                 DetailRegistrationBtn(detailRegistrationBtnType: .init(registTitle: "공연장/좌석등록/평가"))
@@ -196,6 +196,11 @@ struct MainReviewRegistView: View {
         Button(action: {
         }) {
             MainRegistBtn(mainRegistType: .init(title: "업로드"))
+                .background (
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color.mainColorB)
+                        .frame(height: 54)
+                )
         }
         .padding(.horizontal, 16)
     }

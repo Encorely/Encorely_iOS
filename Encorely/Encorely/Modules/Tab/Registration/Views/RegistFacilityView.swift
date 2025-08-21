@@ -11,10 +11,13 @@ import PhotosUI
 struct RegistFacilityView: View {
     
     @EnvironmentObject var container: DIContainer
-    @StateObject var viewModel = RegistViewModel()
+    @Environment(\.dismiss) private var dismiss
     
     let keywordList = KeywordType.RestaurantTag
-    @Environment(\.dismiss) private var dismiss
+    
+    private var viewModel: RegistViewModel {
+            container.registViewModel
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -78,13 +81,13 @@ struct RegistFacilityView: View {
                 
                 Menu {
                     Button("밥집", action: {
-                        viewModel.selectRestaurant(.restaurant)
+                        container.registViewModel.selectRestaurant(.restaurant)
                     })
                     Button("카페", action: {
-                        viewModel.selectRestaurant(.cafe)
+                        container.registViewModel.selectRestaurant(.cafe)
                     })
                     Button("술집", action: {
-                        viewModel.selectRestaurant(.bar)
+                        container.registViewModel.selectRestaurant(.bar)
                     })
                 } label: {
                     selectedRestaurantBtnDetail
@@ -100,7 +103,7 @@ struct RegistFacilityView: View {
     private var selectedRestaurantBtnDetail: some View {
         HStack {
             
-            Text(viewModel.displayRestaurant)
+            Text(container.registViewModel.displayRestaurant)
                 .foregroundStyle(.grayColorF)
                 .font(.mainTextMedium16)
             
@@ -131,24 +134,24 @@ struct RegistFacilityView: View {
             })
             
             PhotosPicker(
-                selection: $viewModel.restaurantItem,
+                selection: $container.registViewModel.restaurantItem,
                 matching: .images
             ) {
-                if viewModel.restaurantItem == nil {
+                if container.registViewModel.restaurantItem == nil {
                     noneImageView
                 } else {
                     restaurantImageCard
                 }
             }
-            .onChange(of: viewModel.restaurantItem) {
-                viewModel.loadRestaurantImage()
+            .onChange(of: container.registViewModel.restaurantItem) {
+                container.registViewModel.loadRestaurantImage()
             }
         }
     }
     
     /// 맛집 사진이 삽입된 상태일 때
     private var restaurantImageCard: some View {
-        Image(uiImage: viewModel.restaurantImage ?? UIImage())
+        Image(uiImage: container.registViewModel.restaurantImage ?? UIImage())
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(height: 122)
@@ -170,46 +173,66 @@ struct RegistFacilityView: View {
                         
                         HStack(spacing: 15) {
                             ForEach(0...2, id: \.self) { index in
-                                GoodKeywordRating(keywordType: keywordList[index])
+                                GoodKeywordRating(
+                                    viewModel: container.registViewModel,
+                                    keywordType: keywordList[index]
+                                )
                             }
                         }
                         
                         HStack(spacing: 15) {
                             ForEach(3...5, id: \.self) { index in
-                                GoodKeywordRating(keywordType: keywordList[index])
+                                GoodKeywordRating(
+                                    viewModel: container.registViewModel,
+                                    keywordType: keywordList[index]
+                                )
                             }
                         }
                         
                         HStack(spacing: 15) {
                             ForEach(6...9, id: \.self) { index in
-                                GoodKeywordRating(keywordType: keywordList[index])
+                                GoodKeywordRating(
+                                    viewModel: container.registViewModel,
+                                    keywordType: keywordList[index]
+                                )
                             }
                         }
                         
                     }
                 }
             }
-            
-            HStack(spacing: 15) {
-                
+            restaurantDetailToggleView(viewModel: container.registViewModel)
+        }
+    }
+    
+    private struct restaurantDetailToggleView: View {
+        @ObservedObject var viewModel: RegistViewModel
+        
+        var body: some View {
+            VStack(spacing: 23) {
                 Button(action: {
                     viewModel.isCheckedRestaurant.toggle()
                 }) {
-                    Image(viewModel.isCheckedRestaurant ? .fullCheck : .emptyCheck)
-                        .resizable()
-                        .frame(width: 20, height: 20)
+                    HStack(spacing: 15) {
+                        Image(viewModel.isCheckedRestaurant ? .fullCheck : .emptyCheck)
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                        
+                        Text("맛집에 대해 더 자세한 후기를 남길래요")
+                            .font(.mainTextSemiBold18)
+                            .foregroundStyle(viewModel.isCheckedRestaurant ? .grayColorA : .grayColorG)
+                        
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
                 
-                Text("맛집에 대해 더 자세한 후기를 남길래요")
-                    .font(.mainTextSemiBold18)
-                    .foregroundStyle(viewModel.isCheckedRestaurant ? .grayColorA : .grayColorG)
-                
-                Spacer()
-            }
-            if viewModel.isCheckedRestaurant {
-                TextEditor(text: $viewModel.detailRestaurantReview)
-                    .detailTextFieldModifier(height: 100, font: .mainTextMedium16
-                    )
+                if viewModel.isCheckedRestaurant {
+                    TextEditor(text: $viewModel.detailRestaurantReview)
+                        .detailTextFieldModifier(height: 100, font: .mainTextMedium16
+                        )
+                }
             }
         }
     }
@@ -237,22 +260,22 @@ struct RegistFacilityView: View {
                 
                 Menu {
                     Button("화장실", action: {
-                        viewModel.selectFacility(.restroom)
+                        container.registViewModel.selectFacility(.restroom)
                     })
                     Button("편의점", action: {
-                        viewModel.selectFacility(.convenienceStore)
+                        container.registViewModel.selectFacility(.convenienceStore)
                     })
                     Button("주차장", action: {
-                        viewModel.selectFacility(.parking)
+                        container.registViewModel.selectFacility(.parking)
                     })
                     Button("벤치", action: {
-                        viewModel.selectFacility(.bench)
+                        container.registViewModel.selectFacility(.bench)
                     })
                     Button("ATM", action: {
-                        viewModel.selectFacility(.atm)
+                        container.registViewModel.selectFacility(.atm)
                     })
                     Button("기타", action: {
-                        viewModel.selectFacility(.other)
+                        container.registViewModel.selectFacility(.other)
                     })
                 } label: {
                     selectedFacilityBtnDetail
@@ -268,7 +291,7 @@ struct RegistFacilityView: View {
     private var selectedFacilityBtnDetail: some View {
         HStack {
             
-            Text(viewModel.displayFacility)
+            Text(container.registViewModel.displayFacility)
                 .foregroundStyle(.grayColorF)
                 .font(.mainTextMedium16)
             
@@ -299,24 +322,24 @@ struct RegistFacilityView: View {
             })
             
             PhotosPicker(
-                selection: $viewModel.facilityItem,
+                selection: $container.registViewModel.facilityItem,
                 matching: .images
             ) {
-                if viewModel.facilityItem == nil {
+                if container.registViewModel.facilityItem == nil {
                     noneImageView
                 } else {
                     facilityImageCard
                 }
             }
-            .onChange(of: viewModel.restaurantItem) {
-                viewModel.loadRestaurantImage()
+            .onChange(of: container.registViewModel.restaurantItem) {
+                container.registViewModel.loadRestaurantImage()
             }
         }
     }
     
     /// 편의시설 사진이 삽입된 상태일 때
     private var facilityImageCard: some View {
-        Image(uiImage: viewModel.facilityImage ?? UIImage())
+        Image(uiImage: container.registViewModel.facilityImage ?? UIImage())
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(height: 122)
@@ -326,24 +349,37 @@ struct RegistFacilityView: View {
     
     /// 자세한 후기
     private var bottomContentsF: some View {
-        VStack(spacing: 23) {
-            HStack(spacing: 15) {
+        facilityDetailToggleView(viewModel: container.registViewModel)
+    }
+    
+    private struct facilityDetailToggleView: View {
+        @ObservedObject var viewModel: RegistViewModel
+        
+        var body: some View {
+            VStack(spacing: 23) {
                 Button(action: {
                     viewModel.isCheckedFacility.toggle()
                 }) {
-                    Image(viewModel.isCheckedFacility ? .fullCheck : .emptyCheck)
-                        .resizable()
-                        .frame(width: 20, height: 20)
+                    HStack(spacing: 15) {
+                        Image(viewModel.isCheckedFacility ? .fullCheck : .emptyCheck)
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                        
+                        Text("편의시설에 대해 더 자세한 후기를 남길래요")
+                            .font(.mainTextSemiBold18)
+                            .foregroundStyle(viewModel.isCheckedFacility ? .grayColorA : .grayColorG)
+                        
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
                 }
-                Text("편의시설에 대해 더 자세한 후기를 남길래요")
-                    .font(.mainTextSemiBold18)
-                    .foregroundStyle(viewModel.isCheckedFacility ? .grayColorA : .grayColorG)
-                Spacer()
-            }
-            if viewModel.isCheckedFacility {
-                TextEditor(text: $viewModel.detailFacilityReview)
-                    .detailTextFieldModifier(height: 100, font: .mainTextMedium16
-                    )
+                .buttonStyle(.plain)
+                
+                if viewModel.isCheckedFacility {
+                    TextEditor(text: $viewModel.detailFacilityReview)
+                        .detailTextFieldModifier(height: 100, font: .mainTextMedium16
+                        )
+                }
             }
         }
     }
@@ -361,6 +397,11 @@ struct RegistFacilityView: View {
             dismiss()
         }) {
             MainRegistBtn(mainRegistType: .init(title: "완료"))
+                .background (
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(Color.mainColorB)
+                        .frame(height: 54)
+                )
         }
     }
 }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 @main
 struct EncorelyApp: App {
     
@@ -19,12 +20,18 @@ struct EncorelyApp: App {
         }
     }
 }
+
+
 /*
 @main
 struct EncorelyApp: App {
+    
+    @StateObject private var container = DIContainer()
+    
     var body: some Scene {
         WindowGroup {
-            AuthRoutingView()   // 임시로 인증 라우터를 루트로
+            AuthRoutingView()
+                .environmentObject(container)
         }
     }
 }
