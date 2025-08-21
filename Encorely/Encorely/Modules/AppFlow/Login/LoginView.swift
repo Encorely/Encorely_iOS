@@ -1,13 +1,22 @@
 import SwiftUI
+import SafariServices
+import AuthenticationServices
 
 struct LoginView: View {
     @StateObject private var viewModel = LoginViewModel()
-
-    /// 로그인 성공 시 상위 라우터에게 알림
     var onLoginSuccess: () -> Void
 
+    private let kakaoURL = URL(string: "http://13.209.39.26:8080/oauth2/authorization/kakao")!
+    private let callbackScheme = "encorely"
+
+    // UI 상태
+    @State private var showKakaoWeb = false        // Safari 시트용
     @State private var showError = false
     @State private var errorMessage = ""
+
+    @State private var webAuthSession: ASWebAuthenticationSession?
+
+    private let useEphemeralWebAuth = true
 
     var body: some View {
         ZStack {
@@ -19,16 +28,13 @@ struct LoginView: View {
                     .init(color: Color("mainColorA"), location: 0.85),
                     .init(color: Color("mainColorB"), location: 1.0)
                 ]),
-                startPoint: .top,
-                endPoint: .bottom
+                startPoint: .top, endPoint: .bottom
             )
             .ignoresSafeArea()
 
             VStack {
                 Image("loginLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 360)
+                    .resizable().scaledToFit().frame(width: 360)
                     .padding(.top, 60)
 
                 Text("Keep Every Moment of the Concert")
@@ -38,8 +44,13 @@ struct LoginView: View {
 
                 Spacer()
 
+                // Kakao
                 Button {
-                    Task { await viewModel.loginWithKakao() }
+                    if useEphemeralWebAuth {
+                        startKakaoEphemeralWebAuth()
+                    } else {
+                        showKakaoWeb = true
+                    }
                 } label: {
                     HStack {
                         Image("kakaoLogo").resizable().frame(width: 24, height: 24)
@@ -48,10 +59,14 @@ struct LoginView: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(LinearGradient(gradient: Gradient(colors: [Color("mainColorB"), Color("mainColorC")]), startPoint: .leading, endPoint: .trailing))
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color("mainColorB"), Color("mainColorC")]),
+                            startPoint: .leading, endPoint: .trailing
+                        )
+                    )
                     .cornerRadius(12)
                 }
-                .disabled(isLoading)
 
                 Button {
                     Task { await viewModel.loginWithApple() }
@@ -63,7 +78,12 @@ struct LoginView: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(LinearGradient(gradient: Gradient(colors: [Color("mainColorB"), Color("mainColorC")]), startPoint: .leading, endPoint: .trailing))
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color("mainColorB"), Color("mainColorC")]),
+                            startPoint: .leading, endPoint: .trailing
+                        )
+                    )
                     .cornerRadius(12)
                 }
                 .disabled(isLoading)
@@ -76,6 +96,17 @@ struct LoginView: View {
             }
             .padding(.horizontal, 24)
         }
+
+        .sheet(isPresented: $showKakaoWeb) {
+            SafariView(url: kakaoURL)
+        }
+
+        .onOpenURL { url in
+            guard url.scheme?.lowercased() == callbackScheme else { return }
+            showKakaoWeb = false
+            handleCallbackURL(url)
+        }
+        // Apple 로그인 결과
         .onChange(of: viewModel.state) { _, new in
             switch new {
             case .success:
@@ -88,7 +119,7 @@ struct LoginView: View {
             }
         }
         .alert("로그인 실패", isPresented: $showError) {
-            Button("확인", role: .cancel) {}
+            Button("확인", role: .cancel) { }
         } message: { Text(errorMessage) }
     }
 
@@ -96,8 +127,72 @@ struct LoginView: View {
         if case .loading = viewModel.state { return true }
         return false
     }
+
+    // MARK: - ASWebAuthenticationSession (ephemeral) 시작
+    private func startKakaoEphemeralWebAuth() {
+        let session = ASWebAuthenticationSession(
+            url: kakaoURL,
+            callbackURLScheme: callbackScheme
+        ) { callbackURL, error in
+            if let url = callbackURL {
+                handleCallbackURL(url)    // 정상 콜백
+                return
+            }
+            // 실패 원인 로깅
+            if let err = error as NSError? {
+                print("ASWebAuth failed: \(err.domain) (\(err.code)) - \(err.localizedDescription)")
+            }
+
+            DispatchQueue.main.async {
+                showKakaoWeb = true
+            }
+        }
+        session.presentationContextProvider = AuthPresentationAnchorProvider()
+        session.prefersEphemeralWebBrowserSession = true  // 쿠키/세션 보존 안 함
+        webAuthSession = session
+        _ = session.start()
+    }
+
+    // MARK: - 공통 콜백 URL 파서
+    private func handleCallbackURL(_ url: URL) {
+        guard let comps = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            errorMessage = "콜백 URL 파싱 실패: \(url.absoluteString)"
+            showError = true
+            return
+        }
+        let q = comps.queryItems ?? []
+        let access  = q.first { ["access","accesstoken"].contains($0.name.lowercased()) }?.value
+        let refresh = q.first { ["refresh","refreshtoken"].contains($0.name.lowercased()) }?.value
+        let code    = q.first { $0.name.lowercased() == "code" }?.value
+
+        // 필요 시 여기에서 토큰 저장/ code→토큰 교환 호출
+        if access != nil || code != nil {
+            // 예: TokenStore.shared.save(access: access, refresh: refresh)
+            onLoginSuccess()
+        } else {
+            errorMessage = "로그인 콜백 파싱 실패: \(url.absoluteString)"
+            showError = true
+        }
+    }
 }
 
 #Preview {
     LoginView(onLoginSuccess: { print("✅ Login Success (Preview)") })
+}
+
+// Safari 래퍼 (보존됨)
+struct SafariView: UIViewControllerRepresentable {
+    let url: URL
+    func makeUIViewController(context: Context) -> SFSafariViewController { SFSafariViewController(url: url) }
+    func updateUIViewController(_ controller: SFSafariViewController, context: Context) { }
+}
+
+// ASWebAuthenticationSession 표시용 앵커
+final class AuthPresentationAnchorProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first { $0.isKeyWindow } ?? ASPresentationAnchor()
+    }
 }
