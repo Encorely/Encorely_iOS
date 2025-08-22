@@ -106,16 +106,21 @@ struct RegistPerformanceReviewView: View {
     
     // MARK: 다음 버튼
     private var nextBtn: some View {
-        Button(action: {
+        let enabled =  viewModel.isPerformanceStepValid
+        
+        return Button(action: {
+            guard enabled else { return }
             dismiss()
         }) {
             MainRegistBtn(mainRegistType: .init(title: "완료"))
                 .background (
                     RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color.mainColorB)
+                        .foregroundStyle(enabled ? Color.mainColorB : Color.grayColorG)
                         .frame(height: 54)
                 )
         }
+        .disabled(!enabled)
+        .animation(.easeInOut(duration: 0.15), value: enabled)
     }
 }
 

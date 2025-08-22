@@ -13,6 +13,7 @@ struct MainReviewRegistView: View {
     @EnvironmentObject var container: DIContainer
     @State private var tempSelectedDate: Date = Date()
     @State private var activeSheet: SheetType?
+    @State private var showUploadComplete = false
     
     private var viewModel: RegistViewModel {
             container.registViewModel
@@ -23,7 +24,13 @@ struct MainReviewRegistView: View {
             ZStack {
                 Color.registrationBG
                     .ignoresSafeArea()
+                
                 VStack {
+                    Text("후기 등록하기")
+                        .font(.mainTextSemiBold20)
+                        .foregroundStyle(Color.grayColorA)
+                        .padding(.vertical, 7)
+                    
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 55) {
                             topContents
@@ -37,6 +44,18 @@ struct MainReviewRegistView: View {
                         .padding(.bottom, 10)
                 }
             }
+            .fullScreenCover(isPresented: $showUploadComplete) { ReviewUploadComplete()
+            }
+            
+            .task(id: showUploadComplete) {
+                guard showUploadComplete else { return }
+                try? await Task.sleep(nanoseconds: 2_000_000_000)
+                viewModel.resetAll()
+                activeSheet = nil
+                container.navigationRouter.destination.removeAll()
+                showUploadComplete = false
+            }
+            
             .sheet(item: $activeSheet) { sheet in
                 switch sheet {
                 case .calendar:
@@ -59,14 +78,15 @@ struct MainReviewRegistView: View {
                 case .facility:
                     RegistFacilityView()
                         .presentationDragIndicator(.visible)
-                        .presentationDetents([.fraction(0.65)])
+                        .presentationDetents([.fraction(0.95)])
                         .presentationCornerRadius(30)
                         .environmentObject(container)
                 }
             }
             .onChange(of: activeSheet) { oldValue, newValue in
-                print("🔵 activeSheet 변경: \(String(describing: oldValue)) -> \(String(describing: newValue))")
+                print("activeSheet 변경: \(String(describing: oldValue)) -> \(String(describing: newValue))")
             }
+            .enableWindowTapToHideKeyboard()
         }
     }
     
@@ -198,6 +218,7 @@ struct MainReviewRegistView: View {
         return Button(action: {
             guard enabled else { return }
             // TODO: 실제 업로드 트리거
+            showUploadComplete = true
         }) {
             MainRegistBtn(mainRegistType: .init(title: "업로드"))
                 .background (

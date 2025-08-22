@@ -16,7 +16,7 @@ struct facilityMapButton: View {
                 .frame(height: 47)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             
-            Text("지도에서 위치보기")
+            Text("장소 추가하기")
                 .font(.mainTextMedium16)
                 .foregroundStyle(.grayColorA)
         }

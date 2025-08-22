@@ -20,6 +20,7 @@ struct MainHomeView: View {
             .ignoresSafeArea()
             .contentMargins(.bottom, 110, for: .scrollContent)
         }
+        .enableWindowTapToHideKeyboard()
     }
         
     private var topBanner : some View {

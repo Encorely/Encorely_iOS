@@ -3,7 +3,7 @@
 //  Encorely
 //
 //  Created by 이예지 on 8/18/25.
-//
+
 
 import Foundation
 import SwiftUI
@@ -35,5 +35,16 @@ extension UIApplication: @retroactive UIGestureRecognizerDelegate {
     /// 여러 제스처 인식기를 동시에 인식할 수 있을지 여부를 반환하는 메서드
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return false  // 동시에 인식하지 않도록 설정
+    }
+}
+
+public extension View {
+    /// 화면이 나타날 때, 윈도우(전역)에 '아무 데나 탭하면 키보드 내림' 제스처를 설치.
+    /// 기존 UIApplication 확장 `hideKeyboard()`를 그대로 사용.
+    func enableWindowTapToHideKeyboard(_ enabled: Bool = true) -> some View {
+        self.onAppear {
+            guard enabled else { return }
+            UIApplication.shared.hideKeyboard()
+        }
     }
 }

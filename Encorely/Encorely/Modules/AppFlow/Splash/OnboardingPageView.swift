@@ -19,7 +19,7 @@ struct OnboardingPageView: View {
 
             Image(imageName)
                 .resizable()
-                .frame(width: 215, height: 466)
+                .frame(width: 240, height: 466)
 
             HStack(spacing: 6) {
                 ForEach(0..<3, id: \.self) { index in

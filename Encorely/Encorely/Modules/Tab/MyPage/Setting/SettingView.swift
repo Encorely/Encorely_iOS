@@ -12,6 +12,7 @@ struct SettingView: View {
                     Image("chevronLeft")
                         .resizable()
                         .frame(width: 30, height: 30)
+                        .foregroundStyle(Color.grayColorA)
                 }
                 Spacer()
                 Text("설정")
@@ -50,7 +51,7 @@ struct SettingView: View {
                                     .foregroundColor(.gray)
                             }
                         }
-                        .tint(Color("mainColorA"))
+                        .tint(Color("mainColorB"))
                     }
                     .padding(.horizontal)
 

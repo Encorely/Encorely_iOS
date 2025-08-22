@@ -12,6 +12,7 @@ struct RegistFacilityView: View {
     
     @EnvironmentObject var container: DIContainer
     @Environment(\.dismiss) private var dismiss
+    @State private var path: [PlaceSearchType] = []
     
     let keywordList = KeywordType.RestaurantTag
     
@@ -20,22 +21,28 @@ struct RegistFacilityView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            
-            topTitle
-            
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 40) {
-                    restaurantContents
-                    
-                    facilityContents
+        NavigationStack(path: $path) {
+            VStack(spacing: 0) {
+                
+                topTitle
+                
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 40) {
+                        restaurantContents
+                        
+                        facilityContents
+                    }
+                    .padding(.bottom, 16)
                 }
                 .padding(.bottom, 16)
+                nextBtn
             }
-            .padding(.bottom, 16)
-            nextBtn
+            .padding(.horizontal, 16)
+            .navigationDestination(for: PlaceSearchType.self) { type in
+                SearchPlaceView()
+                    .environmentObject(container)
+            }
         }
-        .padding(.horizontal, 16)
     }
     
     // MARK: 상단 타이틀 (맛집 및 편의시설)
@@ -124,9 +131,12 @@ struct RegistFacilityView: View {
     private var middleContentsR: some View {
         VStack(spacing: 20) {
             Button(action: {
-                
+                path.append(.restaurant)
             }, label: {
+                //선택된 장소가 없을 때
                 facilityMapButton()
+                //선택된 장소가 있을 때
+                //ReviewPlaceCard()
             })
             
             PhotosPicker(
@@ -302,9 +312,12 @@ struct RegistFacilityView: View {
     private var middleContentsF: some View {
         VStack(spacing: 20) {
             Button(action: {
-                
+                path.append(.facility)
             }, label: {
+                //선택된 장소가 없을 때
                 facilityMapButton()
+                //선택된 장소가 있을 때
+                //ReviewPlaceCard()
             })
             
             PhotosPicker(
@@ -317,8 +330,8 @@ struct RegistFacilityView: View {
                     facilityImageCard
                 }
             }
-            .onChange(of: container.registViewModel.restaurantItem) {
-                container.registViewModel.loadRestaurantImage()
+            .onChange(of: container.registViewModel.facilityItem) {
+                container.registViewModel.loadFacilityImage()
             }
         }
     }
