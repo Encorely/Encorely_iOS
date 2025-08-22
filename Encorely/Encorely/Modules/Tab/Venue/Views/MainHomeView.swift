@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MainHomeView: View {
+    @State private var showViewModel = ShowViewModel()
+    
     var body: some View {
         NavigationStack{
             ScrollView{
@@ -21,6 +23,10 @@ struct MainHomeView: View {
             .contentMargins(.bottom, 110, for: .scrollContent)
         }
         .enableWindowTapToHideKeyboard()
+        .environment(showViewModel)
+        .task {
+            await showViewModel.loadShows()  ///현재 진행 중인 공연 불러오기
+        }
     }
         
     private var topBanner : some View {
@@ -32,13 +38,13 @@ struct MainHomeView: View {
                 HStack {
                     Image(.ENCORELY)
                     Spacer()
-                    NavigationLink(destination: OngoingShowView()) {
+                    NavigationLink(destination: ShowSearchView()) {
                         Image(.magnifyingGlass)
                             .frame(width:25, height:25)
                             .foregroundStyle(.grayColorJ)
                     }
                     Spacer().frame(width:15)
-                    NavigationLink(destination: OngoingShowView()) {
+                    NavigationLink(destination: AlarmView()) {
                         Image(.alarm)
                             .frame(width:25, height:25)
                             .foregroundStyle(.grayColorJ)
@@ -47,7 +53,7 @@ struct MainHomeView: View {
                 Spacer().frame(height:152)
                 VStack (alignment: .leading, spacing: 10) {
                     Text("단독 혜택부터 \n인기 공연 할인까지")
-                        .font(.mainTextSemiBold24)
+                        .font(.mainTextSemiBold32)
                         .foregroundStyle(.grayColorJ)
                     Text("올 여름, 다양한 이벤트를 만나보세요")
                         .font(.mainTextMedium20)
@@ -65,7 +71,7 @@ struct MainHomeView: View {
         return VStack {
             HStack {
                 Text("자주 보는 공연장")
-                    .font(.mainTextMedium20)
+                    .font(.mainTextSemiBold20)
                 Spacer()
                 
                 NavigationLink(destination: VenueListView()) {
@@ -87,12 +93,12 @@ struct MainHomeView: View {
     }
     
     private var ongoingPerformancesView : some View {
-        let performances = OngoingShowMock
+        //let performances = OngoingShowMock
         
         return VStack {
             HStack {
                 Text("현재 진행 중인 공연")
-                    .font(.mainTextMedium20)
+                    .font(.mainTextSemiBold20)
                 Spacer()
                 
                 NavigationLink(destination: OngoingShowView()) {
@@ -104,8 +110,12 @@ struct MainHomeView: View {
             
             ScrollView(.horizontal, showsIndicators: false){
                 LazyHStack(spacing:20) {
-                    ForEach(performances) { performance in
-                        ShowMainCard(ongoingShow:performance)
+                    ForEach(showViewModel.shows) { show in
+                        NavigationLink(
+                            destination: OngoingShowDetailWrapperView(showId: show.id)
+                        ) {
+                            ShowMainCard(ongoingShow: show)
+                        }
                     }
                 }
             }
@@ -120,7 +130,7 @@ struct MainHomeView: View {
         return VStack (alignment: .leading) {
             HStack {
                 Text("인기 공연러")
-                    .font(.mainTextMedium20)
+                    .font(.mainTextSemiBold20)
                 Spacer()
                 
                 NavigationLink(destination: OngoingShowView()) {
@@ -150,7 +160,7 @@ struct MainHomeView: View {
         return VStack (alignment: .leading) {
             HStack {
                 Text("화제의 후기들")
-                    .font(.mainTextMedium20)
+                    .font(.mainTextSemiBold20)
                 Spacer()
                 
                 NavigationLink(destination: OngoingShowView()) {
