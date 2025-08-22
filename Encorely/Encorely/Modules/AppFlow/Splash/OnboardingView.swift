@@ -37,9 +37,11 @@ struct OnboardingView: View {
             .tag(2)
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 
 #Preview("Onboarding - 기본") {
-    OnboardingView(onFinish: { /* 프리뷰에선 아무 것도 안 함 */ })
+    OnboardingView(onFinish: { })
 }

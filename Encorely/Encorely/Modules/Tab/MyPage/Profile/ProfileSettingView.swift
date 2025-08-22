@@ -1,13 +1,6 @@
-//
-//  ProfileSettingView.swift
-//  UMCPractice
-//
-//  Created by Kehyuk on 8/13/25.
-//
-
 import SwiftUI
 import PhotosUI
-import UIKit   // ← 뷰에서만 사용
+import UIKit
 
 struct ProfileSettingView: View {
     @Environment(\.dismiss) private var dismiss
@@ -15,6 +8,8 @@ struct ProfileSettingView: View {
 
     @State private var isPhotoSheetPresented = false
     @State private var selectedItem: PhotosPickerItem?
+
+    @State private var isNicknameValid: Bool? = nil
 
     var body: some View {
         VStack(spacing: 40) {
@@ -28,22 +23,34 @@ struct ProfileSettingView: View {
                 Spacer()
                 Color.clear.frame(width: 24, height: 24)
             }
-            .padding(.horizontal).padding(.top, 12)
+            .padding(.horizontal)
+            .padding(.top, 12)
 
             // Image
             ZStack(alignment: .bottomTrailing) {
+                // ✅ 기본 프로필(=editingImageData가 nil)일 땐 회색 원 배경 표시
+                Circle()
+                    .fill(vm.editingImageData == nil ? Color("grayColorH") : Color.clear)
+                    .frame(width: 100, height: 100)
+
                 Group {
                     if let data = vm.editingImageData, let ui = UIImage(data: data) {
-                        Image(uiImage: ui).resizable().scaledToFill()
+                        Image(uiImage: ui)
+                            .resizable()
+                            .scaledToFill()
                     } else {
-                        Image("profile").resizable().scaledToFill()
+                        Image("Nothing")
+                            .resizable()
+                            .scaledToFill()
                     }
                 }
                 .frame(width: 100, height: 100)
                 .clipShape(Circle())
 
                 Button { isPhotoSheetPresented = true } label: {
-                    Image("plusCircle").resizable().frame(width: 28, height: 28)
+                    Image("plusCircle")
+                        .resizable()
+                        .frame(width: 28, height: 28)
                 }
             }
             .padding(.top, 8)
@@ -56,37 +63,75 @@ struct ProfileSettingView: View {
                 }
                 .padding(.horizontal)
 
-                HStack {
+                ZStack {
                     TextField("닉네임을 입력해주세요", text: $vm.editingNickname)
                         .padding(.leading, 16)
                         .frame(height: 50)
-                    Spacer()
-                    Button("중복 확인") { /* TODO: API 붙이면 체크 */ }
-                        .font(.caption).foregroundColor(.white)
-                        .padding(.horizontal, 12).padding(.vertical, 8)
-                        .background(Color("mainColorB")).clipShape(Capsule())
+                        .background(
+                            RoundedRectangle(cornerRadius: 22)
+                                .stroke(Color("grayColorC"), lineWidth: 1)
+                        )
+
+                    HStack {
+                        Spacer()
+                        Button("중복 확인") {
+                            let trimmed = vm.editingNickname
+                                .trimmingCharacters(in: .whitespacesAndNewlines)
+                            isNicknameValid = !trimmed.isEmpty
+                        }
+                        .font(.caption)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(Color("mainColorB"))
+                        .clipShape(Capsule())
                         .padding(.trailing, 12)
+                    }
                 }
-                .background(RoundedRectangle(cornerRadius: 22)
-                    .stroke(Color("grayColorC"), lineWidth: 1))
                 .padding(.horizontal)
+
+                if let valid = isNicknameValid {
+                    Text(valid ? "사용 가능한 닉네임이에요" : "사용 불가능한 닉네임이에요")
+                        .font(.caption)
+                        .foregroundColor(valid ? .blue : .red)
+                        .padding(.leading, 24)
+                }
             }
 
             // Intro
             VStack(alignment: .leading, spacing: 4) {
-                Text("한 줄 소개").font(.subheadline).fontWeight(.medium).padding(.horizontal)
+                Text("한 줄 소개")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .padding(.horizontal)
+
                 TextField("나를 소개해주세요(최대 50자)", text: $vm.editingIntroduction)
-                    .padding(.horizontal).frame(height: 50)
-                    .overlay(RoundedRectangle(cornerRadius: 22).stroke(Color("grayColorC"), lineWidth: 1))
+                    .padding(.horizontal)
+                    .frame(height: 50)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 22)
+                            .stroke(Color("grayColorC"), lineWidth: 1)
+                    )
                     .padding(.horizontal)
             }
 
             // Link
             VStack(alignment: .leading, spacing: 4) {
-                Text("개인 프로필 링크 추가").font(.subheadline).fontWeight(.medium).padding(.horizontal)
+                Text("개인 프로필 링크 추가")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .padding(.horizontal)
+
                 TextField("ex. 인스타그램, 트위터, 스레드", text: $vm.editingLink)
-                    .padding(.horizontal).frame(height: 50)
-                    .overlay(RoundedRectangle(cornerRadius: 22).stroke(Color("grayColorC"), lineWidth: 1))
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled(true)
+                    .keyboardType(.URL)
+                    .padding(.horizontal)
+                    .frame(height: 50)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 22)
+                            .stroke(Color("grayColorC"), lineWidth: 1)
+                    )
                     .padding(.horizontal)
             }
 
@@ -101,22 +146,37 @@ struct ProfileSettingView: View {
             } label: {
                 Text("프로필 설정 완료")
                     .foregroundColor(.white)
-                    .frame(maxWidth: .infinity).frame(height: 48)
-                    .background(Color("mainColorB")).cornerRadius(12)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 48)
+                    .background(Color("mainColorB"))
+                    .cornerRadius(12)
             }
-            .padding(.horizontal).padding(.bottom, 16)
+            .padding(.horizontal)
+            .padding(.bottom, 16)
         }
         .navigationBarHidden(true)
+
+        // 저장된 값 로드
+        .onAppear { vm.loadFromStore() }
+
+        // 닉네임 변경 시, 중복확인 결과 초기화
+        .onChange(of: vm.editingNickname) { _, _ in
+            isNicknameValid = nil
+        }
+
+        // 사진 선택 시 Data로 반영
         .sheet(isPresented: $isPhotoSheetPresented) { photoSheet }
         .onChange(of: selectedItem) { _, newItem in
             guard let newItem else { return }
             Task {
                 if let data = try? await newItem.loadTransferable(type: Data.self) {
-                    vm.editingImageData = data     // ← VM에 Data만 전달
+                    vm.editingImageData = data
                     isPhotoSheetPresented = false
                 }
             }
         }
+
+        // 에러 알림
         .alert("오류", isPresented: .constant({
             if case .failure = vm.state { return true } else { return false }
         }())) {
@@ -143,7 +203,8 @@ struct ProfileSettingView: View {
                     Text("기본 프로필 사진 적용").foregroundColor(.black)
                     Spacer()
                 }
-                .padding(.horizontal).padding(.vertical, 12)
+                .padding(.horizontal)
+                .padding(.vertical, 12)
             }
             PhotosPicker(selection: $selectedItem, matching: .images) {
                 HStack {
@@ -151,7 +212,8 @@ struct ProfileSettingView: View {
                     Text("갤러리에서 사진 선택").foregroundColor(.black)
                     Spacer()
                 }
-                .padding(.horizontal).padding(.vertical, 12)
+                .padding(.horizontal)
+                .padding(.vertical, 12)
             }
             Spacer()
         }

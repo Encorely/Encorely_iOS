@@ -1,4 +1,3 @@
-// Modules/Follow/FollowingListView.swift
 import SwiftUI
 
 struct FollowingListView: View {
@@ -30,7 +29,8 @@ struct FollowingListView: View {
                         } label: {
                             Text(user.isFollowing ? "팔로잉" : "팔로우")
                                 .foregroundStyle(user.isFollowing ? .black : .white)
-                                .padding(.horizontal, 14).padding(.vertical, 6)
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 6)
                                 .background(
                                     user.isFollowing
                                     ? AnyView(RoundedRectangle(cornerRadius: 100).stroke(.blue))

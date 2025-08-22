@@ -1,4 +1,3 @@
-// Modules/Follow/FollowerListViewModel.swift
 import Foundation
 
 @MainActor

@@ -2,9 +2,6 @@ import Foundation
 import AuthenticationServices
 import UIKit
 
-// 이미 LoginDTOs.swift에 AuthTokens가 있으므로 여기선 선언하지 않음
-// struct AuthTokens { ... }  // ❌ 제거
-
 protocol AuthRepository {
     func loginWithKakao() async throws -> AuthTokens
     func loginWithApple() async throws -> AuthTokens
@@ -19,17 +16,31 @@ final class DefaultAuthRepository: NSObject, AuthRepository, ASWebAuthentication
     // Info.plist 에 등록한 스킴
     private let callbackScheme = "encorely"
 
+    // 세션을 강하게 유지 (표시 중 retain)
+    private var currentSession: ASWebAuthenticationSession?
+
     // MARK: - Kakao
     func loginWithKakao() async throws -> AuthTokens {
+        #if DEBUG
+        print("🔐 [Kakao] start web-auth:", authURL.absoluteString)
+        #endif
         let callbackURL = try await startWebAuth(url: authURL, callbackScheme: callbackScheme)
+
+        #if DEBUG
+        print("🔙 [Kakao] callback url:", callbackURL.absoluteString)
+        #endif
 
         if let comps = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false) {
             let q = comps.queryItems ?? []
             let access = q.first { ["access","accesstoken"].contains($0.name.lowercased()) }?.value
             let refresh = q.first { ["refresh","refreshtoken"].contains($0.name.lowercased()) }?.value
-            if let access { return AuthTokens(access: access, refresh: refresh) }
-
+            if let access {
+                return AuthTokens(access: access, refresh: refresh)
+            }
             if let code = q.first(where: { $0.name.lowercased() == "code" })?.value {
+                #if DEBUG
+                print("ℹ️ [Kakao] got code:", code)
+                #endif
                 return try await exchangeCodeForToken(code: code)
             }
         }
@@ -45,20 +56,34 @@ final class DefaultAuthRepository: NSObject, AuthRepository, ASWebAuthentication
     // MARK: - Web Auth
     private func startWebAuth(url: URL, callbackScheme: String) async throws -> URL {
         try await withCheckedThrowingContinuation { cont in
-            let session = ASWebAuthenticationSession(url: url, callbackURLScheme: callbackScheme) { callbackURL, error in
+            let session = ASWebAuthenticationSession(
+                url: url,
+                callbackURLScheme: callbackScheme
+            ) { [weak self] callbackURL, error in
+                // 세션 해제
+                self?.currentSession = nil
                 if let url = callbackURL {
                     cont.resume(returning: url)
                 } else {
                     cont.resume(throwing: error ?? NSError(
                         domain: "Login", code: -3,
-                        userInfo: [NSLocalizedDescriptionKey: "사용자 취소"]))
+                        userInfo: [NSLocalizedDescriptionKey: "사용자 취소 또는 표시 실패"]
+                    ))
                 }
             }
             session.presentationContextProvider = self
             session.prefersEphemeralWebBrowserSession = true
-            if !session.start() {
-                cont.resume(throwing: NSError(domain: "Login", code: -4,
-                                              userInfo: [NSLocalizedDescriptionKey: "웹 인증 시작 실패"]))
+
+            // 강한 참조 보관
+            self.currentSession = session
+
+            let started = session.start()
+            if !started {
+                self.currentSession = nil
+                cont.resume(throwing: NSError(
+                    domain: "Login", code: -4,
+                    userInfo: [NSLocalizedDescriptionKey: "웹 인증 시작 실패"]
+                ))
             }
         }
     }
@@ -70,15 +95,7 @@ final class DefaultAuthRepository: NSObject, AuthRepository, ASWebAuthentication
 
     // MARK: - code → token 교환(서버가 code만 주는 경우)
     private func exchangeCodeForToken(code: String) async throws -> AuthTokens {
-        // Swagger 보고 채우기
-        // let url = URL(string: "http://13.209.39.26:8080/api/auth/kakao/token")!
-        // var req = URLRequest(url: url)
-        // req.httpMethod = "POST"
-        // req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        // req.httpBody = try JSONEncoder().encode(["code": code])
-        // let (data, _) = try await URLSession.shared.data(for: req)
-        // let dto = try JSONDecoder().decode(LoginResponseDTO.self, from: data)
-        // return AuthTokens(access: dto.accessToken, refresh: dto.refreshToken)
+        // TODO: Swagger 스펙에 맞춰 채우기
         throw NSError(domain: "Login", code: -5,
                       userInfo: [NSLocalizedDescriptionKey: "토큰 교환 API 스펙 필요"])
     }

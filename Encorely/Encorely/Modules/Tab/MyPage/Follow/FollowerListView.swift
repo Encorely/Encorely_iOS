@@ -1,4 +1,3 @@
-// Modules/Follow/FollowerListView.swift
 import SwiftUI
 
 struct FollowerListView: View {
