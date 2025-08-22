@@ -1,4 +1,3 @@
-// Modules/Follow/FollowSummaryViewModel.swift
 import Foundation
 import Combine
 
@@ -12,11 +11,7 @@ final class FollowSummaryViewModel: ObservableObject {
 
     init(repo: FollowRepository = StubFollowRepository.shared) {
         self.repo = repo
-
-        // 최초 로드
         Task { await refresh() }
-
-        // 팔로우/언팔 변경 알림 수신 → 숫자 갱신
         NotificationCenter.default.publisher(for: .followListDidChange)
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
@@ -25,17 +20,19 @@ final class FollowSummaryViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    /// 저장소에서 리스트를 받아와 개수를 계산
     func refresh() async {
         do {
             async let followers = repo.fetchFollowers()
             async let followings = repo.fetchFollowings()
             let (f, g) = try await (followers, followings)
-            followerCount  = f.count
+
+            // 팔로워 수 = 내가 맞팔한 사람 수(버튼이 "팔로잉" = 하얀 버튼)
+            followerCount = f.filter { $0.isFollowing }.count
+
+            // 팔로잉 수는 기존 로직 유지(원하면 .filter { $0.isFollowing } 로 바꿔도 됨)
             followingCount = g.count
         } catch {
-            // 실패 시 필요하면 기본값 유지
-            // print("refresh error:", error)
+            // 실패 시 기존 값 유지
         }
     }
 }

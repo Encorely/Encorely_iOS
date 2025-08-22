@@ -1,19 +1,13 @@
 import SwiftUI
 
-
 @main
 struct EncorelyApp: App {
-
-    @StateObject private var authLink = AuthLinkHandler.shared
+    @StateObject private var container = DIContainer()   
 
     var body: some Scene {
         WindowGroup {
             AuthRoutingView()
-                .environmentObject(authLink) 
-                .onOpenURL { url in
-                    authLink.handle(url)
-                }
+                .environmentObject(container)       
         }
     }
 }
-

@@ -9,11 +9,9 @@ struct LoginView: View {
     private let kakaoURL = URL(string: "http://13.209.39.26:8080/oauth2/authorization/kakao")!
     private let callbackScheme = "encorely"
 
-    // UI 상태
-    @State private var showKakaoWeb = false        // Safari 시트용
+    @State private var showKakaoWeb = false
     @State private var showError = false
     @State private var errorMessage = ""
-
     @State private var webAuthSession: ASWebAuthenticationSession?
 
     private let useEphemeralWebAuth = true
@@ -44,7 +42,6 @@ struct LoginView: View {
 
                 Spacer()
 
-                // Kakao
                 Button {
                     if useEphemeralWebAuth {
                         startKakaoEphemeralWebAuth()
@@ -96,17 +93,16 @@ struct LoginView: View {
             }
             .padding(.horizontal, 24)
         }
+        .navigationBarBackButtonHidden(true)   // ← Back 숨김
 
         .sheet(isPresented: $showKakaoWeb) {
             SafariView(url: kakaoURL)
         }
-
         .onOpenURL { url in
             guard url.scheme?.lowercased() == callbackScheme else { return }
             showKakaoWeb = false
             handleCallbackURL(url)
         }
-        // Apple 로그인 결과
         .onChange(of: viewModel.state) { _, new in
             switch new {
             case .success:
@@ -128,32 +124,28 @@ struct LoginView: View {
         return false
     }
 
-    // MARK: - ASWebAuthenticationSession (ephemeral) 시작
     private func startKakaoEphemeralWebAuth() {
         let session = ASWebAuthenticationSession(
             url: kakaoURL,
             callbackURLScheme: callbackScheme
         ) { callbackURL, error in
             if let url = callbackURL {
-                handleCallbackURL(url)    // 정상 콜백
+                handleCallbackURL(url)
                 return
             }
-            // 실패 원인 로깅
             if let err = error as NSError? {
                 print("ASWebAuth failed: \(err.domain) (\(err.code)) - \(err.localizedDescription)")
             }
-
             DispatchQueue.main.async {
                 showKakaoWeb = true
             }
         }
         session.presentationContextProvider = AuthPresentationAnchorProvider()
-        session.prefersEphemeralWebBrowserSession = true  // 쿠키/세션 보존 안 함
+        session.prefersEphemeralWebBrowserSession = true
         webAuthSession = session
         _ = session.start()
     }
 
-    // MARK: - 공통 콜백 URL 파서
     private func handleCallbackURL(_ url: URL) {
         guard let comps = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             errorMessage = "콜백 URL 파싱 실패: \(url.absoluteString)"
@@ -165,9 +157,7 @@ struct LoginView: View {
         let refresh = q.first { ["refresh","refreshtoken"].contains($0.name.lowercased()) }?.value
         let code    = q.first { $0.name.lowercased() == "code" }?.value
 
-        // 필요 시 여기에서 토큰 저장/ code→토큰 교환 호출
         if access != nil || code != nil {
-            // 예: TokenStore.shared.save(access: access, refresh: refresh)
             onLoginSuccess()
         } else {
             errorMessage = "로그인 콜백 파싱 실패: \(url.absoluteString)"
@@ -180,14 +170,12 @@ struct LoginView: View {
     LoginView(onLoginSuccess: { print("✅ Login Success (Preview)") })
 }
 
-// Safari 래퍼 (보존됨)
 struct SafariView: UIViewControllerRepresentable {
     let url: URL
     func makeUIViewController(context: Context) -> SFSafariViewController { SFSafariViewController(url: url) }
     func updateUIViewController(_ controller: SFSafariViewController, context: Context) { }
 }
 
-// ASWebAuthenticationSession 표시용 앵커
 final class AuthPresentationAnchorProvider: NSObject, ASWebAuthenticationPresentationContextProviding {
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         UIApplication.shared.connectedScenes

@@ -1,4 +1,3 @@
-// Modules/Follow/FollowUser.swift
 import Foundation
 
 struct FollowUser: Identifiable, Equatable {

@@ -1,5 +1,6 @@
 import Foundation
 
+
 enum AuthRoute: Hashable {
     case splash
     case onboarding
