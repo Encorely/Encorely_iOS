@@ -193,16 +193,22 @@ struct MainReviewRegistView: View {
     
     // MARK: 업로드 버튼
     private var uploadBtn: some View {
-        Button(action: {
+        let enabled = viewModel.isUploadEnabled
+        
+        return Button(action: {
+            guard enabled else { return }
+            // TODO: 실제 업로드 트리거
         }) {
             MainRegistBtn(mainRegistType: .init(title: "업로드"))
                 .background (
                     RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(Color.mainColorB)
+                        .foregroundStyle(enabled ? Color.mainColorB : Color.grayColorG)
                         .frame(height: 54)
                 )
         }
+        .disabled(!enabled)
         .padding(.horizontal, 16)
+        .animation(.easeInOut(duration: 0.15), value: enabled)
     }
 }
 
