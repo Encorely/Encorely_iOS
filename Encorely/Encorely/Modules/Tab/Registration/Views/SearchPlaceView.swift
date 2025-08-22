@@ -11,28 +11,45 @@ struct SearchPlaceView: View {
     
     @EnvironmentObject var container: DIContainer
     @StateObject var viewModel = RegistViewModel()
+    @Environment(\.dismiss) var dismiss
+    
+    @State private var didSearch = false
     
     var body: some View {
-        VStack(spacing: 25) {
+        VStack(spacing: 16) {
             searchBar
-            ScrollView(showsIndicators: false) {
-                LazyVStack(spacing: 0) {
-                    ForEach(0..<5) { index in
-                        placeCard
-                    }
-                }
-            }
+                .padding(.bottom, 5)
+            
+            Rectangle()
+                .frame(height: 1)
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(Color.grayColorH)
+            
+            placeList
         }
         .toolbar(content: {
-                    ToolbarItem(placement: .topBarLeading, content: {
-                        Image("chevronLeft")
-                    })
-                    
-                    ToolbarItem(placement: .principal, content: {
-                        Text("장소 첨부")
-                            .font(.mainTextSemiBold20)
-                    })
-                })
+            ToolbarItem(placement: .topBarLeading, content: {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image("chevronLeft")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .foregroundStyle(Color.grayColorA)
+                        .padding(.top, 30)
+                }
+            })
+            
+            ToolbarItem(placement: .principal, content: {
+                Text("장소 첨부")
+                    .font(.mainTextSemiBold20)
+                    .padding(.top, 30)
+            })
+        })
+        .navigationBarBackButtonHidden(true)
+        .padding(.top, 20)
+        .padding(.horizontal, 9)
+
     }
     
     private var searchBar: some View {
@@ -40,9 +57,19 @@ struct SearchPlaceView: View {
             TextField("장소명을 입력하세요.", text: $viewModel.searchPlace)
                 .padding(.leading, 21)
                 .font(.mainTextMedium14)
+                .submitLabel(.search)
+                .onSubmit {
+                    let q = viewModel.searchPlace.trimmingCharacters(in: .whitespacesAndNewlines)
+                    didSearch = !q.isEmpty
+                }
+                .onChange(of: viewModel.searchPlace) {
+                    let q = viewModel.searchPlace.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if q.isEmpty { didSearch = false }
+                }
             
             Button(action: {
-                
+                let q = viewModel.searchPlace.trimmingCharacters(in: .whitespacesAndNewlines)
+                didSearch = !q.isEmpty
             }) {
                 Image("magnifyingGlass")
                     .resizable()
@@ -58,16 +85,40 @@ struct SearchPlaceView: View {
             RoundedRectangle(cornerRadius: 100)
                 .stroke(Color.mainColorF, lineWidth: 1)
         }
-        .padding(.horizontal, 32)
+        .padding(.horizontal, 15)
     }
+    
+    
+    private var placeList: some View {
+        ScrollView(showsIndicators: false) {
+            if didSearch && !viewModel.searchPlace.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                LazyVStack(spacing: 16) {
+                    ForEach(0..<5) { index in
+                        placeCard
+                    }
+                }
+            } else {
+                emptyPlaceCard
+            }
+        }
+    }
+    
+    private var emptyPlaceCard: some View {
+        VStack(spacing: 25) {
+            Image(systemName: "mappin.and.ellipse")
+                .resizable()
+                .frame(width: 58, height: 70)
+                .foregroundStyle(Color.mainColorF.opacity(0.5))
+            
+            Text("장소명과 주소를 검색해보세요")
+                .font(.mainTextRegular18)
+        }
+        .padding(.top, 180)
+    }
+    
     
     private var placeCard: some View {
         VStack(spacing: 16) {
-            Rectangle()
-                .frame(height: 1)
-                .frame(maxWidth: .infinity)
-                .foregroundStyle(.gray.opacity(0.8))
-            
             HStack {
                 VStack(alignment: .leading, spacing: 3) {
                     Text("남월 안산한양대본점")
@@ -83,7 +134,7 @@ struct SearchPlaceView: View {
                 Spacer()
                 
                 Button(action: {
-                    
+                    // TODO: 장소 첨부하기
                 }) {
                     Text("첨부")
                         .frame(width: 48, height: 26)
@@ -100,10 +151,8 @@ struct SearchPlaceView: View {
             Rectangle()
                 .frame(height: 1)
                 .frame(maxWidth: .infinity)
-                .foregroundStyle(.gray.opacity(0.8))
-            
+                .foregroundStyle(Color.grayColorH)
         }
-        .padding(.horizontal, 9)
     }
 }
 

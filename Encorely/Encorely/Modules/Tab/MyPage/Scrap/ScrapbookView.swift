@@ -15,6 +15,7 @@ struct ScrapbookView: View {
             HStack {
                 Button(action: { dismiss() }) {
                     Image("chevronLeft").resizable().frame(width: 30, height: 30)
+                        .foregroundStyle(Color.grayColorA)
                 }
                 Spacer()
                 Text("스크랩북").font(.title3).bold()

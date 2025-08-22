@@ -111,6 +111,8 @@ class RegistViewModel: ObservableObject {
     }
     /// 맛집 사진 담기
     @Published var restaurantImage: UIImage? = nil
+    /// 맛집 키워드 평가
+    @Published var selectedRestaurantKeywords: Set<String> = []
     /// 맛집에 대해 더 자세한 후기를 남길래요
     @Published var isCheckedRestaurant: Bool = false
     
@@ -187,12 +189,11 @@ class RegistViewModel: ObservableObject {
     }
     
     /// 공연 후기
+    var isPerformanceStepValid: Bool {
+        !simplePerformanceReview.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
     
-    
-    
-    /// 맛집 및 편의시설
-    
-    
+
     // MARK: 전체 후기 업로드 버튼 활성화/비활성화
     /// 공백만 있는 입력 방지용
     private func isNonEmpty(_ s: String) -> Bool {
@@ -429,9 +430,9 @@ class RegistViewModel: ObservableObject {
         
         if !failedUploads.isEmpty {
             imageUploadError = "\(failedUploads.count)개 이미지 업로드에 실패했습니다"
-            print("❌ 이미지 업로드 실패: \(failedUploads.count)개")
+            print("이미지 업로드 실패: \(failedUploads.count)개")
         } else {
-            print("✅ 모든 이미지 업로드 완료!")
+            print("모든 이미지 업로드 완료")
         }
         
         isUploadingImages = false
@@ -460,13 +461,13 @@ class RegistViewModel: ObservableObject {
             uploadStatus.isUploading = false
             uploadStatus.uploadError = nil
             
-            print("✅ 이미지 업로드 성공: \(uploadStatus.fileName)")
+            print("이미지 업로드 성공: \(uploadStatus.fileName)")
             
         } catch {
             uploadStatus.isUploading = false
             uploadStatus.uploadError = error.localizedDescription
             
-            print("❌ 이미지 업로드 실패: \(uploadStatus.fileName) - \(error)")
+            print("이미지 업로드 실패: \(uploadStatus.fileName) - \(error)")
         }
     }
     
@@ -483,7 +484,7 @@ class RegistViewModel: ObservableObject {
     }
     
     /// 실제 후기 업로드 (이미지 업로드 + 후기 등록)
-    func submitReview() async {  // ⚠️ 파라미터 제거
+    func submitReview() async {
         // 입력값 검증
         guard canUpload else {
             await MainActor.run {
@@ -528,7 +529,7 @@ class RegistViewModel: ObservableObject {
             await MainActor.run {
                 if response.isSuccess {
                     uploadSuccess = true
-                    print("✅ 후기 등록 성공: \(response.message)")
+                    print("후기 등록 성공: \(response.message)")
                 } else {
                     uploadError = response.message
                 }
@@ -538,7 +539,7 @@ class RegistViewModel: ObservableObject {
             await MainActor.run {
                 uploadError = error.localizedDescription
             }
-            print("❌ 후기 등록 실패: \(error)")
+            print("후기 등록 실패: \(error)")
         }
         
         await MainActor.run {
@@ -546,10 +547,10 @@ class RegistViewModel: ObservableObject {
         }
     }
         
-        /// RegistReviewRequest 생성  ⚠️ 함수명 및 파라미터 수정
+        /// RegistReviewRequest 생성  함수명 및 파라미터 수정
         private func createRegistReviewRequest(
             reviewImageInfos: [ReviewImageInfo]
-        ) -> RegistReviewElement {  // ⚠️ 반환 타입 수정
+        ) -> RegistReviewElement {  // 반환 타입 수정
             
             // 날짜 포맷팅 (API 형식에 맞게)
             let formatter = DateFormatter()
@@ -562,12 +563,12 @@ class RegistViewModel: ObservableObject {
             // 키워드 합치기
             let allKeywords = (Array(selectedGoodKeywords) + Array(selectedBadKeywords)).joined(separator: ",")
             
-            return RegistReviewElement(  // ⚠️ 올바른 타입 사용
+            return RegistReviewElement(  // 올바른 타입 사용
                 showDate: formattedDate,
                 round: roundInt,
                 showName: performanceTitle,
                 artistName: artistName,
-                hallId: selectedVenue?.id ?? 1, // ⚠️ 안전한 처리
+                hallId: selectedVenue?.id ?? 1, // 안전한 처리
                 seatArea: zone,
                 seatRow: rows,
                 seatNumber: num,
@@ -612,6 +613,68 @@ class RegistViewModel: ObservableObject {
             imageUrl: "" // TODO: 편의시설 이미지 URL
         )]
     }
+    
+    // MARK: 전체 업로드 버튼
+    /// 전체 초기화
+    func resetAll() {
+        // MainReviewRegistView.swift에서
+        selectedDate = nil
+        selectedRound = ""
+        performanceTitle = ""
+        artistName = ""
+        
+        // MainMiddleContents.swift에서
+        performanceImages.removeAll()
+        sightImages.removeAll()
+        performanceItems.removeAll()
+        sightItems.removeAll()
+        performanceImageUploads.removeAll()
+        sightImageUploads.removeAll()
+        currentPage = 0
+        selectedImageCategory = .sight
+        
+        // RegistVenueView.swift에서
+        searchVenue = ""
+        selectedVenue = nil
+        
+        // RegistSeatView.swift에서
+        zone = ""
+        rows = ""
+        num = ""
+        
+        // RegistRateView.swift에서
+        rating = 0
+        selectedGoodKeywords.removeAll()
+        selectedBadKeywords.removeAll()
+        isCheckedSeat = false
+        detailSeatReview = ""
+        
+        // RegistPerformanceReviewView.swift에서
+        simplePerformanceReview = ""
+        isCheckedPerformance = false
+        detailPerformanceReview = ""
+        
+        // RegistFacilityView.swift에서
+        selectedRestaurantType = .restaurant
+        restaurantImage = nil
+        restaurantItem = nil
+        selectedRestaurantKeywords.removeAll()
+        isCheckedRestaurant = false
+        detailRestaurantReview = ""
+        selectedFacilityType = .restroom
+        facilityImage = nil
+        facilityItem = nil
+        isCheckedFacility = false
+        detailFacilityReview = ""
+        
+        
+        isUploading = false
+        uploadSuccess = false
+        uploadError = nil
+        isUploadingImages = false
+        imageUploadError = nil
+    } 
+    
         
     // MARK: - 진행률 및 상태
     
@@ -650,9 +713,9 @@ extension RegistViewModel {
         do {
             let result = try await service.getAllVenues()
             self.venues = result
-            print("✅ 공연장 불러오기 성공: \(result.count)개")
+            print("공연장 불러오기 성공: \(result.count)개")
         } catch {
-            print("❌ 공연장 불러오기 실패: \(error)")
+            print("공연장 불러오기 실패: \(error)")
         }
     }
 }

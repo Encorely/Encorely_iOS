@@ -36,9 +36,9 @@ struct NavigationRoutingView: View {
                         container.navigationRouter.popToRootView()
                     }
                 )
-//            case .searchPlace(let type):
-// 맛집, 편의시설 장소 등록
-//                SearchPlaceView()
+            case .searchPlace(_):
+                //맛집, 편의시설 장소 등록
+                SearchPlaceView()
             }
         }
         .environmentObject(container)

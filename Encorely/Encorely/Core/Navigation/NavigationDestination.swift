@@ -11,10 +11,10 @@ enum NavigationDestination: Equatable, Hashable {
     case venueView
     case registSeat
     case registRating
-//    case searchPlace(type: PlaceSearchType)
+    case searchPlace(type: PlaceSearchType)
 }
 
-//enum PlaceSearchType: Hashable {
-//    case restaurant
-//    case facility
-//}
+enum PlaceSearchType: Hashable {
+    case restaurant
+    case facility
+}

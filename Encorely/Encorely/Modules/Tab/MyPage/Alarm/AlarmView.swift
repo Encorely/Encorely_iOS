@@ -12,6 +12,7 @@ struct AlarmView: View {
                     Image("chevronLeft")
                         .resizable()
                         .frame(width: 30, height: 30)
+                        .foregroundStyle(Color.grayColorA)
                 }
                 Spacer()
                 Text("알림")

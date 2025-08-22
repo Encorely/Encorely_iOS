@@ -117,6 +117,7 @@ struct LoginView: View {
         .alert("로그인 실패", isPresented: $showError) {
             Button("확인", role: .cancel) { }
         } message: { Text(errorMessage) }
+            .navigationBarBackButtonHidden(true)
     }
 
     private var isLoading: Bool {

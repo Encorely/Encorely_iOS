@@ -3,6 +3,7 @@ import UIKit
 
 struct BeforeProfileSetting: View {
     @EnvironmentObject private var authRouter: AuthRouter
+    @Environment(\.dismiss) private var dismiss
 
     @State private var nickname: String = ""
     @State private var introduction: String = ""
@@ -18,6 +19,14 @@ struct BeforeProfileSetting: View {
         VStack(spacing: 40) {
             HStack {
                 Color.clear.frame(width: 24, height: 24)
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image("chevronLeft")
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                        .foregroundStyle(Color.grayColorA)
+                }
                 Spacer()
                 Text("프로필 설정").font(.headline)
                 Spacer()
@@ -146,6 +155,7 @@ struct BeforeProfileSetting: View {
             }
             .padding(.horizontal)
             .padding(.bottom, 16)
+            .navigationBarBackButtonHidden(true)
         }
         .navigationBarBackButtonHidden(true)
         .onAppear {
