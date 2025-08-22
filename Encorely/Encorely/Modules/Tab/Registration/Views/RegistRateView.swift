@@ -180,7 +180,7 @@ struct RegistRateView: View {
                         }
                         
                         HStack(spacing: 15) {
-                            ForEach(8...11, id: \.self) { index in
+                            ForEach(8...10, id: \.self) { index in
                                 BadKeywordRating(
                                     viewModel: container.registViewModel,
                                     keywordType: badkeywordList[index]

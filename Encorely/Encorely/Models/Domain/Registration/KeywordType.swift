@@ -42,7 +42,6 @@ extension KeywordType {
         KeywordType(title: "출구가 멀어요"),
         KeywordType(title: "좌석이 불편해요"),
         KeywordType(title: "가격 대비 시야가 별로예요"),
-        KeywordType(title: "본무대가 멀어요")
     ]
     
     static let RestaurantTag: [KeywordType] = [
