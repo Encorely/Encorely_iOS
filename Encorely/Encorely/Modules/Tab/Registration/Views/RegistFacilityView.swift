@@ -80,47 +80,43 @@ struct RegistFacilityView: View {
                     .padding(.bottom, 7)
                 
                 Menu {
-                    Button("밥집", action: {
-                        container.registViewModel.selectRestaurant(.restaurant)
-                    })
-                    Button("카페", action: {
-                        container.registViewModel.selectRestaurant(.cafe)
-                    })
-                    Button("술집", action: {
-                        container.registViewModel.selectRestaurant(.bar)
-                    })
+                    Button("밥집") { container.registViewModel.selectRestaurant(.restaurant) }
+                    Button("카페") { container.registViewModel.selectRestaurant(.cafe) }
+                    Button("술집") { container.registViewModel.selectRestaurant(.bar) }
                 } label: {
-                    selectedRestaurantBtnDetail
+                    selectedRestaurantBtnDetail(viewModel: container.registViewModel)
                 }
                 .buttonStyle(.plain)
             }
-            
             Spacer()
         }
         .padding(.top, 20)
     }
     
-    private var selectedRestaurantBtnDetail: some View {
-        HStack {
-            
-            Text(container.registViewModel.displayRestaurant)
-                .foregroundStyle(.grayColorF)
-                .font(.mainTextMedium16)
-            
-            Spacer()
-            
-            Image("chevronDown")
-                .resizable()
-                .frame(width: 16, height: 9.04)
-                .foregroundStyle(.grayColorD)
-        }
-        .padding(.leading, 20)
-        .padding(.trailing, 18)
-        .frame(width: 103, height: 33)
-        .background {
-            RoundedRectangle(cornerRadius: 100)
-                .fill(.mainColorH)
-                .strokeBorder(.mainColorF, lineWidth: 1)
+    private struct selectedRestaurantBtnDetail: View {
+        @ObservedObject var viewModel: RegistViewModel
+        
+        var body: some View {
+            HStack {
+                Text(viewModel.displayRestaurant)
+                    .foregroundStyle(.grayColorF)
+                    .font(.mainTextMedium16)
+                
+                Spacer()
+                
+                Image("chevronDown")
+                    .resizable()
+                    .frame(width: 16, height: 9.04)
+                    .foregroundStyle(.grayColorD)
+            }
+            .padding(.leading, 20)
+            .padding(.trailing, 18)
+            .frame(width: 103, height: 33)
+            .background {
+                RoundedRectangle(cornerRadius: 100)
+                    .fill(.mainColorH)
+                    .strokeBorder(.mainColorF, lineWidth: 1)
+            }
         }
     }
     
@@ -259,26 +255,14 @@ struct RegistFacilityView: View {
                     .padding(.bottom, 7)
                 
                 Menu {
-                    Button("화장실", action: {
-                        container.registViewModel.selectFacility(.restroom)
-                    })
-                    Button("편의점", action: {
-                        container.registViewModel.selectFacility(.convenienceStore)
-                    })
-                    Button("주차장", action: {
-                        container.registViewModel.selectFacility(.parking)
-                    })
-                    Button("벤치", action: {
-                        container.registViewModel.selectFacility(.bench)
-                    })
-                    Button("ATM", action: {
-                        container.registViewModel.selectFacility(.atm)
-                    })
-                    Button("기타", action: {
-                        container.registViewModel.selectFacility(.other)
-                    })
+                    Button("화장실") { container.registViewModel.selectFacility(.restroom) }
+                    Button("편의점") { container.registViewModel.selectFacility(.convenienceStore) }
+                    Button("주차장") { container.registViewModel.selectFacility(.parking) }
+                    Button("벤치")  { container.registViewModel.selectFacility(.bench) }
+                    Button("ATM")  { container.registViewModel.selectFacility(.atm) }
+                    Button("기타")  { container.registViewModel.selectFacility(.other) }
                 } label: {
-                    selectedFacilityBtnDetail
+                    selectedFacilityBtnDetail(viewModel: container.registViewModel)
                 }
                 .buttonStyle(.plain)
             }
@@ -288,27 +272,29 @@ struct RegistFacilityView: View {
         .padding(.top, 20)
     }
     
-    private var selectedFacilityBtnDetail: some View {
-        HStack {
-            
-            Text(container.registViewModel.displayFacility)
-                .foregroundStyle(.grayColorF)
-                .font(.mainTextMedium16)
-            
-            Spacer()
-            
-            Image("chevronDown")
-                .resizable()
-                .frame(width: 16, height: 9.04)
-                .foregroundStyle(.grayColorD)
-        }
-        .padding(.leading, 18)
-        .padding(.trailing, 18)
-        .frame(width: 103, height: 33)
-        .background {
-            RoundedRectangle(cornerRadius: 100)
-                .fill(.mainColorH)
-                .strokeBorder(.mainColorF, lineWidth: 1)
+    private struct selectedFacilityBtnDetail: View {
+        @ObservedObject var viewModel: RegistViewModel
+        var body: some View {
+            HStack {
+                Text(viewModel.displayFacility)
+                    .foregroundStyle(.grayColorF)
+                    .font(.mainTextMedium16)
+                
+                Spacer()
+                
+                Image("chevronDown")
+                    .resizable()
+                    .frame(width: 16, height: 9.04)
+                    .foregroundStyle(.grayColorD)
+            }
+            .padding(.leading, 18)
+            .padding(.trailing, 18)
+            .frame(width: 103, height: 33)
+            .background {
+                RoundedRectangle(cornerRadius: 100)
+                    .fill(.mainColorH)
+                    .strokeBorder(.mainColorF, lineWidth: 1)
+            }
         }
     }
     

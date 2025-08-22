@@ -175,15 +175,11 @@ class RegistViewModel: ObservableObject {
     @Published var uploadError: String? = nil
     
     
-    // MARK: 업로드 버튼 활성화/비활성화
+    // MARK: 세부 후기 업로드 버튼 활성화/비활성화
     /// 공연장 등록
     var isVenueStepValid: Bool {
             selectedVenue != nil
     }
-    
-    /// 좌석 등록
-    
-    
     
     /// 좌석 평가
     var isRatingStepValid: Bool {
@@ -197,8 +193,49 @@ class RegistViewModel: ObservableObject {
     /// 맛집 및 편의시설
     
     
-    
-    /// 전체 리뷰 등록
+    // MARK: 전체 후기 업로드 버튼 활성화/비활성화
+    /// 공백만 있는 입력 방지용
+    private func isNonEmpty(_ s: String) -> Bool {
+        !s.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    /// 1. 공연 날짜
+    var isDateValid: Bool { isDateSelected }
+
+    /// 2. 공연 회차
+    var isRoundValid: Bool { !selectedRound.isEmpty }
+
+    /// 3. 공연명
+    var isTitleValid: Bool { isNonEmpty(performanceTitle) }
+
+    /// 4. 아티스트명
+    var isArtistValid: Bool { isNonEmpty(artistName) }
+
+    /// 5. 공연 사진(최소 1장)
+    var isPhotoValid: Bool {
+        !performanceImages.isEmpty || !performanceImageUploads.isEmpty
+    }
+
+    /// 6. 공연장/좌석등록/평가 (공연장 + 구역/열/번 + 별점)
+    var isVenueSeatRatingValid: Bool {
+        selectedVenue != nil &&
+        isNonEmpty(zone) && isNonEmpty(rows) && isNonEmpty(num) &&
+        rating > 0
+    }
+
+    /// 7. 공연 후기(한줄평)
+    var isReviewValid: Bool { isNonEmpty(simplePerformanceReview) }
+
+    /// 모든 단계가 완료됐을 때만 업로드 활성화
+    var isUploadEnabled: Bool {
+        isDateValid &&
+        isRoundValid &&
+        isTitleValid &&
+        isArtistValid &&
+        isPhotoValid &&
+        isVenueSeatRatingValid &&
+        isReviewValid
+    }
     
     // MARK: - 공연 기본 정보 관련 함수들
     /// 공연일자 받기
