@@ -11,7 +11,8 @@ import Kingfisher
 /// 공연장 탭 - 공연장 검색 리스트
 struct MainVenueCard: View {
 
-    let searchVenueResponse: SearchVenueResponse
+    //let searchVenueResponse: SearchVenueResponse
+    let hallRanking: HallRanking
     
     var body: some View {
         HStack(spacing: 20) {
@@ -26,11 +27,11 @@ struct MainVenueCard: View {
     // MARK: 공연장 정보(이름, 주소)
     private var venueInfo: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(searchVenueResponse.name)
+            Text(hallRanking.name)
                 .font(.mainTextMedium18)
                 .foregroundStyle(.grayColorA)
             
-            Text(searchVenueResponse.address)
+            Text(hallRanking.address)
                 .font(.mainTextMedium14)
                 .foregroundStyle(.grayColorF)
         }
@@ -38,6 +39,7 @@ struct MainVenueCard: View {
     
     // MARK: 공연장 자세히 보기 이동 버튼
     private var venueDetailBtn: some View {
+        /*
         Button(action: {
         // TODO: 공연장 이동
         }) {
@@ -45,13 +47,17 @@ struct MainVenueCard: View {
                 .resizable()
                 .foregroundStyle(.grayColorA)
                 .frame(width: 24, height: 24)
-        }
+        }*/
+        Image(.chevronRight)
+            .resizable()
+            .foregroundStyle(.grayColorA)
+            .frame(width: 24, height: 24)
     }
     
     // MARK: 이미지 가져오기
     @ViewBuilder
     private var urlImage: some View {
-        if let url = URL(string: searchVenueResponse.image) {
+        if let url = URL(string: hallRanking.hallImageURL) {
             KFImage(url)
                 .placeholder {
                     ProgressView()
@@ -68,5 +74,13 @@ struct MainVenueCard: View {
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-    MainVenueCard(searchVenueResponse: .init(name: "KSPO DOME", address: "서울특별시 송파구 올림픽로 424", image: "https://i.namu.wiki/i/F4tCq3s3vS8MTOl1j1E6kPpiKu6lL9iLr6jl5OeSPLln1fBem4R8uHT0Mn7DuEqyCb5_xWrSwRROxviJDEGPIfhkLR3uV1zWfYyPISIXbou6vMoLPLkzdz1YgNmjqpgY8PG7cJxBwfl5jcHbEUJehQ.webp", id: 2))
+    MainVenueCard(
+        hallRanking: HallRanking(
+            id: 1,
+            name: "KSPO DOME",
+            hallImageURL: "https://i.namu.wiki/i/F4tCq3s3vS8MTOl1j1E6kPpiKu6lL9iLr6jl5OeSPLln1fBem4R8uHT0Mn7DuEqyCb5_xWrSwRROxviJDEGPIfhkLR3uV1zWfYyPISIXbou6vMoLPLkzdz1YgNmjqpgY8PG7cJxBwfl5jcHbEUJehQ.webp",
+            address: "서울특별시 송파구 올림픽로 424",
+            ranking: 1
+        )
+    )
 }

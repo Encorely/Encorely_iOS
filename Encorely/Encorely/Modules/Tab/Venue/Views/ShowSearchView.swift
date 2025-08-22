@@ -31,7 +31,7 @@ struct ShowSearchView: View {
             Button(action: { dismiss() }) {
                 Image(.chevronLeft)
                     .frame(width: 25, height: 25)
-                    .foregroundStyle(.grayColorB)
+                    .foregroundStyle(.grayColorA)
             }
             RightSearchBar(rightSearchBarType: .init(title: "공연명, 아티스트, 공연장 등을 입력해보세요"))
         }

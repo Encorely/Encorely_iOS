@@ -12,9 +12,9 @@ import Foundation
 class ShowViewModel {
     private let service: ShowService
     
-    /// 공연 리스트
+    /// 현재 진행 중인 공연 리스트
     var shows: [OngoingShow] = []
-    /// 공연 상세 정보,, 딕셔너리로 저장
+    /// 각 공연 상세 정보,, 딕셔너리로 저장
     var selectedShows: [Int: OngoingShowDetail] = [:]
     
     var isLoading: Bool = false
@@ -31,9 +31,9 @@ class ShowViewModel {
         
         do {
             let dtoList = try await service.fetchShows()   /// [ShowItem]
-            print("✅ 서버 응답 성공: \(dtoList)")
+            print("서버 응답 성공: \(dtoList)")
             self.shows = dtoList.map { OngoingShow(dto: $0) }
-            print("✅ 변환 후 shows: \(self.shows)")
+            print("변환 후 shows: \(self.shows)")
         } catch {
             self.errorMessage = error.localizedDescription
         }

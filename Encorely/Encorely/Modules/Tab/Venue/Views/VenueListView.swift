@@ -9,7 +9,8 @@ import SwiftUI
 
 struct VenueListView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject var viewModel = RegistViewModel()
+    //@StateObject var viewModel = RegistViewModel()
+    @Environment(HallViewModel.self) private var viewModel
     
     var body: some View {
         topSearchBar
@@ -23,6 +24,7 @@ struct VenueListView: View {
             Button(action: { dismiss() }) {
                 Image(.chevronLeft)
                     .frame(width: 25, height: 25)
+                    .foregroundStyle(.grayColorA)
             }
             RightSearchBar(rightSearchBarType: .init(title: "내가 찾고 싶은 공연장을 입력해보세요"))
         }
@@ -34,24 +36,23 @@ struct VenueListView: View {
     private var venueList: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 0) {
-                ForEach(viewModel.venues, id: \.name) { venue in
+                ForEach(viewModel.halls) { hall in
                     Button (action: {
                         
                     }) {
-                        MainVenueCard(searchVenueResponse: venue)
+                        MainVenueCard(hallRanking: hall)
                     }
                 }
             }
             .task {
-                let service = MockVenueSelectionService()
-                let result = try? await service.getAllVenues()
-                self.viewModel.venues = result ?? []
+                await viewModel.loadHalls() /// 불러오기이이이이이ㅣㅇㄱ
+                print("viewModel.halls.count = \(viewModel.halls.count)") ///연결되고있는지 로그 확인용으로 넣어놧어용
             }
         }
     }
 }
-
+/*
 #Preview {
     VenueListView()
-}
+}*/
 
