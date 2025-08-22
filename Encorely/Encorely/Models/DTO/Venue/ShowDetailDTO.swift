@@ -13,7 +13,7 @@ struct ShowDetailResponse: Decodable {
     let isSuccess: Bool
     let code: String
     let message: String
-    let result: [ShowDetailItem]
+    let result: ShowDetailItem
 }
 
 //MARK: - response item

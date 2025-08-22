@@ -44,6 +44,7 @@ struct OngoingShowDetailView: View {
     }
     
     var body: some View {
+        
         ZStack(alignment: .bottom, content: {
             topContents
             sheetContents
@@ -55,7 +56,7 @@ struct OngoingShowDetailView: View {
                 .padding(.horizontal, PerformanceDetailContents.safeHoriozontalPadding)
         })
     }
-    
+   
     // MARK: - TopContents
     /// 상단 네비게이션 상태 바
     private var topStatus: some View {
@@ -204,7 +205,7 @@ struct OngoingShowDetailView: View {
         .foregroundStyle(.grayColorE)
     }
 }
-
+/*
 #Preview {
     OngoingShowDetailView(
         ongoingShowDetail: OngoingShowDetail(
@@ -219,3 +220,4 @@ struct OngoingShowDetailView: View {
                                             
     )
 }
+*/

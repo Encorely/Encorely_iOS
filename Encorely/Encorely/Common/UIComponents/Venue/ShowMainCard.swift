@@ -12,6 +12,7 @@ struct ShowMainCard: View {
     let ongoingShow: OngoingShow
     
     var body: some View {
+        /*
         Button(action: {
             //TODO: - 연결 추가
         }) {
@@ -21,7 +22,13 @@ struct ShowMainCard: View {
                 showInfo
             }
             .frame(width: 135)
+        }*/
+        VStack(alignment: .leading) {
+            urlImage
+            Spacer() .frame(height:10)
+            showInfo
         }
+        .frame(width: 135)
     }
     
     //MARK: - 공연 이미지
@@ -40,6 +47,7 @@ struct ShowMainCard: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 135, height: 180)
                 .clipShape(RoundedRectangle(cornerRadius: 7))
+                .clipped()
         }
     }
     
@@ -50,14 +58,16 @@ struct ShowMainCard: View {
                 .font(.mainTextMedium16)
                 .foregroundStyle(.grayColorA)
                 .multilineTextAlignment(.leading) //텍스트 무조건 왼쪽 정렬되도록!
+                .lineLimit(2) ///두 줄 고정
+                .truncationMode(.tail) ///길면 뒷부분 잘리게
         
             Text(ongoingShow.hallName)
-                .font(.mainTextMedium16)
+                .font(.mainTextMedium15)
                 .foregroundStyle(.grayColorC)
                 .multilineTextAlignment(.leading)
                 
             Text("\(ongoingShow.startDate)~\(ongoingShow.endDate)")
-                .font(.mainTextMedium14)
+                .font(.mainTextMedium13)
                 .foregroundStyle(.grayColorF)
                 .multilineTextAlignment(.leading)
         }
