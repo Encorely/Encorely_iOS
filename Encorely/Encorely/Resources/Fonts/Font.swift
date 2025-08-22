@@ -55,6 +55,10 @@ extension Font {
         return .pretendard(type: .semibold, size: 38)
     }
     
+    static var mainTextSemiBold32: Font {
+        return .pretendard(type: .semibold, size: 32)
+    }
+    
     static var mainTextSemiBold24: Font {
         return .pretendard(type: .semibold, size: 24)
     }
