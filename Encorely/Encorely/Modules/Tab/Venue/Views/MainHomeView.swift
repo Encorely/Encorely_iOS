@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainHomeView: View {
     @State private var showViewModel = ShowViewModel()
+    @State private var hallViewModel = HallViewModel()
     
     var body: some View {
         NavigationStack{
@@ -24,6 +25,7 @@ struct MainHomeView: View {
         }
         .enableWindowTapToHideKeyboard()
         .environment(showViewModel)
+        .environment(hallViewModel) 
         .task {
             await showViewModel.loadShows()  ///현재 진행 중인 공연 불러오기
         }
@@ -88,6 +90,14 @@ struct MainHomeView: View {
                     }
                 }
             }
+             /*
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing:30) {
+                    ForEach(hallViewModel.hallRanking) { hall in
+                        HallCircleCard(hallCircleCardType: hall)
+                    }
+                }
+            }*/
         }
         .padding(16)
     }
@@ -133,7 +143,7 @@ struct MainHomeView: View {
                     .font(.mainTextSemiBold20)
                 Spacer()
                 
-                NavigationLink(destination: OngoingShowView()) {
+                NavigationLink(destination: UserRankingView()) {
                     Image(.chevronRight)
                         .frame(width:25, height:25)
                 }
@@ -163,7 +173,7 @@ struct MainHomeView: View {
                     .font(.mainTextSemiBold20)
                 Spacer()
                 
-                NavigationLink(destination: OngoingShowView()) {
+                NavigationLink(destination: ReviewRankingView()) {
                     Image(.chevronRight)
                         .frame(width:25, height:25)
                 }

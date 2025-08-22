@@ -23,6 +23,7 @@ struct ReviewRankingView: View {
                 Button(action: { dismiss() }) {
                     Image(.chevronLeft)
                         .frame(width: 25, height: 25)
+                        .foregroundStyle(.grayColorA)
                 }
             })
             

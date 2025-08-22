@@ -36,7 +36,7 @@ struct OngoingShowView: View {
         })
         .task {
             await viewModel.loadShows()  /// 불 러 오 기!!!!!!!!!!!
-            print("viewModel.shows.count = \(viewModel.shows.count)")
+            print("viewModel.shows.count = \(viewModel.shows.count)") ///연결되고있는지 로그 확인용으로 넣어놧어용
         }
     }
     

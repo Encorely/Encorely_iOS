@@ -30,7 +30,6 @@
 				Info.plist,
 				Models/Domain/MyPage/.gitkeep,
 				Models/DTO/Auth/.gitkeep,
-				Modules/Tab/Venue/ViewModels/.gitkeep,
 			);
 			target = C74A49572E1BD083009FC517 /* Encorely */;
 		};
