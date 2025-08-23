@@ -93,8 +93,7 @@ struct LoginView: View {
             }
             .padding(.horizontal, 24)
         }
-        .navigationBarBackButtonHidden(true)   // ← Back 숨김
-
+        .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $showKakaoWeb) {
             SafariView(url: kakaoURL)
         }
@@ -117,7 +116,6 @@ struct LoginView: View {
         .alert("로그인 실패", isPresented: $showError) {
             Button("확인", role: .cancel) { }
         } message: { Text(errorMessage) }
-            .navigationBarBackButtonHidden(true)
     }
 
     private var isLoading: Bool {
@@ -137,9 +135,7 @@ struct LoginView: View {
             if let err = error as NSError? {
                 print("ASWebAuth failed: \(err.domain) (\(err.code)) - \(err.localizedDescription)")
             }
-            DispatchQueue.main.async {
-                showKakaoWeb = true
-            }
+            DispatchQueue.main.async { showKakaoWeb = true }
         }
         session.presentationContextProvider = AuthPresentationAnchorProvider()
         session.prefersEphemeralWebBrowserSession = true
@@ -154,11 +150,23 @@ struct LoginView: View {
             return
         }
         let q = comps.queryItems ?? []
-        let access  = q.first { ["access","accesstoken"].contains($0.name.lowercased()) }?.value
-        let refresh = q.first { ["refresh","refreshtoken"].contains($0.name.lowercased()) }?.value
-        let code    = q.first { $0.name.lowercased() == "code" }?.value
+        func lower(_ s: String) -> String { s.lowercased() }
 
-        if access != nil || code != nil {
+        let access   = q.first { ["access","accesstoken"].contains(lower($0.name)) }?.value
+        let refresh  = q.first { ["refresh","refreshtoken"].contains(lower($0.name)) }?.value
+        let expires  = q.first { ["expiresin","expires_in"].contains(lower($0.name)) }?.value
+        let expiresAt = expires.flatMap { Double($0) }.map { Date().addingTimeInterval($0) }
+        let code     = q.first { lower($0.name) == "code" }?.value
+
+        if let access = access {
+            TokenStore.shared.save(access: access, refresh: refresh, expiresAt: expiresAt)
+            AuthStore.shared.isLoggedIn = true
+            AuthStore.shared.hasSeenOnboarding = true
+            onLoginSuccess()
+        } else if code != nil {
+            // code만 오는 구성이라면 여기서 토큰 교환 API 호출 후 저장
+            AuthStore.shared.isLoggedIn = true
+            AuthStore.shared.hasSeenOnboarding = true
             onLoginSuccess()
         } else {
             errorMessage = "로그인 콜백 파싱 실패: \(url.absoluteString)"
