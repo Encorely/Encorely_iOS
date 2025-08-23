@@ -19,6 +19,7 @@ struct EncorelyApp: App {
         WindowGroup {
                  AuthRoutingView()
                 .environmentObject(authLink)
+                .environmentObject(container)
                 .onOpenURL { url in
                     authLink.handle(url)
                 }

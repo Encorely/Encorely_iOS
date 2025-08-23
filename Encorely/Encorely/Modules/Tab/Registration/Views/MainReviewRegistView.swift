@@ -128,7 +128,7 @@ struct MainReviewRegistView: View {
             
             Image("chevronDown")
         }
-        .frame(width: 90)
+        .frame(width: 95)
         .basicDropdownModifier(horizontal: 15, vertical: 8)
     }
     

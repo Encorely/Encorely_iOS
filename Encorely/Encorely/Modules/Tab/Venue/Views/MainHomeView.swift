@@ -186,7 +186,7 @@ struct MainHomeView: View {
             ScrollView(.horizontal, showsIndicators: false){
                 LazyHStack(spacing:20) {
                     ForEach(reviews) { review in
-                        ReviewRankingCard(reviewRanking: review)
+                        ReviewMainRankingCard(reviewRanking: review)
                     }
                 }
             }
