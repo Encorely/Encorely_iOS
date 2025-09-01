@@ -12,8 +12,7 @@ struct WholeReviewView: View {
     @ObservedObject var viewModel = RegistViewModel()
     @Environment(\.dismiss) var dismiss
     
-    let goodkeywordList = KeywordType.goodSeatTag
-    let badkeywordList = KeywordType.badSeatTag
+    let seatList = KeywordType.SeatTag
     let restaurantList = KeywordType.RestaurantTag
     
     var body: some View {
@@ -134,10 +133,10 @@ struct WholeReviewView: View {
             
             VStack(alignment: .leading) {
                 HStack(spacing: 5) {
-                    KeywordStyle(keywordType: goodkeywordList[0])
-                    KeywordStyle(keywordType: goodkeywordList[6])
+                    KeywordStyle(keywordType: seatList[0])
+                    KeywordStyle(keywordType: seatList[6])
                 }
-                KeywordStyle(keywordType: goodkeywordList[7])
+                KeywordStyle(keywordType: seatList[7])
             }
         }
     }

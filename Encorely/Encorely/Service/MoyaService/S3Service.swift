@@ -22,7 +22,7 @@ class S3Service {
     
     init() {
         let logger = NetworkLoggerPlugin(configuration: .init(logOptions: [.verbose]))
-        self.provider = MoyaProvider<S3Router>(plugins: [logger])
+        self.provider = MoyaProvider<S3Router>(plugins: [AuthPlugin(), logger])
     }
     
     /// GET Method

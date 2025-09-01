@@ -34,7 +34,7 @@ class ReviewService {
     
     init() {
         let logger = NetworkLoggerPlugin(configuration: .init(logOptions: [.verbose]))
-        self.provider = MoyaProvider<ReviewRouter>(plugins: [logger])
+        self.provider = MoyaProvider<ReviewRouter>(plugins: [AuthPlugin(), logger])
     }
     
     /// POST Method

@@ -40,6 +40,7 @@ struct EncorelyTabView: View {
         .onAppear {
             setupTabBarAppearance()
         }
+        .enableWindowTapToHideKeyboard()
     }
     
     
