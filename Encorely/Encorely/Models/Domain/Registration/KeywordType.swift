@@ -13,7 +13,7 @@ struct KeywordType: Identifiable, Hashable {
 }
 
 extension KeywordType {
-    static let goodSeatTag: [KeywordType] = [
+    static let SeatTag: [KeywordType] = [
         KeywordType(title: "돌출이 가까워요"),
         KeywordType(title: "본무대가 가까워요"),
         KeywordType(title: "전광판이 잘 보여요"),
@@ -27,10 +27,7 @@ extension KeywordType {
         KeywordType(title: "토롯코랑 가까워요"),
         KeywordType(title: "오른쪽 블록이에요"),
         KeywordType(title: "왼쪽 블록이에요"),
-        KeywordType(title: "정면 블록이에요")
-    ]
-    
-    static let badSeatTag: [KeywordType] = [
+        KeywordType(title: "정면 블록이에요"),
         KeywordType(title: "전광판이 잘 안 보여요"),
         KeywordType(title: "무대 돌출이 멀어요"),
         KeywordType(title: "본무대가 멀어요"),
@@ -41,7 +38,7 @@ extension KeywordType {
         KeywordType(title: "화장실이 멀어요"),
         KeywordType(title: "출구가 멀어요"),
         KeywordType(title: "좌석이 불편해요"),
-        KeywordType(title: "가격 대비 시야가 별로예요"),
+        KeywordType(title: "가격 대비 시야가 별로예요")
     ]
     
     static let RestaurantTag: [KeywordType] = [

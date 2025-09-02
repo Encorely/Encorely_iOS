@@ -14,6 +14,8 @@ struct MainReviewRegistView: View {
     @State private var tempSelectedDate: Date = Date()
     @State private var activeSheet: SheetType?
     @State private var showUploadComplete = false
+    @State private var showErrorAlert = false
+    @State private var errorMessage = ""
     
     private var viewModel: RegistViewModel {
             container.registViewModel
@@ -217,8 +219,15 @@ struct MainReviewRegistView: View {
         
         return Button(action: {
             guard enabled else { return }
-            // TODO: 실제 업로드 트리거
-            showUploadComplete = true
+            Task {
+                await viewModel.submitReview()
+                if viewModel.uploadSuccess {
+                    showUploadComplete = true
+                } else if let err = viewModel.uploadError {
+                    errorMessage = err
+                    showErrorAlert = true
+                }
+            }
         }) {
             MainRegistBtn(mainRegistType: .init(title: "업로드"))
                 .background (

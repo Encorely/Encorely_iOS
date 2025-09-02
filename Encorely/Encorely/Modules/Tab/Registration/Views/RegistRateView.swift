@@ -16,8 +16,7 @@ struct RegistRateView: View {
 
     @Binding var showSheet: SheetType?
     
-    let goodkeywordList = KeywordType.goodSeatTag
-    let badkeywordList = KeywordType.badSeatTag
+    let seatList = KeywordType.SeatTag
     let onComplete: () -> Void
     
     private var viewModel: RegistViewModel {
@@ -123,7 +122,7 @@ struct RegistRateView: View {
                             ForEach(0...4, id: \.self) { index in
                                 GoodKeywordRating(
                                     viewModel: container.registViewModel,
-                                    keywordType: goodkeywordList[index]
+                                    keywordType: seatList[index]
                                 )
                             }
                         }
@@ -132,7 +131,7 @@ struct RegistRateView: View {
                             ForEach(5...8, id: \.self) { index in
                                 GoodKeywordRating(
                                     viewModel: container.registViewModel,
-                                    keywordType: goodkeywordList[index]
+                                    keywordType: seatList[index]
                                 )
                             }
                         }
@@ -141,7 +140,7 @@ struct RegistRateView: View {
                             ForEach(9...13, id: \.self) { index in
                                 GoodKeywordRating(
                                     viewModel: container.registViewModel,
-                                    keywordType: goodkeywordList[index]
+                                    keywordType: seatList[index]
                                 )
                             }
                         }
@@ -162,28 +161,28 @@ struct RegistRateView: View {
                     VStack(alignment: .leading, spacing: 13) {
                         
                         HStack(spacing: 15) {
-                            ForEach(0...3, id: \.self) { index in
+                            ForEach(14...17, id: \.self) { index in
                                 BadKeywordRating(
                                     viewModel: container.registViewModel,
-                                    keywordType: badkeywordList[index]
+                                    keywordType: seatList[index]
                                 )
                             }
                         }
                         
                         HStack(spacing: 15) {
-                            ForEach(4...7, id: \.self) { index in
+                            ForEach(18...21, id: \.self) { index in
                                 BadKeywordRating(
                                     viewModel: container.registViewModel,
-                                    keywordType: badkeywordList[index]
+                                    keywordType: seatList[index]
                                 )
                             }
                         }
                         
                         HStack(spacing: 15) {
-                            ForEach(8...10, id: \.self) { index in
+                            ForEach(21...24, id: \.self) { index in
                                 BadKeywordRating(
                                     viewModel: container.registViewModel,
-                                    keywordType: badkeywordList[index]
+                                    keywordType: seatList[index]
                                 )
                             }
                         }

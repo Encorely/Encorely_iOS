@@ -31,8 +31,8 @@ struct RegistReviewElement: Codable {
     let seatArea: String
     let seatRow: String
     let seatNumber: String
-    let seatRating: Int
-    let consAndProsList: String
+    let rating: Float
+    let consAndProsList: [Int]
     let seatDetail: String?
     
     // 공연 후기
@@ -62,7 +62,7 @@ struct RestaurantInfo: Codable {
     let longitude: String
     let restaurantDetail: String
     let imageUrl: String
-    let restaurantProsList: String
+    let restaurantProsList: [Int]
 }
 
 struct FacilityInfo: Codable {
@@ -71,7 +71,7 @@ struct FacilityInfo: Codable {
     let address: String
     let latitude: String
     let longitude: String
-    let tips: String
+    let tips: String?
     let imageUrl: String
 }
 

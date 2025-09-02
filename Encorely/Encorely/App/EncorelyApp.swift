@@ -2,22 +2,21 @@ import SwiftUI
 
 @main
 struct EncorelyApp: App {
-    
     @StateObject private var authLink = AuthLinkHandler.shared
-    @StateObject private var container = DIContainer()
+    @StateObject private var container = DIContainer.shared
 
     init() {
     #if DEBUG
-            FontRegistrar.registerAll()
-            DispatchQueue.main.async {
-                FontRegistrar.dumpPretendard()
-            }
+        FontRegistrar.registerAll()
+        DispatchQueue.main.async {
+            FontRegistrar.dumpPretendard()
+        }
     #endif
     }
-    
+
     var body: some Scene {
         WindowGroup {
-                 AuthRoutingView()
+            AuthRoutingView()
                 .environmentObject(authLink)
                 .environmentObject(container)
                 .onOpenURL { url in

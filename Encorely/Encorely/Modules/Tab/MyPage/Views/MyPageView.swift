@@ -16,35 +16,37 @@ struct MyPageView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack(alignment: .leading, spacing: 20) {
-                topBar
-                    .padding(.horizontal, 16)
-                profileSection
-                    .padding(.horizontal, 16)
-                
-                bioSection
-                    .padding(.horizontal, 16)
-                
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 0) {
-                        tabBar
-                        imageGrid(geometry: geometry)
+        NavigationStack {
+            GeometryReader { geometry in
+                VStack(alignment: .leading, spacing: 20) {
+                    topBar
+                        .padding(.horizontal, 16)
+                    profileSection
+                        .padding(.horizontal, 16)
+                    
+                    bioSection
+                        .padding(.horizontal, 16)
+                    
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 0) {
+                            tabBar
+                            imageGrid(geometry: geometry)
+                        }
+                        .padding(.top, 5)
+                        .padding(.bottom, 40)
                     }
-                    .padding(.top, 5)
-                    .padding(.bottom, 40)
+                }
+                .task {
+                    await vm.load()
+                    await followSummary.refresh()
+                }
+                .onAppear { profile = ProfileStore.shared.load() }
+                .onReceive(NotificationCenter.default.publisher(for: .profileDidChange)) { _ in
+                    profile = ProfileStore.shared.load()
                 }
             }
-            .task {
-                await vm.load()
-                await followSummary.refresh()
-            }
-            .onAppear { profile = ProfileStore.shared.load() }
-            .onReceive(NotificationCenter.default.publisher(for: .profileDidChange)) { _ in
-                profile = ProfileStore.shared.load()
-            }
+            .enableWindowTapToHideKeyboard()
         }
-        .enableWindowTapToHideKeyboard()
     }
 }
 
@@ -192,7 +194,6 @@ private extension MyPageView {
     }
     
     func imageGrid(geometry: GeometryProxy) -> some View {
-        // 가로 간격 0, 3열 그리드
         let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 3)
         
         return LazyVGrid(
@@ -201,16 +202,12 @@ private extension MyPageView {
         ) {
             let images = vm.currentImages()
             ForEach(images.indices, id: \.self) { i in
-                Button(action: {
-                    
-                }) {
+                Button(action: {}) {
                     VStack(alignment: .leading, spacing: 4) {
                         Image(images[i])
                             .resizable()
                             .scaledToFill()
-                            .frame(
-                                width: (geometry.size.width) / 3
-                            )
+                            .frame(width: geometry.size.width / 3)
                             .clipped()
                         
                         if vm.selectedTab == .my {
@@ -222,13 +219,11 @@ private extension MyPageView {
                                 
                                 HStack(spacing: 5) {
                                     Image("location1").resizable().frame(width: 11, height: 14)
-                                    
                                     Text("올림픽공원 ...")
                                         .font(.mainTextMedium14)
                                         .foregroundStyle(Color.grayColorA)
                                         .lineLimit(1)
                                 }
-                                
                             }
                             .padding(.horizontal, 9)
                             .padding(.top, 3)
@@ -257,7 +252,6 @@ private extension MyPageView {
         }
     }
 }
-
 
 #Preview {
     NavigationStack { MyPageView() }
