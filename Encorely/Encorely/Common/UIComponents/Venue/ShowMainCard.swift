@@ -60,6 +60,7 @@ struct ShowMainCard: View {
                 .multilineTextAlignment(.leading) //텍스트 무조건 왼쪽 정렬되도록!
                 .lineLimit(2) ///두 줄 고정
                 .truncationMode(.tail) ///길면 뒷부분 잘리게
+                .frame(height: 40)
         
             Text(ongoingShow.hallName)
                 .font(.mainTextMedium15)
